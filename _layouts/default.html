@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Tech Conference List - Spain</title>
+    <meta name="description" content="A community-curated list of tech conferences around Spain.">
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{site.baseurl}}/css/main.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            {% assign main_pages = site.pages | where_exp:"node", "node.title != null" %}
+            {% for node in main_pages %}
+              {% if page.url == node.url %}
+                <li role="presentation" class="active"><a href="{{site.baseurl}}{{node.url}}">{{node.title}}</a></li>
+              {% else %}
+                <li role="presentation"><a href="{{site.baseurl}}{{node.url}}">{{node.title}}</a></li>
+              {% endif %}
+            {% endfor %}
+            <li role="presentation"><a href="https://github.com/npatarino/tech-conferences-spain/#adding-a-conference">Add</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">Tech Conferences - Spain</h3>
+      </div>
+
+      {{ content }}
+
+      <footer class="footer">
+        <p><a href="conferences.ics">iCalendar</a> &middot;  <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a> &middot; <a href="https://github.com/npatarino/tech-conferences-spain/">GitHub</a></p>
+      </footer>
+    </div>
+  </body>
+</html>
