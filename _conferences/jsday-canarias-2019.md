@@ -1,5 +1,5 @@
 ---
-name: "JS Day"
+name: "JSDay Canarias"
 website: https://jsdaycanarias.com/
 twitter: https://twitter.com/canariasjs
 location: Tenerife, Spain
