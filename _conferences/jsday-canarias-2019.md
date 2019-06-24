@@ -1,5 +1,5 @@
 ---
-name: "React Alicante"
+name: "JS Day"
 website: https://jsdaycanarias.com/
 twitter: https://twitter.com/canariasjs
 location: Tenerife, Spain
