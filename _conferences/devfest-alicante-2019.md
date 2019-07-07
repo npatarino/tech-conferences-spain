@@ -1,6 +1,6 @@
 ---
 name: "DevFest"
-website: 
+website: http://devfestalicante.com/ 
 twitter: https://twitter.com/GDGAlicante
 location: Alicante, Spain
 
