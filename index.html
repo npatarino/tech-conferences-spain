@@ -35,9 +35,6 @@ var today = dateTimestamp();
       if (today >= dateTimestamp('{{ conference.date_start | date: "%Y-%m-%d" }}') && today <= dateTimestamp('{{ conference.date_end | date: "%Y-%m-%d" }}')) {
         document.write('<span class="label label-danger">Happening Now</span>');
       }
-      if (today > dateTimestamp('{{ conference.date_end | date: "%Y-%m-%d" }}')) {
-        document.getElementById('{{ forloop.index }}').style.color="gray";
-      }
     </script>
   </li>
   {% endif %}
