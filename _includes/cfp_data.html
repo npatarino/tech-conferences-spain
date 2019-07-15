@@ -1,0 +1,7 @@
+{% assign cfp_start = conference.cfp_start | date: "%s" %}
+{% assign cfp_end = conference.cfp_end | date: "%s" %}
+{% if today >= cfp_start and today <= cfp_end %} 
+<a href="{% if conference.cfp_site %}{{ conference.cfp_site }}{% else %}{{ conference.website }}{% endif %}">
+  <span class="label label-success">Call For Papers</span>
+</a>
+{% endif %}
