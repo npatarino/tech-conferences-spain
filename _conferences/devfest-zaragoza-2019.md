@@ -9,5 +9,5 @@ date_end:   2019-11-23
 
 cfp_start: 2019-07-09
 cfp_end:   2019-10-09
-cfp_site:  http://www.lambda.world/call-for-papers/
+cfp_site:  https://forms.gle/UbXyvGZ5jj5qvtp39
 ---
