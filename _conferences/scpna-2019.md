@@ -1,5 +1,5 @@
 ---
-name: "Pamplona Software Crafters Conference"
+name: "Software Crafters Conference"
 website: https://pamplonaswcraft.com/
 twitter: https://twitter.com/pamplonaswcraft
 location: Pamplona, Navarra, Spain
