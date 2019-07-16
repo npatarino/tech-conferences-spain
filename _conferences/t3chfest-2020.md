@@ -1,5 +1,5 @@
 ---
-name: "T3chFest 2020"
+name: "T3chFest"
 website: http://t3chfest.es/2020/
 twitter: http://twitter.com/t3chfest/
 location: Leganes, Madrid, Spain

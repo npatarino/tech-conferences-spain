@@ -1,5 +1,5 @@
 ---
-name: "MorcillaConf 2019"
+name: "MorcillaConf"
 website: http://morcillaconf.es/
 twitter: https://twitter.com/morcillaconf/
 location: Burgos, Spain

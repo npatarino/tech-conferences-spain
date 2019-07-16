@@ -1,5 +1,5 @@
 ---
-name: "Software Crafters Barcelona"
+name: "Software Crafters"
 website: https://softwarecrafters.barcelona/
 twitter: https://twitter.com/bcnswcraft
 location: Barcelona, Catalunya, Spain

@@ -1,5 +1,5 @@
 ---
-name: "WordCamp Sevilla 2019"
+name: "WordCamp"
 website: https://2019-developers.sevilla.wordcamp.org/
 twitter: https://twitter.com/WCSevilla
 location: Sevilla, Spain

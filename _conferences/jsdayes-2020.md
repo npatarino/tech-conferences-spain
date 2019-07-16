@@ -1,5 +1,5 @@
 ---
-name:     "JSDayES 2020"
+name:     "JSDayES"
 website:  http://2019.jsday.es/
 twitter:  https://twitter.com/jsdayes
 location: Madrid, Spain
