@@ -4,14 +4,21 @@ title: Past
 ---
 
 <ul class="conference-list list-unstyled">
-{% assign sorted_conferences = (site.conferences | sort: 'date_start' | reverse) %}
-{% assign today = (site.time | date: "%s" ) %}
+
+{% assign today = site.time | date: "%s" %}
+
+{% assign past_conferences = "" | split: "" %}
+{% for conference in site.conferences %}
+{%   assign date_end = conference.date_end | date: "%s" %}
+{%   if today > date_end %}
+{%     assign past_conferences = past_conferences | push: conference %}
+{%   endif %}
+{% endfor %}
+
+{% assign sorted_conferences = past_conferences | sort: 'date_start' | reverse %}
 {% for conference in sorted_conferences %}
-  {% assign date_end = (conference.date_end | date: "%s") %}
-  {% if today > date_end %}
   <li>
     {% include general_data.html %}
   </li>
-  {% endif %}
 {% endfor %}
 </ul>

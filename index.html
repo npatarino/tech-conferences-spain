@@ -4,17 +4,23 @@ title: Upcoming
 ---
 
 <ul class="conference-list list-unstyled">
-{% assign sorted_conferences = site.conferences | sort: 'date_start' %}
+
 {% assign today = site.time | date: "%s" %}
+
+{% assign upcoming_conferences = "" | split: "" %}
+{% for conference in site.conferences %}
+{%   assign date_end = conference.date_end | date: "%s" %}
+{%   if today <= date_end %}
+{%     assign upcoming_conferences = upcoming_conferences | push: conference %}
+{%   endif %}
+{% endfor %}
+
+{% assign sorted_conferences = upcoming_conferences | sort: 'date_start' %}
 {% for conference in sorted_conferences %}
-  {% assign date_start = conference.date_start | date: "%s" %}
-  {% assign date_end = conference.date_end | date: "%s" %}
-  {% if today <= date_end %}
   <li>
     {% include general_data.html %}
     {% include cfp_data.html %}
     {% include live_data.html %}
   </li>
-  {% endif %}
 {% endfor %}
 </ul>
