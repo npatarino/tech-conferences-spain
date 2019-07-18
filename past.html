@@ -8,7 +8,7 @@ title: Past
 {% assign today = (site.time | date: "%s" ) %}
 {% for conference in sorted_conferences %}
   {% assign date_end = (conference.date_end | date: "%s") %}
-  {% if today >= date_end %}
+  {% if today > date_end %}
   <li>
     {% include general_data.html %}
   </li>

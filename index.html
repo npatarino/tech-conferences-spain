@@ -9,7 +9,7 @@ title: Upcoming
 {% for conference in sorted_conferences %}
   {% assign date_start = conference.date_start | date: "%s" %}
   {% assign date_end = conference.date_end | date: "%s" %}
-  {% if today < date_end %}
+  {% if today <= date_end %}
   <li>
     {% include general_data.html %}
     {% include cfp_data.html %}
