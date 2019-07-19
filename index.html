@@ -4,7 +4,8 @@ title: Upcoming
 ---
 
 
-{% assign today = site.time | date: "%s" %}
+{% assign today_without_time = site.time | date: "%Y-%m-%d" %}
+{% assign today = today_without_time | date: "%s" %}
 
 {% assign upcoming_conferences = "" | split: "" %}
 {% for conference in site.conferences %}

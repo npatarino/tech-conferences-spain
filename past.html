@@ -3,9 +3,8 @@ layout: default
 title: Past
 ---
 
-<ul class="conference-list list-unstyled">
-
-{% assign today = site.time | date: "%s" %}
+{% assign today_without_time = site.time | date: "%Y-%m-%d" %}
+{% assign today = today_without_time | date: "%s" %}
 
 {% assign past_conferences = "" | split: "" %}
 {% for conference in site.conferences %}
