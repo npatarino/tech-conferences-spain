@@ -1,5 +1,5 @@
 ---
-name: "Pucela Tech Day 2020"
+name: "Pucela Tech Day"
 website: https://pucelatechday.com/
 twitter: https://twitter.com/pucelatechday/
 location: Valladolid, Spain
