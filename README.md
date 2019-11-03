@@ -1,7 +1,7 @@
 Conferences
 ===========
 
-A community-curated list of tech conferences around Spain.
+A community-curated list of Software Development conferences around Spain.
 
 Adding a conference
 -------------------
