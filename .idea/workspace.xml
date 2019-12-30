@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7087011c-e259-4963-85e5-fb1d19f2a0b8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/_conferences/techfest-2020.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/_conferences/pulpocon-2020.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_conferences/pulpocon-2019.md" beforeDir="false" afterPath="$PROJECT_DIR$/_conferences/pulpocon-2019.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -11,17 +11,34 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ComposerSettings">
+    <execution>
+      <executable />
+    </execution>
+  </component>
   <component name="DefaultGradleProjectSettings">
     <option name="isMigrated" value="true" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/_conferences/techfest-2020.md">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/_conferences/pulpocon-2020.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="105">
-                <caret line="7" column="16" selection-start-line="7" selection-start-column="16" selection-end-line="7" selection-end-column="16" />
+              <first_editor relative-caret-position="23">
+                <caret line="1" column="15" selection-start-line="1" selection-start-column="15" selection-end-line="1" selection-end-column="15" />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/_conferences/pulpocon-2019.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="92">
+                <caret line="4" column="10" lean-forward="true" selection-start-line="4" selection-start-column="10" selection-end-line="4" selection-end-column="10" />
               </first_editor>
               <second_editor />
             </state>
@@ -41,8 +58,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/_site/index.html" />
-        <option value="$PROJECT_DIR$/conferences.ics" />
         <option value="$PROJECT_DIR$/_layouts/default.html" />
         <option value="$PROJECT_DIR$/_conferences/commit-conf-2019.md" />
         <option value="$PROJECT_DIR$/_conferences/jonthebeach-2019.md" />
@@ -92,6 +107,8 @@
         <option value="$PROJECT_DIR$/_conferences/expoqa-2019.md" />
         <option value="$PROJECT_DIR$/_conferences/vlc-testing-2019.md" />
         <option value="$PROJECT_DIR$/_conferences/techfest-2020.md" />
+        <option value="$PROJECT_DIR$/_conferences/pulpocon-2020.md" />
+        <option value="$PROJECT_DIR$/_conferences/pulpocon-2019.md" />
       </list>
     </option>
   </component>
@@ -107,28 +124,23 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
-              <item name="conferences" type="b2602c69:ProjectViewProjectNode" />
-              <item name="conferences" type="462c0819:PsiDirectoryNode" />
+              <item name="tech-conferences-spain" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tech-conferences-spain" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="conferences" type="b2602c69:ProjectViewProjectNode" />
-              <item name="conferences" type="462c0819:PsiDirectoryNode" />
+              <item name="tech-conferences-spain" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tech-conferences-spain" type="462c0819:PsiDirectoryNode" />
               <item name="_conferences" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="conferences" type="b2602c69:ProjectViewProjectNode" />
-              <item name="conferences" type="462c0819:PsiDirectoryNode" />
-              <item name="_incomplete" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -170,17 +182,18 @@
       <workItem from="1561382949672" duration="451000" />
       <workItem from="1561643039883" duration="229000" />
       <workItem from="1562056686712" duration="48000" />
+      <workItem from="1577700905434" duration="89000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9904000" />
+    <option name="totallyTimeSpent" value="9993000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="877" extended-state="6" />
+    <frame x="56" y="27" width="1864" height="1053" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19957082" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20209251" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -215,16 +228,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/_conferences/big-things-2019.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="180">
-            <caret line="12" column="3" lean-forward="true" selection-start-line="12" selection-start-column="3" selection-end-line="12" selection-end-column="3" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/_conferences/call-of-data-2019.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -391,14 +394,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/_conferences/pulpocon-2019.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor />
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/_conferences/pycones-2019.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -501,16 +496,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/_conferences/wtm-galicia-2019.md" />
-    <entry file="file://$PROJECT_DIR$/_conferences/wordcamp-2019.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="30">
-            <caret line="2" column="40" selection-start-line="2" selection-start-column="40" selection-end-line="2" selection-end-column="40" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/_conferences/wordcamp-2019.md" />
     <entry file="file://$PROJECT_DIR$/_conferences/wtm-asturias-2019.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -670,19 +656,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/_conferences/techfest-2019.md">
+    <entry file="file://$PROJECT_DIR$/_conferences/techfest-2019.md" />
+    <entry file="file://$PROJECT_DIR$/_conferences/techfest-2020.md" />
+    <entry file="file://$PROJECT_DIR$/_conferences/pulpocon-2020.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor />
+          <first_editor relative-caret-position="23">
+            <caret line="1" column="15" selection-start-line="1" selection-start-column="15" selection-end-line="1" selection-end-column="15" />
+          </first_editor>
           <second_editor />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/_conferences/techfest-2020.md">
+    <entry file="file://$PROJECT_DIR$/_conferences/pulpocon-2019.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="105">
-            <caret line="7" column="16" selection-start-line="7" selection-start-column="16" selection-end-line="7" selection-end-column="16" />
+          <first_editor relative-caret-position="92">
+            <caret line="4" column="10" lean-forward="true" selection-start-line="4" selection-start-column="10" selection-end-line="4" selection-end-column="10" />
           </first_editor>
           <second_editor />
         </state>

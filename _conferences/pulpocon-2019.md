@@ -1,6 +1,6 @@
 ---
 name: "PulpoCon"
-website: https://pulpocon.es
+website: https://2019.pulpocon.es
 twitter: https://twitter.com/phpulpocon
 location: Pontevedra, Spain
 
