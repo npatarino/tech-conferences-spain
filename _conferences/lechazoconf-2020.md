@@ -1,5 +1,5 @@
 ---
-name: "LechazoConf '20"
+name: "LechazoConf"
 website: https://lechazoconf.com/
 twitter: http://twitter.com/lechazoconf/
 location: Valladolid, Spain
