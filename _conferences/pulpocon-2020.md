@@ -1,9 +1,9 @@
 ---
 name: "PulpoCon"
-website: https://2019.pulpocon.es
+website: https://pulpocon.es
 twitter: https://twitter.com/phpulpocon
 location: Vigo, Pontevedra, Spain
 
-date_start: 2019-09-07
-date_end:   2019-09-07
+date_start: 2020-09-05
+date_end:   2020-09-05
 ---
