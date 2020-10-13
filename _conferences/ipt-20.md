@@ -3,6 +3,7 @@ name: "Informática Para Tod@s"
 website: https://ipt.acm.org/
 twitter: https://twitter.com/IPT_ACMW_es
 location: Valencia, Spain
+cancelled: true
 
 date_start: 2020-04-24
 date_end:   2020-04-25

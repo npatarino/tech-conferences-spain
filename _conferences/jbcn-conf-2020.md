@@ -3,6 +3,7 @@ name: "JBCNConf"
 website: http://www.jbcnconf.com/2020/
 twitter: https://twitter.com/jbcnconf/
 location: Barcelona, Spain
+cancelled: true
 
 date_start: 2020-07-06
 date_end:   2020-07-08
