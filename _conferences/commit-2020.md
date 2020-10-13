@@ -3,6 +3,7 @@ name: "Commit"
 website: https://2020.commit-conf.com/
 twitter: https://twitter.com/commitconf
 location: Madrid, Spain
+cancelled: true
 
 date_start: 2020-11-27
 date_end:   2020-11-28
