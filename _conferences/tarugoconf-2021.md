@@ -1,7 +1,7 @@
 ---
 name: "Tarugoconf"
-website: http://es.coolconf.com/2019/
-twitter: https://www.tarugoconf.com/
+website: https://www.tarugoconf.com/
+twitter: https://twitter.com/tarugoconf
 location: Evento Online (pero awesómico)
 
 date_start: 2021-10-21
