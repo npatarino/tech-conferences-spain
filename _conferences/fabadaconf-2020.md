@@ -1,9 +1,10 @@
 ---
 name: "Fabada Conf"
-website: https://fabadaconf.com/2019/
+website: https://fabadaconf.com
 twitter: https://twitter.com/fabadaconf
 location: Gijón, Asturias, Spain
+cancelled: true
 
-date_start: 2019-11-09
-date_end:   2019-11-09
+date_start: 2020-11-07
+date_end:   2020-11-07
 ---

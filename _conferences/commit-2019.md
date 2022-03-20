@@ -1,5 +1,5 @@
 ---
-name: "Commit Conf"
+name: "Commit"
 website: https://2019.commit-conf.com/
 twitter: https://twitter.com/commitconf
 location: Madrid, Spain

@@ -4,6 +4,8 @@ website:  https://springio.net
 twitter:  https://twitter.com/spring_io
 location: Barcelona, Spain
 
+cancelled: true
+
 date_start: 2020-05-14
 date_end:   2020-05-15
 

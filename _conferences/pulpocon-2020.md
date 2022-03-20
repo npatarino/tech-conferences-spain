@@ -3,6 +3,7 @@ name: "PulpoCon - POSTPOSED TO 2021"
 website: https://pulpocon.es
 twitter: https://twitter.com/phpulpocon
 location: Vigo, Pontevedra, Spain
+cancelled: true
 
 date_start: 2020-09-05
 date_end:   2020-09-05
