@@ -1,5 +1,5 @@
 ---
-name: "PulpoCon - POSTPOSED TO 2021"
+name: "PulpoCon - POSTPOSED TO 2022"
 website: https://pulpocon.es
 twitter: https://twitter.com/phpulpocon
 location: Vigo, Pontevedra, Spain
