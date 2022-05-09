@@ -2,7 +2,7 @@
 name: "Software Crafters"
 website: https://softwarecrafters.barcelona/
 twitter: https://twitter.com/bcnswcraft
-location: Barcelona, Catalunya, Spain
+location: Barcelona, Spain
 
 date_start: 2022-10-22
 date_end:   2022-10-23
