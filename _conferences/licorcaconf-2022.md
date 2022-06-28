@@ -1,7 +1,7 @@
 ---
-name: "LicorcaConf"
-website: https://www.licorcaconf.com/
-twitter: http://twitter.com/licorcaconf/
+name:     "LicorcaConf"
+website:  https://www.licorcaconf.com/
+twitter:  https://twitter.com/LicorcaConf
 location: Santiago de Compostela, Spain
 
 date_start: 2022-10-15
