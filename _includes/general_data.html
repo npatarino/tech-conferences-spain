@@ -1,7 +1,8 @@
+
 {{ conference.date_start | date: "%d" }}&nbsp;
 {% if conference.twitter %}
 {% assign random_number = site.time | date: "%N" | modulo: 1000 %}
-<img alt="Avantar" src="https://res.cloudinary.com/dsscw65fc/image/twitter_name/{{ conference.twitter | split: '/' | last }}" onerror="this.onerror=null; this.src='https://avatar.vercel.sh/{{ random_number }}?size=100'" width="100" height="100">
+<img alt="Avatar {{ conference.name }}" src="https://res.cloudinary.com/dsscw65fc/image/twitter_name/{{ conference.twitter | split: '/' | last }}" onerror="this.onerror=null; this.src='https://avatar.vercel.sh/{{ random_number }}?size=50'" width="50" height="50">
 {% endif %}
 <a class="post-link" href="{{ conference.website }}">{{ conference.name }}</a>
 {% if conference.location %}
