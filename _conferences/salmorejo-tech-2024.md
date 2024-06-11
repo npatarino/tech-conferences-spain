@@ -1,6 +1,6 @@
 ---
 name: "Salmorejo Tech"
-website: https://salmorejo.tech/2023/
+website: https://salmorejo.tech/2024/
 twitter: https://twitter.com/AulaSL
 location: Córdoba, Spain
 
