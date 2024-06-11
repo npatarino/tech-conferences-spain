@@ -1,6 +1,6 @@
 ---
-name: "DevBcn 2023"
-website: https://jonathanvila.wixsite.com/devbcn
+name: "DevBcn"
+website: https://www.devbcn.com/
 twitter: https://twitter.com/dev_bcn
 location: Barcelona, Spain
 

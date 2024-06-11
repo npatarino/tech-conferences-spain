@@ -34,13 +34,30 @@ cfp_site: http://es.coolconf.com/2019/call-for-papers/ # Optional, will default 
 Running locally
 ---------------
 
+## Traditional
+
 ```
 bundle install --path vendor/bundle
 bundle exec jekyll serve
 ```
 
-Once running the site can be opened at http://localhost:4000.
+Once running the site can be opened at [http://localhost:4000](http://localhost:4000).
 
+## Docker
+
+Compile image
+
+```
+docker build -t tech-conferences-spain-app .
+```
+
+Run image
+
+```
+docker run --rm -it -v ./:/usr/src/app -p 4000:4000 -p 35729:35729 tech-conferences-spain-app bundle exec jekyll serve
+```
+
+Once running the site can be opened at [http://localhost:4000](http://localhost:4000).
 
 License
 -------
