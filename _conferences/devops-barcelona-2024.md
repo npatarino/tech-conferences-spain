@@ -1,6 +1,6 @@
 ---
 name: "Devops Barcelona"
-website: https://devops.barcelona/?utm_source=techconf&utm_medium=link&utm_campaign=devops-barcelona-2023&utm_id=devops-barcelona-2023
+website: https://devops.barcelona
 twitter: https://twitter.com/devopsbarcelona
 location: Barcelona, Spain
 
