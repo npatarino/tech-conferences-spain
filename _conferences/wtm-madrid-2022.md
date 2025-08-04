@@ -1,9 +1,9 @@
 ---
 name: "WTM"
-website: https://wtm.gdgmadrid.es/
-twitter: https://twitter.com/TechandLadies
+website: https://gdg.community.dev/events/details/google-gdg-madrid-presents-iwd-women-techmakers-2023/
+twitter: https://twitter.com/wtmmadrid
 location: Madrid, Spain
 
-date_start: 2022-04-23
-date_end:   2022-04-23
+date_start: 2022-04-14
+date_end:   2022-04-14
 ---
