@@ -1,8 +1,35 @@
 timezone: "UTC"
 markdown: kramdown
 
-# Google Analytics
-google_analytics: "G-077BBT8NE3"  # Reemplaza con tu ID de Google Analytics
+# Site configuration
+title: "Conferencias Tech España"
+description: "Los próximos eventos tecnológicos más relevantes de España"
+url: "https://conferencias-tech-espana.github.io"
+baseurl: ""
 
+# Google Analytics
+google_analytics: "G-077BBT8NE3"
+
+# Jekyll plugins
+plugins:
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Collections
 collections:
-- conferences
+  conferences:
+    output: false
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - vendor/
+  - .bundle/
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - node_modules/
+  - "*.gemspec"
