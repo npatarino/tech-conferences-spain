@@ -1,7 +1,7 @@
 ---
 name: "PulpoCon"
 website: https://pulpocon.es
-twitter: https://twitter.com/phpulpocon
+twitter: https://x.com/phpulpocon
 location: Vigo, Spain
 
 date_start: 2022-09-01

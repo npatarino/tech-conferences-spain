@@ -1,7 +1,7 @@
 ---
 name: "Navaja Negra Conference"
 website: https://www.navajanegra.com/2019/
-twitter: https://twitter.com/navajanegra_ab
+twitter: https://x.com/navajanegra_ab
 location: Albacete, Spain
 
 date_start: 2019-10-03

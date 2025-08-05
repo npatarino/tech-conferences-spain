@@ -1,7 +1,7 @@
 ---
 name:     "JSDay Canarias"
 website:  http://jsdaycanarias.com/
-twitter:  https://twitter.com/canariasjs
+twitter:  https://x.com/canariasjs
 location: Tenerife, Spain
 cancelled: true
 

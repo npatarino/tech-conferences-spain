@@ -1,7 +1,7 @@
 ---
 name: "Big Things"
 website: https://www.bigthingsconference.com/
-twitter: https://twitter.com/BigThingsConf
+twitter: https://x.com/BigThingsConf
 location: Madrid, Spain
 
 date_start: 2019-11-20

@@ -1,7 +1,7 @@
 ---
 name: "Wey Wey Web"
 website: https://weyweyweb.com/
-twitter: https://twitter.com/WeyWeyWeb
+twitter: https://x.com/WeyWeyWeb
 location: Málaga, Spain
 
 date_start: 2023-11-23

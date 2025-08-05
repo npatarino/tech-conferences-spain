@@ -26,6 +26,9 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - README.md
+
+  - SETUP.md
+  - setup.sh
   - vendor/
   - .bundle/
   - .sass-cache/

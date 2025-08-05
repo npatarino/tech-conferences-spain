@@ -1,7 +1,7 @@
 ---
 name: "#Tarugoconf. Sofá edition"
 website: https://www.tarugoconf.com/
-twitter: http://twitter.com/tarugoconf/
+twitter: https://x.com/tarugoconf/
 location: Online
 
 date_start: 2020-11-26

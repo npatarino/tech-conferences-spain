@@ -1,7 +1,7 @@
 ---
 name: "DevFest"
 website: http://devfest.gdgasturias.com/
-twitter: https://twitter.com/GDGAsturias
+twitter: https://x.com/GDGAsturias
 location: Asturias, Spain
 
 date_start: 2019-11-16

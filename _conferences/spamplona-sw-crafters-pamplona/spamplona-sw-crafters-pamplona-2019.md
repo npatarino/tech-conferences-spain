@@ -1,7 +1,7 @@
 ---
 name: "SPamplona SW Crafters"
 website: https://pamplonaswcraft.com/
-twitter: https://twitter.com/pamplonaswcraft
+twitter: https://x.com/pamplonaswcraft
 location: Pamplona, Navarra, Spain
 
 date_start: 2019-06-14

@@ -1,7 +1,7 @@
 ---
 name: "JS Camp"
 website: https://jscamp.tech/
-twitter: https://twitter.com/jscamp
+twitter: https://x.com/jscamp
 location: Barcelona, Spain
 
 date_start: 2021-07-15

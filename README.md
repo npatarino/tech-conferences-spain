@@ -53,7 +53,7 @@ The contents of the file should use the following template:
 ---
 name: "CoolConf"
 website: http://es.coolconf.com/2024/
-twitter: http://twitter.com/coolconf/
+twitter: https://x.com/coolconf/
 location: Illescas, Toledo, Spain
 
 date_start: 2024-10-18

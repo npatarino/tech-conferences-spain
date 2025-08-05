@@ -1,7 +1,7 @@
 ---
 name:     "Devops Barcelona"
 website:  https://devops.barcelona
-twitter:  https://twitter.com/devopsbarcelona
+twitter:  https://x.com/devopsbarcelona
 location: Barcelona, Spain
 cancelled: true
 

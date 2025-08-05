@@ -151,6 +151,36 @@ body {
     }
   }
   
+  .event-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-right: 12px;
+    
+    .avatar-image {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #e2e8f0;
+    }
+    
+    .avatar-fallback {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      border: 2px solid #e2e8f0;
+    }
+  }
+  
   .event-info {
     flex: 1;
     display: flex;
@@ -330,6 +360,12 @@ body {
       align-self: flex-start;
     }
     
+    .event-avatar {
+      margin-right: 0;
+      margin-bottom: 8px;
+      align-self: flex-start;
+    }
+    
     .event-info {
       width: 100%;
       flex-direction: column;
@@ -403,5 +439,254 @@ body {
   
   .month-title {
     font-size: 1.3rem;
+  }
+}
+
+// Card Grid Layout Styles
+.card-grid-body {
+  background: #f8fafc;
+}
+
+.main-content-cards {
+  min-height: 60vh;
+  display: block;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.month-section-cards {
+  margin-bottom: 48px;
+  
+  .month-title-cards {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 24px;
+  }
+}
+
+.conference-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.conference-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.card-image {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+  
+  .card-gradient {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  // Different gradients for different types of events
+  .devfest-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+  
+  .js-gradient {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  }
+  
+  .react-gradient {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  }
+  
+  .python-gradient {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  }
+  
+  .security-gradient {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  }
+  
+  .data-gradient {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  }
+  
+  .mobile-gradient {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+  }
+  
+  .web-gradient {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  }
+  
+  .default-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+}
+
+.card-actions {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  
+  .card-action-btn {
+    width: 32px;
+    height: 32px;
+    background: rgba(29, 161, 242, 0.9);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: white;
+    text-decoration: none;
+    
+    &:hover {
+      background: #1da1f2;
+      transform: scale(1.1);
+    }
+    
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+}
+
+.cfp-badge {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: #10b981;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.card-content {
+  padding: 20px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.card-date {
+  flex-shrink: 0;
+  text-align: center;
+  
+  .date-month {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: #718096;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  
+  .date-day {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2d3748;
+    line-height: 1;
+  }
+}
+
+.card-details {
+  flex: 1;
+  min-width: 0;
+  
+  .card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2d3748;
+    margin: 0 0 6px 0;
+    line-height: 1.3;
+    
+    a {
+      color: inherit;
+      text-decoration: none;
+      
+      &:hover {
+        color: #3182ce;
+      }
+    }
+  }
+  
+  .card-location {
+    font-size: 14px;
+    color: #718096;
+    margin: 0;
+    font-weight: 500;
+  }
+}
+
+// Responsive adjustments for card grid
+@media (max-width: 1024px) {
+  .conference-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content-cards {
+    padding: 0 16px;
+  }
+  
+  .conference-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .month-title-cards {
+    font-size: 1.5rem;
+  }
+  
+  .card-content {
+    padding: 16px;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content-cards {
+    padding: 0 12px;
+  }
+  
+  .conference-card {
+    border-radius: 12px;
+  }
+  
+  .card-image {
+    height: 140px;
+  }
+  
+  .card-content {
+    padding: 12px;
+  }
+  
+  .card-title {
+    font-size: 15px;
+  }
+  
+  .card-location {
+    font-size: 13px;
   }
 }

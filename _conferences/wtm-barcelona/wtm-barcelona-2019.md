@@ -1,7 +1,7 @@
 ---
 name: "WTM"
 website: http://wtm.gdgbarcelona.com/
-twitter: https://twitter.com/wtmbcn
+twitter: https://x.com/wtmbcn
 location: Barcelona, Spain
 
 date_start: 2019-04-06

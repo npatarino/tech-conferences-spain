@@ -1,7 +1,7 @@
 ---
 name:     "Asturias NetConf"
 website:  http://asturiasnetconf.tech/
-twitter:  https://twitter.com/net_conf
+twitter:  https://x.com/net_conf
 location: Gijón, Spain
 
 date_start: 2020-02-22

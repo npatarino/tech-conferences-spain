@@ -1,7 +1,7 @@
 ---
 name:     "Try IT!"
 website:  https://congresotryit.es/
-twitter:  https://twitter.com/tryit_upm
+twitter:  https://x.com/tryit_upm
 location: Madrid, Spain
 cancelled: true
 

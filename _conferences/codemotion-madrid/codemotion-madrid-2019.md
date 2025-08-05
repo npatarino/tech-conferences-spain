@@ -1,7 +1,7 @@
 ---
 name: "Codemotion"
 website: https://madrid2018.codemotionworld.com/es/
-twitter: https://twitter.com/CodemoMadrid
+twitter: https://x.com/CodemoMadrid
 location: Madrid, Spain
 
 date_start: 2019-09-24

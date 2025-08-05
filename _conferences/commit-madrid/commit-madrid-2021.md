@@ -1,7 +1,7 @@
 ---
 name: "Commit"
 website: https://2021.commit-conf.com/
-twitter: https://twitter.com/commitconf
+twitter: https://x.com/commitconf
 location: Online
 cancelled: true
 

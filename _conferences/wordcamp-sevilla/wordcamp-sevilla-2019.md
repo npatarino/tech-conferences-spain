@@ -1,7 +1,7 @@
 ---
 name: "WordCamp"
 website: https://2019-developers.sevilla.wordcamp.org/
-twitter: https://twitter.com/WCSevilla
+twitter: https://x.com/WCSevilla
 location: Sevilla, Spain
 
 date_start: 2019-10-04

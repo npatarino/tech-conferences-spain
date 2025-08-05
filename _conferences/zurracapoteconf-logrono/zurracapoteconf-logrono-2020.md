@@ -1,7 +1,7 @@
 ---
 name: "Zurracapoteconf"
 website: https://zurracapoteconf.appspot.com/
-twitter: https://twitter.com/zurracapoteconf
+twitter: https://x.com/zurracapoteconf
 location: Logroño, Spain
 
 date_start: 2020-02-21

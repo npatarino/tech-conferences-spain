@@ -1,7 +1,7 @@
 ---
 name: "J on the Beach"
 website: https://jonthebeach.com/
-twitter: https://twitter.com/jotb19
+twitter: https://x.com/jotb19
 location: Málaga, Spain
 
 date_start: 2019-05-15

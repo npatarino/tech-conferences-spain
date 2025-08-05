@@ -1,7 +1,7 @@
 ---
 name: "PyConEs"
 website: https://2024.es.pycon.org/
-twitter: https://twitter.com/pycones
+twitter: https://x.com/pycones
 location: Vigo, Spain
 
 date_start: 2024-10-04

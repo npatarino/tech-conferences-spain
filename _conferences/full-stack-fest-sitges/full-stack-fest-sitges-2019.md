@@ -1,7 +1,7 @@
 ---
 name:       "Full Stack Fest"
 website:    https://2019.fullstackfest.com/
-twitter:    https://twitter.com/fullstackfest
+twitter:    https://x.com/fullstackfest
 location:   Sitges, Barcelona, Spain
 
 date_start: 2019-09-03

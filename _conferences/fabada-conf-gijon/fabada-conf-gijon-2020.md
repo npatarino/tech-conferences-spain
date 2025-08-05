@@ -1,7 +1,7 @@
 ---
 name: "Fabada Conf"
 website: https://fabadaconf.com
-twitter: https://twitter.com/fabadaconf
+twitter: https://x.com/fabadaconf
 location: Gijón, Asturias, Spain
 cancelled: true
 

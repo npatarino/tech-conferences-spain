@@ -1,7 +1,7 @@
 ---
 name:     "JSDayES"
 website:  http://2019.jsday.es/
-twitter:  https://twitter.com/jsdayes
+twitter:  https://x.com/jsdayes
 location: Madrid, Spain
 
 date_start: 2020-05-09

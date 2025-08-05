@@ -1,7 +1,7 @@
 ---
 name: "WTM"
 website: https://wtmz24.mullerestech.es/
-twitter: https://twitter.com/WTMZaragoza
+twitter: https://x.com/WTMZaragoza
 location: Zaragoza, Spain
 
 date_start: 2024-11-09

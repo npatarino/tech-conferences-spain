@@ -1,7 +1,7 @@
 ---
 name: "Droidcon"
 website: https://www.madrid.droidcon.com/
-twitter: https://twitter.com/droidconMAD
+twitter: https://x.com/droidconMAD
 location: Madrid, Spain
 
 date_start: 2019-12-20

@@ -1,7 +1,7 @@
 ---
 name: "Greach"
 website: https://greachconf.com/
-twitter: https://twitter.com/greachconf
+twitter: https://x.com/greachconf
 location: Madrid, Spain
 
 date_start: 2019-03-28

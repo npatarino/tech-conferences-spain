@@ -1,7 +1,7 @@
 ---
 name:     "Pamplona SW Crafters"
 website:  https://pamplonaswcraft.com/
-twitter:  https://twitter.com/pamplonaswcraft
+twitter:  https://x.com/pamplonaswcraft
 location: Pamplona, Spain
 cancelled: true
 

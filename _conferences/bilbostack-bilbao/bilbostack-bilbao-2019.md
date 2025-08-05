@@ -1,7 +1,7 @@
 ---
 name: "BilboStack"
 website: https://bilbostack.com/2019/
-twitter: https://twitter.com/bilbostack
+twitter: https://x.com/bilbostack
 location: Bilbao, Vizcaya, Spain
 
 date_start: 2019-01-26

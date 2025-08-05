@@ -1,7 +1,7 @@
 ---
 name: "PyConEs"
 website: https://2022.es.pycon.org
-twitter: https://twitter.com/pycones
+twitter: https://x.com/pycones
 location: Granada, Spain
 
 date_start: 2022-09-30

@@ -1,7 +1,7 @@
 ---
 name: "DevFest Sevilla"
 website: https://gdg.community.dev/gdg-sevilla/
-twitter: https://twitter.com/GDGSevilla
+twitter: https://x.com/GDGSevilla
 location: Sevilla, Spain
 
 date_start: 2025-11-09

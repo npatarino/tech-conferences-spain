@@ -1,7 +1,7 @@
 ---
 name: "Pucela Tech Day"
 website: https://pucelatechday.com/
-twitter: https://twitter.com/pucelatechday/
+twitter: https://x.com/pucelatechday/
 location: Valladolid, Spain
 
 cancelled: true

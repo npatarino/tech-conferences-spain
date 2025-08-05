@@ -1,7 +1,7 @@
 ---
 name: "Nerdearla España"
 website: https://nerdearla.es/
-twitter: https://twitter.com/nerdearla
+twitter: https://x.com/nerdearla
 location: Madrid, Spain
 
 date_start: 2025-11-13

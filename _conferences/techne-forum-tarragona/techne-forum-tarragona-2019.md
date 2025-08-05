@@ -1,7 +1,7 @@
 ---
 name: "Techne Forum"
 website: https://techneforum.com/
-twitter: https://twitter.com/techneforum
+twitter: https://x.com/techneforum
 location: Tarragona, Spain
 
 date_start: 2019-10-19

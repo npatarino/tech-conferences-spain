@@ -1,7 +1,7 @@
 ---
 name: "Conferencia Agile Spain (CAS)"
 website: https://cas.agile-spain.org/
-twitter: https://twitter.com/agilespain
+twitter: https://x.com/agilespain
 location: Madrid, Spain
 
 date_start: 2025-11-13

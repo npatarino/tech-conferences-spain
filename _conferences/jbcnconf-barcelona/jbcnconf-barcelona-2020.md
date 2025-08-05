@@ -1,7 +1,7 @@
 ---
 name: "JBCNConf"
 website: http://www.jbcnconf.com/2020/
-twitter: https://twitter.com/jbcnconf/
+twitter: https://x.com/jbcnconf/
 location: Barcelona, Spain
 cancelled: true
 

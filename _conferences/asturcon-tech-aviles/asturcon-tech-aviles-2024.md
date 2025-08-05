@@ -1,7 +1,7 @@
 ---
 name: "AsturCon Tech"
 website: https://asturcon.tech/
-twitter: https://twitter.com/AsturCONtech
+twitter: https://x.com/AsturCONtech
 location: Avilés, Spain
 
 date_start: 2024-11-08

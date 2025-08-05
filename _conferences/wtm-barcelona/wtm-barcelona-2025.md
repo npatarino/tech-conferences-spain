@@ -1,7 +1,7 @@
 ---
 name: "WTM Barcelona 2025"
 website: https://wtmbarcelona.com/
-twitter: https://twitter.com/wtmbcn
+twitter: https://x.com/wtmbcn
 location: Barcelona, Spain
 
 date_start: 2025-03-08

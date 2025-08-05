@@ -1,7 +1,7 @@
 ---
 name: "DevFest"
 website: http://devfestalicante.com/ 
-twitter: https://twitter.com/GDGAlicante
+twitter: https://x.com/GDGAlicante
 location: Alicante, Spain
 
 date_start: 2019-11-16

@@ -1,7 +1,7 @@
 ---
 name: "WordCamp Galicia"
 website: https://galicia.wordcamp.org/2025/es/
-twitter: https://twitter.com/wordcampgalicia
+twitter: https://x.com/wcgalicia
 location: Pontevedra, Spain
 
 date_start: 2025-10-03

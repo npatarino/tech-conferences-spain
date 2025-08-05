@@ -1,7 +1,7 @@
 ---
 name:     "AdaloversConf"
 website:  http://adaloversconf.es/
-twitter:  https://twitter.com/adalovedev
+twitter:  https://x.com/adalovedev
 location: Tenerife, Spain
 
 date_start: 2021-09-24

@@ -1,7 +1,7 @@
 ---
 name: "Commit Conf"
 website: https://2025.commit-conf.com/
-twitter: https://twitter.com/commitconf
+twitter: https://x.com/commitconf
 location: Madrid, Spain
 
 date_start: 2025-04-04

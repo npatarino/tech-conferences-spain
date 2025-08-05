@@ -1,7 +1,7 @@
 ---
 name: "React Alicante"
 website: https://reactalicante.es/
-twitter: https://twitter.com/reactalicante
+twitter: https://x.com/reactalicante
 location: Alicante, Spain
 
 date_start: 2025-10-02

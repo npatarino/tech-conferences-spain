@@ -1,7 +1,7 @@
 ---
 name: "Codemotion Madrid"
 website: https://conferences.codemotion.com/madrid2025/es/home-es/
-twitter: https://twitter.com/codemotionit
+twitter: https://x.com/codemotionit
 location: Madrid, Spain
 
 date_start: 2025-05-20

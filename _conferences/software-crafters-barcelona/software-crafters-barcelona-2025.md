@@ -1,7 +1,7 @@
 ---
 name: "Software Crafters Barcelona"
 website: https://softwarecrafters.barcelona/
-twitter: https://twitter.com/bcnswcraft
+twitter: https://x.com/bcnswcraft
 location: Barcelona, Spain
 
 date_start: 2025-10-24

@@ -1,7 +1,7 @@
 ---
 name: "Tarugoconf"
 website: https://trgcon.com/
-twitter: https://twitter.com/tarugoconf
+twitter: https://x.com/tarugoconf
 location: Madrid, Spain
 
 date_start: 2024-11-14

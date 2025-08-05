@@ -1,7 +1,7 @@
 ---
 name: "Tarugoconf"
 website: https://www.tarugoconf.com/
-twitter: https://twitter.com/tarugoconf
+twitter: https://x.com/tarugoconf
 location: Online
 
 date_start: 2021-10-21

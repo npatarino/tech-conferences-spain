@@ -1,7 +1,7 @@
 ---
 name: "DevFest Sevilla 2024"
 website: https://devfest24.gdgsevilla.com/
-twitter: https://twitter.com/GDGSevilla
+twitter: https://x.com/GDGSevilla
 location: Sevilla, Spain
 
 date_start: 2024-11-24

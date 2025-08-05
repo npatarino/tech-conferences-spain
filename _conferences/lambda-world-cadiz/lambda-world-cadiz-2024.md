@@ -1,7 +1,7 @@
 ---
 name: "Lambda World"
 website: https://www.lambda.world
-twitter: https://twitter.com/Lambda_World
+twitter: https://x.com/Lambda_World
 location: Cadiz, Spain
 
 date_start: 2024-10-02

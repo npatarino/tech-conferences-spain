@@ -1,7 +1,7 @@
 ---
 name:     "VCLTesting"
 website:  https://vlctesting.es
-twitter:  https://twitter.com/iti_tic
+twitter:  https://x.com/iti_tic
 location: Valencia, Spain
 
 date_start: 2019-11-27

@@ -1,7 +1,7 @@
 ---
 name: "MiduFest"
 website: https://www.midufest.com/
-twitter: https://twitter.com/midudev
+twitter: https://x.com/midudev
 location: Online
 
 date_start: 2025-05-28

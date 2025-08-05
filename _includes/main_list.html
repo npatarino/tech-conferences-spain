@@ -16,6 +16,27 @@
               </div>
             </div>
             
+            <!-- Avatar temporalmente oculto
+            <div class="event-avatar">
+              {% if conference.twitter %}
+                {% assign twitter_url = conference.twitter | strip %}
+                {% assign twitter_handle = twitter_url | replace: 'http://x.com/', '' | replace: 'https://x.com/', '' | replace: 'http://twitter.com/', '' | replace: 'https://twitter.com/', '' | replace: 'www.x.com/', '' | replace: 'www.twitter.com/', '' | replace: 'x.com/', '' | replace: 'twitter.com/', '' | replace: '@', '' | replace: '/', '' | strip %}
+                <img src="https://unavatar.io/{{ twitter_handle }}" 
+                     alt="Avatar de {{ conference.name }}" 
+                     class="avatar-image"
+                     loading="lazy"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="avatar-fallback" style="display: none;">
+                  {{ conference.name | slice: 0 | upcase }}
+                </div>
+              {% else %}
+                <div class="avatar-fallback">
+                  {{ conference.name | slice: 0 | upcase }}
+                </div>
+              {% endif %}
+            </div>
+            -->
+            
             <div class="event-info">
               <h3 class="event-name">
                 {% if conference.website %}
@@ -39,18 +60,16 @@
             
             <div class="event-actions">
               {% if conference.website %}
-                <a href="{{ conference.website }}" class="share-link" target="_blank" rel="noopener" title="Ver evento">
+                <a href="{{ conference.website }}" class="share-link" target="_blank" rel="noopener" title="Ver website">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="18" cy="5" r="3"/>
-                    <circle cx="6" cy="12" r="3"/>
-                    <circle cx="18" cy="19" r="3"/>
-                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
-                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+                    <path d="M2 12h20"/>
                   </svg>
                 </a>
               {% endif %}
               {% if conference.twitter %}
-                <a href="{{ conference.twitter }}" class="twitter-link" target="_blank" rel="noopener" title="Ver en Twitter">
+                <a href="{{ conference.twitter }}" class="twitter-link" target="_blank" rel="noopener" title="Ver en X">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>
                   </svg>

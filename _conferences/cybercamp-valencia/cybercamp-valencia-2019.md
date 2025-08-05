@@ -1,7 +1,7 @@
 ---
 name:       "CyberCamp"
 website:    https://cybercamp.es/
-twitter:    https://twitter.com/cybercampes
+twitter:    https://x.com/cybercampes
 location:   Valencia, Spain
 
 date_start: 2019-11-27

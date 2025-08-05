@@ -1,7 +1,7 @@
 ---
 name: "Hola Mundo Day"
 website: https://holamundo.day/
-twitter: https://twitter.com/mouredev
+twitter: https://x.com/mouredev
 location: Online
 
 date_start: 2025-05-07

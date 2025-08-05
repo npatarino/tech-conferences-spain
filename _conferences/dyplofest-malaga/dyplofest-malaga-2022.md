@@ -1,7 +1,7 @@
 ---
 name:       "DyploFest"
 website:    https://dyplofest.com/
-twitter:    https://twitter.com/DscMalaga
+twitter:    https://x.com/DscMalaga
 location:   Málaga, Spain
 
 date_start: 2022-06-04

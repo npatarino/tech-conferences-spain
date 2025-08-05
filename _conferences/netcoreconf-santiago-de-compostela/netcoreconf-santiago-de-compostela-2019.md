@@ -1,7 +1,7 @@
 ---
 name: "NetCoreConf"
 website: https://galicia.netcoreconf.com/
-twitter: https://twitter.com/netcoreconf
+twitter: https://x.com/netcoreconf
 location: Santiago de Compostela, Galicia, Spain
 
 date_start: 2019-09-28

@@ -1,7 +1,7 @@
 ---
 name: "MorcillaConf"
 website: http://morcillaconf.es/
-twitter: https://twitter.com/morcillaconf/
+twitter: https://x.com/morcillaconf/
 location: Online
 
 date_start: 2020-10-03

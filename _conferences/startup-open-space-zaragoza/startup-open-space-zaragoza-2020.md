@@ -1,7 +1,7 @@
 ---
 name:     "Startup Open Space"
 website:  http://sosz16.cachirulovalley.com/
-twitter:  https://twitter.com/cachirulovalley
+twitter:  https://x.com/cachirulovalley
 location: Zaragoza, Spain
 cancelled: true
 

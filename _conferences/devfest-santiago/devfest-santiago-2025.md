@@ -1,7 +1,7 @@
 ---
 name: "DevFest Santiago"
 website: https://devfest.gdg-sdc.org
-twitter: https://twitter.com/gdgsdc
+twitter: https://x.com/GDGSantiagoES
 location: Santiago de Compostela, A Coruña, Spain
 
 date_start: 2025-10-08

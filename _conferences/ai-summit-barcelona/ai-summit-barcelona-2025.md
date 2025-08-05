@@ -1,7 +1,7 @@
 ---
 name: "AI Summit Barcelona"
 website: https://aisummitbarcelona.com/
-twitter: https://twitter.com/aisummitbcn
+twitter: https://x.com/manar_ttn
 location: Barcelona, Spain
 
 date_start: 2025-10-15

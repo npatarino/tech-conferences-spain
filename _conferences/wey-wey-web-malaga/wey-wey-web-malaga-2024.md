@@ -1,7 +1,7 @@
 ---
 name: "Wey Wey Web"
 website: https://www.weyweyweb.com/
-twitter: https://twitter.com/WeyWeyWeb
+twitter: https://x.com/WeyWeyWeb
 location: Malaga, Spain
 
 date_start: 2024-11-27

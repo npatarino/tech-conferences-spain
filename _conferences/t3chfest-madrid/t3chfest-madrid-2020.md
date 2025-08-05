@@ -1,7 +1,7 @@
 ---
 name: "T3chFest"
 website: http://t3chfest.es/2020/
-twitter: http://twitter.com/t3chfest/
+twitter: https://x.com/t3chfest/
 location: Leganes, Madrid, Spain
 cancelled: true
 

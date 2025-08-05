@@ -1,7 +1,7 @@
 ---
 name:     "Pamplona SW Crafters"
 website:  https://pamplonaswcraft.com/
-twitter:  https://twitter.com/pamplonaswcraft
+twitter:  https://x.com/pamplonaswcraft
 location: Pamplona, Spain
 
 date_start: 2024-05-17

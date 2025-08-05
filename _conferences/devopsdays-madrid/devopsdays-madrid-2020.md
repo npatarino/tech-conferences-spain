@@ -1,7 +1,7 @@
 ---
 name:     "DevOpsDays"
 website:  https://devopsdays.org/events/2020-madrid/welcome/
-twitter:  https://twitter.com/DevOpsDaysMad
+twitter:  https://x.com/DevOpsDaysMad
 location: Madrid, Spain
 
 date_start: 2020-02-21

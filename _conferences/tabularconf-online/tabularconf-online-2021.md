@@ -2,7 +2,7 @@
 name: "TabularConf 2021"
 website: https://tabularconf.es/
 location: Online
-twitter: https://twitter.com/tabularconf
+twitter: https://x.com/tabularconf
 
 date_start: 2021-01-30
 date_end: 2021-01-30

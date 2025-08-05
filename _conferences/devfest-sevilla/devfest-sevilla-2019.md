@@ -1,7 +1,7 @@
 ---
 name: "DevFest"
 website: https://devfest-sev.firebaseapp.com/
-twitter: https://twitter.com/GDGSevilla
+twitter: https://x.com/GDGSevilla
 location: Sevilla, Spain
 
 date_start: 2019-10-11

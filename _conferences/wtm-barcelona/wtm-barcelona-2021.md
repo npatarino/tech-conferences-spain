@@ -1,7 +1,7 @@
 ---
 name: "WTM Barcelona 2021"
 website: https://wtmbarcelona.com/
-twitter: https://twitter.com/wtmbcn
+twitter: https://x.com/wtmbcn
 location: Online
 
 date_start: 2021-03-08

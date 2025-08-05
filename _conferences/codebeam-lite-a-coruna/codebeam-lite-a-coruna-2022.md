@@ -1,7 +1,7 @@
 ---
 name:     "CodeBEAM Lite"
 website:  https://codebeamcorunha.es/
-twitter:  https://twitter.com/codebeamcorunha
+twitter:  https://x.com/codebeamcorunha
 location: A Coruña, Spain
 
 date_start: 2022-06-11

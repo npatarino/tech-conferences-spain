@@ -1,7 +1,7 @@
 ---
 name: "QA&Test Safety & Cybersecurity"
 website: https://safety.qatest.org/
-twitter: https://twitter.com/qatestconf
+twitter: https://x.com/QATestMadrid
 location: Madrid, Spain
 
 date_start: 2026-04-16

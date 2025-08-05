@@ -1,7 +1,7 @@
 ---
 name: "Commit"
 website: https://2020.commit-conf.com/
-twitter: https://twitter.com/commitconf
+twitter: https://x.com/commitconf
 location: Madrid, Spain
 cancelled: true
 

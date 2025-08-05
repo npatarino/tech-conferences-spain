@@ -1,7 +1,7 @@
 ---
 name: "Salmorejo Tech"
 website: https://salmorejo.tech/2024/
-twitter: https://twitter.com/AulaSL
+twitter: https://x.com/AulaSL
 location: Córdoba, Spain
 
 date_start: 2024-04-26

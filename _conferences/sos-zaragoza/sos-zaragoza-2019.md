@@ -1,7 +1,7 @@
 ---
 name: "SOS"
 website: http://sosz19.cachirulovalley.com
-twitter: https://twitter.com/cachiruloValley
+twitter: https://x.com/cachiruloValley
 location: Zaragoza, Spain
 
 date_start: 2019-03-23

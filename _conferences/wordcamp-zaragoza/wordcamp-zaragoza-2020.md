@@ -1,7 +1,7 @@
 ---
 name:     "WordCamp"
 website:  https://2020.zaragoza.wordcamp.org
-twitter:  https://twitter.com/zaragozawp
+twitter:  https://x.com/zaragozawp
 location: Zaragoza, Spain
 
 date_start: 2020-01-17

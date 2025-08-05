@@ -1,7 +1,7 @@
 ---
 name:       "Codemotion Online"
 website:    https://events.codemotion.com/conferences/online/2020/online-tech-conference-spanish-edition
-twitter:    https://twitter.com/CodemoMadrid
+twitter:    https://x.com/CodemoMadrid
 location:   Online
 
 date_start: 2020-11-03

@@ -1,7 +1,7 @@
 ---
 name: "DevFest"
 website: https://devfest.gdgmalaga.com/
-twitter: https://twitter.com/GDGMalaga
+twitter: https://x.com/GDGMalaga
 location: Malaga, Spain
 
 date_start: 2019-12-14

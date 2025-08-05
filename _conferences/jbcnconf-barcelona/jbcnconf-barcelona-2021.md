@@ -1,7 +1,7 @@
 ---
 name: "JBCNConf"
 website: http://www.jbcnconf.com/
-twitter: https://twitter.com/jbcnconf/
+twitter: https://x.com/jbcnconf/
 location: Barcelona, Spain
 
 date_start: 2021-07-23

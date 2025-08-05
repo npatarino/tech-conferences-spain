@@ -1,7 +1,7 @@
 ---
 name: "The AntiEvent"
 website: https://theantievent.org/
-twitter: https://twitter.com/TheAntiEvent
+twitter: https://x.com/TheAntiEvent
 location: Bilbao, Spain
 
 date_start: 2022-10-07

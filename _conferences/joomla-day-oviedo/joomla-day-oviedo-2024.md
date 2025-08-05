@@ -1,7 +1,7 @@
 ---
 name:     "Joomla Day"
 website:  https://jday.joomlaes.org/
-twitter:  https://twitter.com/Joomla_ES
+twitter:  https://x.com/Joomla_ES
 location: Oviedo, Spain
 
 date_start: 2024-10-04

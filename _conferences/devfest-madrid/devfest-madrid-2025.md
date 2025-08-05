@@ -1,7 +1,7 @@
 ---
 name: "DevFest Madrid"
 website: https://gdg.community.dev/events/details/google-gdg-madrid-presents-devfest-madrid-2025/
-twitter: https://twitter.com/gdgmadrid
+twitter: https://x.com/gdgmadrid
 location: Madrid, Spain
 
 date_start: 2025-11-21

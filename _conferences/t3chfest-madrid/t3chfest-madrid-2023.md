@@ -1,7 +1,7 @@
 ---
 name: "T3chFest"
 website: https://t3chfest.es/2023/
-twitter: http://twitter.com/t3chfest/
+twitter: https://x.com/t3chfest/
 location: Leganes, Madrid, Spain
 
 date_start: 2023-03-02

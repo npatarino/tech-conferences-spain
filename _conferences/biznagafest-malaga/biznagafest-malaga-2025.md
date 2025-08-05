@@ -1,7 +1,7 @@
 ---
 name: "BiznagaFest"
 website: https://www.biznagafest.com/
-twitter: https://twitter.com/biznagafest
+twitter: https://x.com/biznagafest
 location: Málaga, Spain
 
 date_start: 2025-10-25

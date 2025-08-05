@@ -1,7 +1,7 @@
 ---
 name:     "CAS"
 website:  https://cas2019.agile-spain.org/
-twitter:  https://twitter.com/confagilespain
+twitter:  https://x.com/confagilespain
 location: Barcelona, Spain
 
 date_start: 2019-11-22

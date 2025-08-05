@@ -1,7 +1,7 @@
 ---
 name:     "FrontFest"
 website:  https://frontfest.es/
-twitter:  https://twitter.com/frontfest
+twitter:  https://x.com/frontfest
 location: Madrid, Spain
 
 date_start: 2020-02-15

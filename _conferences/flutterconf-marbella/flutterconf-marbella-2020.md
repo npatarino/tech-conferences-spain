@@ -1,7 +1,7 @@
 ---
 name: "FlutterConf"
 website: https://flutterconf.dev/
-twitter: https://twitter.com/flutterconfdev
+twitter: https://x.com/flutterconfdev
 location: Marbella, Spain
 cancelled: true
 date_start: 2020-10-01

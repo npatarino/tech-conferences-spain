@@ -1,7 +1,7 @@
 ---
 name: "Extremadura Digital Day"
 website: https://extremaduradigitalday.com/
-twitter: https://twitter.com/eddcaceres
+twitter: https://x.com/eddcaceres
 location: Cáceres, Spain
 
 date_start: 2025-09-27

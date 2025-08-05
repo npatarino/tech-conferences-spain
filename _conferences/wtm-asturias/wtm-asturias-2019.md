@@ -1,7 +1,7 @@
 ---
 name: "WTM"
 website: http://wtm.gdgasturias.com/
-twitter: https://twitter.com/WTMASturias
+twitter: https://x.com/WTMASturias
 location: Asturias, Spain
 
 date_start: 2019-04-06

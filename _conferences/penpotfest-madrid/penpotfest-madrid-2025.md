@@ -1,7 +1,7 @@
 ---
 name: "Penpot Fest"
 website: https://penpot.app/penpotfest
-twitter: https://twitter.com/penpot
+twitter: https://x.com/penpotapp
 location: Madrid, Spain
 
 date_start: 2025-10-08

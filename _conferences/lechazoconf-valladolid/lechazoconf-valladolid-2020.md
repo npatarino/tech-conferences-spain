@@ -1,7 +1,7 @@
 ---
 name: "LechazoConf"
 website: https://lechazoconf.com/
-twitter: http://twitter.com/lechazoconf/
+twitter: https://x.com/lechazoconf/
 location: Valladolid, Spain
 cancelled: true
 

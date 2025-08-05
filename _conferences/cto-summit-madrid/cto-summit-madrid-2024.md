@@ -1,7 +1,7 @@
 ---
 name:     "CTO Summit"
 website:  https://ctosummit.geekshubs.com/
-twitter:  https://twitter.com/geeksctosummit
+twitter:  https://x.com/geeksctosummit
 location: Madrid, Spain
 
 date_start: 2024-06-13

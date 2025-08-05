@@ -1,7 +1,7 @@
 ---
 name: "Devops Barcelona"
 website: https://devops.barcelona/?utm_source=techconf&utm_medium=link&utm_campaign=devops-barcelona-2023&utm_id=devops-barcelona-2023
-twitter: https://twitter.com/devopsbarcelona
+twitter: https://x.com/devopsbarcelona
 location: Auditori AXA, Barcelona, Spain
 
 date_start: 2023-11-09

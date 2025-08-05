@@ -1,7 +1,7 @@
 ---
 name: "DevBcn (Barcelona Developers Conference)"
 website: https://www.devbcn.com
-twitter: https://twitter.com/devbcn
+twitter: https://x.com/devbcn
 location: Barcelona, Spain
 
 date_start: 2025-06-13

@@ -1,7 +1,7 @@
 ---
 name:       "Codemotion Tech Online"
 website:    https://events.codemotion.com/conferences/online/2022/online-tech-conference-2022-spanish-edition-spring
-twitter:    https://twitter.com/CodemoMadrid
+twitter:    https://x.com/CodemoMadrid
 location:   Online
 
 date_start: 2022-05-11

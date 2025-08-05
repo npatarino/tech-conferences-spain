@@ -1,7 +1,7 @@
 ---
 name:     "Drupalcamp"
 website:  https://drupalcamp.es/
-twitter:  https://twitter.com/drupalcampspain
+twitter:  https://x.com/drupalcampspain
 location: Conil, Spain
 cancelled: true
 

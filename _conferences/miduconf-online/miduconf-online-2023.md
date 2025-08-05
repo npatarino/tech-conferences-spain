@@ -1,7 +1,7 @@
 ---
 name: "MiduConf"
 website: https://miduconf.com/
-twitter: https://twitter.com/midudev
+twitter: https://x.com/midudev
 location: Online
 
 date_start: 2023-09-13

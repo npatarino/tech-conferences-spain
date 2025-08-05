@@ -1,7 +1,7 @@
 ---
 name: "Call of Data"
 website: http://callofdata.info/
-twitter: https://twitter.com/RLadiesMAD
+twitter: https://x.com/RLadiesMAD
 location: Madrid, Spain
 
 date_start: 2019-06-02

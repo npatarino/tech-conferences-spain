@@ -1,7 +1,7 @@
 ---
 name:     "SalamancaConf"
 website:  http://salamancaconf.com/
-twitter:  https://twitter.com/salamancaconf
+twitter:  https://x.com/salamancaconf
 location: Salamanca, Spain
 cancelled: true
 date_start: 2020-03-27

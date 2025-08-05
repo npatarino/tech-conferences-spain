@@ -1,7 +1,7 @@
 ---
 name: "PyConES"
 website: https://2025.es.pycon.org/
-twitter: https://twitter.com/pycones
+twitter: https://x.com/pycones
 location: Sevilla, Spain
 
 date_start: 2025-10-17

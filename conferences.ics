@@ -12,7 +12,7 @@ X-WR-TIMEZONE:Europe/Madrid
 {% for conference in site.conferences %}{% assign today = site.time | date: "%s" %}{% assign conf_date = conference.date_start | date: "%s" %}{% if conf_date >= today %}BEGIN:VEVENT
 UID:{{ page.uid_prefix }}{{ conference.relative_path }}
 URL:{{ conference.website }}
-DESCRIPTION:{% if conference.cfp_start and conference.cfp_end %}CFP: {{ conference.cfp_start | date: "%d/%m/%Y" }} - {{ conference.cfp_end | date: "%d/%m/%Y" }}{% if conference.cfp_site %}\nCFP URL: {{ conference.cfp_site }}{% endif %}\n\n{% endif %}{{ conference.website }}{% if conference.twitter %}\nTwitter: {{ conference.twitter }}{% endif %}{% if conference.location %}
+DESCRIPTION:{% if conference.cfp_start and conference.cfp_end %}CFP: {{ conference.cfp_start | date: "%d/%m/%Y" }} - {{ conference.cfp_end | date: "%d/%m/%Y" }}{% if conference.cfp_site %}\nCFP URL: {{ conference.cfp_site }}{% endif %}\n\n{% endif %}{{ conference.website }}{% if conference.twitter %}\nX: {{ conference.twitter }}{% endif %}{% if conference.location %}
 LOCATION:{{ conference.location }}{% endif %}
 SUMMARY:{{ conference.name }}{% if conference.location %} - {{ conference.location | remove: ", Spain" }}{% endif %}
 CLASS:PUBLIC

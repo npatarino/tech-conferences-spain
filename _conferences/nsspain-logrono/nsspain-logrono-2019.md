@@ -1,7 +1,7 @@
 ---
 name:       "NSSpain"
 website:    https://2019.nsspain.com/
-twitter:    https://twitter.com/nsspain
+twitter:    https://x.com/nsspain
 location:   Logroño, La Rioja, Spain
 
 date_start: 2019-09-18

@@ -1,7 +1,7 @@
 ---
 name: "Salmorejo Tech"
 website: https://salmorejo.tech/2025/
-twitter: https://twitter.com/salmorejotech
+twitter: https://x.com/salmorejotech
 location: Córdoba, Spain
 
 date_start: 2025-05-09

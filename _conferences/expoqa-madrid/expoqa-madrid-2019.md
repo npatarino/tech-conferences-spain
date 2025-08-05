@@ -1,7 +1,7 @@
 ---
 name: "expo:QA"
 website: http://www.expoqa.com
-twitter: https://twitter.com/expoqa
+twitter: https://x.com/expoqa
 location: Madrid, Spain
 
 date_start: 2019-06-17

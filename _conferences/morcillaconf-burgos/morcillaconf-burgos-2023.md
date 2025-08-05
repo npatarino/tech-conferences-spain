@@ -1,7 +1,7 @@
 ---
 name: "MorcillaConf"
 website: http://morcillaconf.es/
-twitter: https://twitter.com/morcillaconf/
+twitter: https://x.com/morcillaconf/
 location: Burgos, Spain
 
 date_start: 2023-10-06

@@ -1,7 +1,7 @@
 ---
 name: "Gen AI Summit"
 website: https://genaisummit.eu/en/home/
-twitter: https://twitter.com/genaisummit
+twitter: https://x.com/genaisummit
 location: Valencia, Spain
 
 date_start: 2025-04-11

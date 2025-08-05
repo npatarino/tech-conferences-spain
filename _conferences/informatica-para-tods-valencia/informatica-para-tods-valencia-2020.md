@@ -1,7 +1,7 @@
 ---
 name: "Informática Para Tod@s"
 website: https://ipt.acm.org/
-twitter: https://twitter.com/IPT_ACMW_es
+twitter: https://x.com/IPT_ACMW_es
 location: Valencia, Spain
 cancelled: true
 

@@ -1,7 +1,7 @@
 ---
 name: "CodeRioja"
 website: https://www.coderioja.com/
-twitter: https://twitter.com/coderioja
+twitter: https://x.com/coderioja
 location: La Rioja, Spain
 
 date_start: 2025-10-25

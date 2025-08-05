@@ -1,7 +1,7 @@
 ---
 name: "NG Spain"
 website: https://ngspain.com/
-twitter: https://twitter.com/ngspain/
+twitter: https://x.com/ngspain/
 location: Madrid, Spain
 
 date_start: 2019-10-19

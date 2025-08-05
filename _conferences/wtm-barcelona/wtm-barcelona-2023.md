@@ -1,7 +1,7 @@
 ---
 name: "WTM"
 website: https://wtmbarcelona.com/
-twitter: https://twitter.com/wtmbcn
+twitter: https://x.com/wtmbcn
 location: Barcelona, Spain
 
 date_start: 2023-03-25

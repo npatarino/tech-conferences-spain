@@ -1,7 +1,7 @@
 ---
 name:     "Lagarto TechDay"
 website:  https://lagartotechday.es
-twitter:  https://twitter.com/lagartotechday
+twitter:  https://x.com/lagartotechday
 location: Jaén, Spain
 
 cancelled: true

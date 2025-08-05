@@ -1,7 +1,7 @@
 ---
 name: "FrontFest"
 website: https://2019.frontfest.es/
-twitter: https://twitter.com/frontfest
+twitter: https://x.com/frontfest
 location: Madrid, Spain
 
 date_start: 2019-02-02

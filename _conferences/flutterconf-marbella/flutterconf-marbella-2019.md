@@ -1,7 +1,7 @@
 ---
 name: "FlutterConf"
 website: http://flutterconf.gdgmarbella.com/
-twitter: https://twitter.com/GDGMarbella
+twitter: https://x.com/GDGMarbella
 location: Marbella, Spain
 
 date_start: 2019-10-18

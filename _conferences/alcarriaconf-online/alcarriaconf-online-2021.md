@@ -1,7 +1,7 @@
 ---
 name:     "AlcarriaConf"
 website:  https://www.alcarriaconf.com/
-twitter:  https://twitter.com/AlcarriaConf
+twitter:  https://x.com/AlcarriaConf
 location: Online
 
 date_start: 2021-07-23

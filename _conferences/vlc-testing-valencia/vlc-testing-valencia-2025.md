@@ -1,7 +1,7 @@
 ---
 name: "VLC Testing"
 website: https://vlctesting.es/
-twitter: https://twitter.com/vlctesting
+twitter: https://x.com/ITI_TIC
 location: Valencia, Spain
 
 date_start: 2025-10-01

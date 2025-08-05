@@ -1,7 +1,7 @@
 ---
 name:     "DevOpsDays"
 website:  https://devopsdays.cc/
-twitter:  https://twitter.com/DevOpsDaysCC
+twitter:  https://x.com/DevOpsDaysCC
 location: Cáceres, Spain
 
 date_start: 2024-10-03

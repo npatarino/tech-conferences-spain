@@ -1,7 +1,7 @@
 ---
 name: "WTM"
 website: https://wtm.gdgmadrid.es/
-twitter: https://twitter.com/TechandLadies
+twitter: https://x.com/TechandLadies
 location: Madrid, Spain
 cancelled: true
 

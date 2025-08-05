@@ -1,7 +1,7 @@
 ---
 name: "Opensouthcode"
 website: https://www.opensouthcode.org/
-twitter: https://twitter.com/opensouthcode
+twitter: https://x.com/opensouthcode
 location: Malaga, Spain
 cancelled: true
 

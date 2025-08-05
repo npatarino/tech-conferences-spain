@@ -1,7 +1,7 @@
 ---
 name: "WTM Barcelona 2022"
 website: https://wtmbarcelona.com/
-twitter: https://twitter.com/wtmbcn
+twitter: https://x.com/wtmbcn
 location: Barcelona, Spain
 
 date_start: 2022-03-12

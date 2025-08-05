@@ -1,7 +1,7 @@
 ---
 name:     "Open Biko"
 website:  https://www.biko2.com/open-space/
-twitter:  https://twitter.com/biko2
+twitter:  https://x.com/biko2
 location: Pamplona, Spain
 
 date_start: 2022-05-27

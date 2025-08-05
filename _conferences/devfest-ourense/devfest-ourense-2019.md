@@ -1,7 +1,7 @@
 ---
 name: "DevFest"
 website: https://devfest.gdggalicia.com/
-twitter: https://twitter.com/GDGGalicia
+twitter: https://x.com/GDGGalicia
 location: Ourense, Galicia, Spain
 
 date_start: 2019-10-26

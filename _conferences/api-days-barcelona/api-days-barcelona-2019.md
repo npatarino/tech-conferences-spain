@@ -1,7 +1,7 @@
 ---
 name:       "Api Days"
 website:    https://www.apidays.co/barcelona
-twitter:    https://twitter.com/apidaysglobal
+twitter:    https://x.com/apidaysglobal
 location:   Barcelona, Spain
 
 date_start: 2019-09-12

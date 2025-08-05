@@ -1,7 +1,7 @@
 ---
 name: "DevFest"
 website: http://gdgzaragoza.es/devfest/
-twitter: https://twitter.com/GDGZaragoza
+twitter: https://x.com/GDGZaragoza
 location: Zaragoza, Spain
 
 date_start: 2019-11-23

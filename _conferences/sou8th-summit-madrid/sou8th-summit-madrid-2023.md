@@ -1,7 +1,7 @@
 ---
 name:     "Sou8th Summit"
 website:  https://www.southsummit.co/madrid/
-twitter:  https://twitter.com/south_summit
+twitter:  https://x.com/south_summit
 location: Madrid, Spain
 
 date_start: 2023-06-07

@@ -1,7 +1,7 @@
 ---
 name: "DevFest"
 website: https://gdgjaen-devfest.vercel.app/
-twitter: https://twitter.com/GdgJaen
+twitter: https://x.com/GdgJaen
 location: Jaen, Spain
 
 date_start: 2022-11-19

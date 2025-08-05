@@ -1,7 +1,7 @@
 ---
 name: "ExFest"
 website: https://exfest.tech/
-twitter: https://twitter.com/gdgcaceres
+twitter: https://x.com/gdgcaceres
 location: Cáceres, Spain
 
 date_start: 2019-04-26

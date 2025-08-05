@@ -1,7 +1,7 @@
 ---
 name: "Lambda World"
 website: http://cadiz.lambda.world/
-twitter: https://twitter.com/lambda_world
+twitter: https://x.com/lambda_world
 location: Cádiz, Spain
 cancelled: true
 
