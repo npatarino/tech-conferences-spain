@@ -25,6 +25,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{site.baseurl}}/css/main.css">
+    
+    <!-- Google Analytics -->
+    {% if site.google_analytics %}
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{ site.google_analytics }}');
+      </script>
+    {% endif %}
   </head>
   <body>
     <div class="container">
@@ -50,7 +62,7 @@
           <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>
           <a href="https://github.com/npatarino/tech-conferences-spain/">GitHub</a>
         </div>
-        <p class="footer-note">Ver eventos pasados</p>
+        
       </footer>
     </div>
   </body>

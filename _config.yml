@@ -1,5 +1,8 @@
 timezone: "UTC"
 markdown: kramdown
 
+# Google Analytics
+google_analytics: "G-077BBT8NE3"  # Reemplaza con tu ID de Google Analytics
+
 collections:
 - conferences
