@@ -1,0 +1,9 @@
+---
+name: "QA&TEST Embedded"
+website: https://embedded.qatest.org/
+twitter: https://twitter.com/qatestconf
+location: Bilbao, Vizcaya, Spain
+
+date_start: 2025-10-22
+date_end: 2025-10-24
+---
