@@ -1,0 +1,9 @@
+---
+name: "Extremadura Digital Day"
+website: https://extremaduradigitalday.com/
+twitter: https://twitter.com/extredigitalday
+location: Cáceres, Spain
+
+date_start: 2022-10-01
+date_end:   2022-10-01
+---
