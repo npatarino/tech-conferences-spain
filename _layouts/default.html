@@ -5,48 +5,52 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Tech Conference List - Spain</title>
-    <meta name="title" content="Tu lista de Conferencias Tech">
+    <title>Conferencias Tech España</title>
+    <meta name="title" content="Conferencias Tech 🇪🇸">
     <meta name="description" content="A community-curated list of tech conferences around Spain.">
 
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://techconf.es/">
-    <meta property="og:title" content="Tu lista de Conferencias Tech">
+    <meta property="og:title" content="Conferencias Tech España">
     <meta property="og:description" content="A community-curated list of tech conferences around Spain.">
     <meta property="og:image" content="https://techconf.es/img/thumbnail.png">
 
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://techconf.es/">
-    <meta property="twitter:title" content="Tu lista de Conferencias Tech">
+    <meta property="twitter:title" content="Conferencias Tech España">
     <meta property="twitter:description" content="A community-curated list of tech conferences around Spain.">
     <meta property="twitter:image" content="https://techconf.es/img/thumbnail-twitter.png">
 
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{site.baseurl}}/css/main.css">
   </head>
   <body>
     <div class="container">
-      <div class="header clearfix">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-            {% assign main_pages = site.pages | where_exp:"node", "node.title != null" %}
-            {% for node in main_pages %}
-              {% if page.url == node.url %}
-                <li role="presentation" class="active"><a href="{{site.baseurl}}{{node.url}}">{{node.title}}</a></li>
-              {% else %}
-                <li role="presentation"><a href="{{site.baseurl}}{{node.url}}">{{node.title}}</a></li>
-              {% endif %}
-            {% endfor %}
-            <li role="presentation"><a href="https://github.com/npatarino/tech-conferences-spain/#adding-a-conference">Add</a></li>
+      <header class="header">
+        <h1 class="main-title">Conferencias Tech 🇪🇸</h1>
+        
+        <nav class="navigation">
+          <ul class="nav-links">
+            <li><a href="{{site.baseurl}}/" {% if page.url == "/" %}class="active"{% endif %}>Próximos</a></li>
+            <li><a href="{{site.baseurl}}/past.html" {% if page.url == "/past.html" %}class="active"{% endif %}>Pasados</a></li>
+            <li><a href="https://github.com/npatarino/tech-conferences-spain/#adding-a-conference">Añadir evento</a></li>
           </ul>
         </nav>
-        <h3 class="text-muted">Tech Conferences - Spain</h3>
-      </div>
+      </header>
 
-      {{ content }}
+      <main class="main-content">
+        {{ content }}
+      </main>
 
       <footer class="footer">
-        <p><a href="conferences.ics">iCalendar</a> &middot;  <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a> &middot; <a href="https://github.com/npatarino/tech-conferences-spain/">GitHub</a></p>
+        <div class="footer-links">
+          <a href="conferences.ics">iCalendar</a>
+          <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>
+          <a href="https://github.com/npatarino/tech-conferences-spain/">GitHub</a>
+        </div>
+        <p class="footer-note">Ver eventos pasados</p>
       </footer>
     </div>
   </body>

@@ -1,20 +1,24 @@
 ---
 layout: none
-uid_prefix: https://github.com/npatarino/tech-conferences-spain/tree/gh-pages/
+uid_prefix: https://github.com/npatarino/tech-conferences-spain/tree/master/
 ---
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:https://npatarino.github.io/tech-conferences-spain/
+PRODID:-//Conferencias Tech España//conferencias-tech-espana.github.io//ES
 METHOD:PUBLISH
-{% for conference in site.conferences %}BEGIN:VEVENT
+X-WR-CALNAME:Conferencias Tech España 🇪🇸
+X-WR-CALDESC:Los próximos eventos tecnológicos más relevantes de España
+X-WR-TIMEZONE:Europe/Madrid
+{% for conference in site.conferences %}{% assign today = site.time | date: "%s" %}{% assign conf_date = conference.date_start | date: "%s" %}{% if conf_date >= today %}BEGIN:VEVENT
 UID:{{ page.uid_prefix }}{{ conference.relative_path }}
 URL:{{ conference.website }}
-DESCRIPTION:{{ conference.website }}{% if conference.location %}
+DESCRIPTION:{% if conference.cfp_start and conference.cfp_end %}CFP: {{ conference.cfp_start | date: "%d/%m/%Y" }} - {{ conference.cfp_end | date: "%d/%m/%Y" }}{% if conference.cfp_site %}\nCFP URL: {{ conference.cfp_site }}{% endif %}\n\n{% endif %}{{ conference.website }}{% if conference.twitter %}\nTwitter: {{ conference.twitter }}{% endif %}{% if conference.location %}
 LOCATION:{{ conference.location }}{% endif %}
-SUMMARY:{{ conference.name }}{% if conference.location %} ({{ conference.location }}){% endif %}
+SUMMARY:{{ conference.name }}{% if conference.location %} - {{ conference.location | remove: ", Spain" }}{% endif %}
 CLASS:PUBLIC
 DTSTART;VALUE=DATE:{{ conference.date_start | date: "%Y%m%d" }}
 DTEND;VALUE=DATE:{{ conference.date_end | date: "%s" | plus: 86400 | date: "%Y%m%d" }}
 DTSTAMP:{{ site.time | date: "%Y%m%dT%H%M%S" }}Z
-END:VEVENT
-{% endfor %}END:VCALENDAR
+{% if conference.cancelled %}STATUS:CANCELLED
+{% endif %}END:VEVENT
+{% endif %}{% endfor %}END:VCALENDAR

@@ -1,5 +1,5 @@
 ---
-name: "QA&TEST Embedded"
+name: "QA&Test Embedded"
 website: https://embedded.qatest.org/
 twitter: https://twitter.com/qatestconf
 location: Bilbao, Vizcaya, Spain

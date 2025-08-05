@@ -1,5 +1,5 @@
 ---
-name: "QA&TEST Safety & Cybersecurity"
+name: "QA&Test Safety & Cybersecurity"
 website: https://safety.qatest.org/
 twitter: https://twitter.com/qatestconf
 location: Madrid, Spain

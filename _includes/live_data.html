@@ -1,5 +1,5 @@
 {% assign date_start = conference.date_start | date: "%s" %}
 {% assign date_end = conference.date_end | date: "%s" %}
 {% if today >= date_start and today <= date_end %}
-<span class="label label-danger">Happening Now</span>
+<span class="label live">En directo</span>
 {% endif %}

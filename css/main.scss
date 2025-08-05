@@ -4,19 +4,5 @@
 
 @import "layout";
 
-.conference-list {
-  margin-bottom: 0;
-
-  li {
-    padding-top: 5px;
-    padding-bottom: 5px;
-
-    &:hover {
-      background-color: #f6f6f6;
-    }
-
-    .label {
-      float: right;
-    }
-  }
-}
+// Legacy styles removal - all styles are now in _layout.scss
+// This file is kept for compatibility with Jekyll's build process

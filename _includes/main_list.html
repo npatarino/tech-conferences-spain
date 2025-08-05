@@ -1,20 +1,65 @@
 {% assign conferences_grouped_by_year = sorted_conferences | group_by_exp:"conference", "conference.date_start | date: '%Y'" %}
 {% for conferences_by_year in conferences_grouped_by_year %}
-  <h2>{{ conferences_by_year.name }}</h2>
   {% assign conferences_grouped_by_month = conferences_by_year.items | group_by_exp:"conference", "conference.date_start | date: '%m'" %}
   {% for conferences_by_month in conferences_grouped_by_month %}
-    <h3>{{ conferences_by_month.items.first.date_start | date: '%B' }}</h3>
-    <ul class="conference-list list-unstyled">
-    {% for conference in conferences_by_month.items %}  
-      <li>
-        {% include general_data.html %}
-        {% if include.type_of_events == 'upcoming' %}
-        {%   include cfp_data.html %}
-        {%   include live_data.html %}
-        {% endif %}
-        {%   include cancelled-data.html %}
-      </li>
-    {% endfor %}
-    </ul>
+    <section class="month-section">
+      <h2 class="month-title">{{ conferences_by_month.items.first.date_start | date: '%B %Y' }}</h2>
+      <div class="conference-list">
+        {% for conference in conferences_by_month.items %}  
+          <div class="conference-item">
+            <div class="date-section">
+              <div class="date-badge">
+                <span class="day">{{ conference.date_start | date: "%d" }}</span>
+                {% if conference.date_start != conference.date_end %}
+                  <span class="day-range">-{{ conference.date_end | date: "%d" }}</span>
+                {% endif %}
+              </div>
+            </div>
+            
+            <div class="event-info">
+              <h3 class="event-name">
+                {% if conference.website %}
+                  <a href="{{ conference.website }}" target="_blank" rel="noopener">{{ conference.name }}</a>
+                {% else %}
+                  {{ conference.name }}
+                {% endif %}
+              </h3>
+              {% if conference.location %}
+                <span class="event-location">{{ conference.location | remove: ", Spain" }}</span>
+              {% endif %}
+            </div>
+            
+            <div class="event-metadata">
+              {% if include.type_of_events == 'upcoming' %}
+                {% include cfp_data.html %}
+                {% include live_data.html %}
+              {% endif %}
+              {% include cancelled-data.html %}
+            </div>
+            
+            <div class="event-actions">
+              {% if conference.website %}
+                <a href="{{ conference.website }}" class="share-link" target="_blank" rel="noopener" title="Ver evento">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="18" cy="5" r="3"/>
+                    <circle cx="6" cy="12" r="3"/>
+                    <circle cx="18" cy="19" r="3"/>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                  </svg>
+                </a>
+              {% endif %}
+              {% if conference.twitter %}
+                <a href="{{ conference.twitter }}" class="twitter-link" target="_blank" rel="noopener" title="Ver en Twitter">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>
+                  </svg>
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
   {% endfor %}
 {% endfor %}
