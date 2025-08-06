@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Setup script for Conferencias Tech España
+# Setup script for TechConf by Chimichurri Code
 # This script automates the initial setup of the project
 
 set -e  # Exit on any error
 
-echo "🇪🇸 Configurando Conferencias Tech España..."
+echo "🇪🇸 Configurando TechConf by Chimichurri Code..."
 echo ""
 
 # Check if Ruby is installed

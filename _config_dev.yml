@@ -1,0 +1,12 @@
+# Configuración para desarrollo local
+# Usar con: bundle exec jekyll serve --config _config.yml,_config_dev.yml
+
+# Sobrescribir configuración para desarrollo
+url: "http://localhost:4000"
+baseurl: ""
+
+# API key de desarrollo (sin restricciones o con localhost permitido)
+google_maps_api_key_dev: "AIzaSyAj88BlU6RkgiNfm0Cfg0MqUGv-g8P6Bmc"
+
+# Desactivar Google Analytics en desarrollo
+google_analytics: ""

@@ -4,9 +4,9 @@ uid_prefix: https://github.com/npatarino/tech-conferences-spain/tree/master/
 ---
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//Conferencias Tech España//conferencias-tech-espana.github.io//ES
+PRODID:-//TechConf by Chimichurri Code//conferencias-tech-espana.github.io//ES
 METHOD:PUBLISH
-X-WR-CALNAME:Conferencias Tech España 🇪🇸
+X-WR-CALNAME:TechConf by Chimichurri Code 🇪🇸
 X-WR-CALDESC:Los próximos eventos tecnológicos más relevantes de España
 X-WR-TIMEZONE:Europe/Madrid
 {% for conference in site.conferences %}{% assign today = site.time | date: "%s" %}{% assign conf_date = conference.date_start | date: "%s" %}{% if conf_date >= today %}BEGIN:VEVENT

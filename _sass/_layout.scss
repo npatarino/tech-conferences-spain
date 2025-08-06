@@ -21,48 +21,145 @@ body {
 
 // Header styles
 .header {
+  margin-bottom: 32px;
+  padding: 24px 0 0 0;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.header-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
-  padding: 24px 0;
+  margin-bottom: 8px;
   
-  .main-title {
-    font-size: 2rem;
-    font-weight: 600;
-    margin: 0;
-    color: #1a202c;
-  }
-  
-  .navigation {
-    .nav-links {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      gap: 24px;
+  .logo {
+    display: flex;
+    align-items: center;
+    
+    a {
+      text-decoration: none;
+      transition: opacity 0.2s ease;
       
-      li a {
-        color: #4a5568;
-        text-decoration: none;
-        font-weight: 500;
-        padding: 8px 16px;
-        border-radius: 6px;
-        transition: all 0.2s ease;
-        
-        &:hover {
-          background: #f7fafc;
-          color: #2d3748;
-        }
-        
-        &.active {
-          background: #3182ce;
-          color: white;
-        }
+      &:hover {
+        opacity: 0.8;
       }
+    }
+    
+    .logo-image {
+      height: 40px;
+      width: auto;
+      max-width: 300px;
+      display: block;
     }
   }
 }
+
+// Events wrapper and view icons
+.events-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.view-icons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+// View icons for calendar and map pages
+.calendar-container .view-icons,
+.map-container .view-icons {
+  max-width: 800px;
+  margin: 0 auto 16px auto;
+  padding: 0 20px;
+}
+
+.view-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  color: #718096;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  
+  &:hover {
+    background: #f8f9fa;
+    color: #4a5568;
+    border-color: #e2e8f0;
+  }
+  
+  &.active {
+    background: #f0f7ff;
+    color: #007acc;
+    border-color: #007acc;
+  }
+  
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+// Traditional navbar
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fafbfc;
+  overflow: hidden;
+}
+
+.navbar-left {
+  display: flex;
+}
+
+.navbar-right {
+  display: flex;
+}
+
+.navbar-item {
+  padding: 12px 24px;
+  color: #4a5568;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
+  
+  &:hover {
+    background: #f0f4f7;
+    color: #2d3748;
+  }
+  
+  &.active {
+    background: #ffffff;
+    color: #007acc;
+    border-bottom-color: #007acc;
+  }
+  
+  &.add-event {
+    color: #28a745;
+    
+    &:hover {
+      background: #f8fff8;
+      color: #1e7e34;
+    }
+  }
+}
+
+
 
 // Main content
 .main-content {
@@ -303,6 +400,23 @@ body {
     color: #a0aec0;
     font-size: 14px;
     margin: 0;
+  }
+  
+  .footer-credits {
+    color: #64748b;
+    font-size: 13px;
+    margin-top: 8px;
+    
+    a {
+      color: #3182ce;
+      text-decoration: none;
+      font-weight: 500;
+      
+      &:hover {
+        color: #2c5aa0;
+        text-decoration: underline;
+      }
+    }
   }
 }
 
@@ -645,7 +759,67 @@ body {
   }
 }
 
+// Responsive styles
 @media (max-width: 768px) {
+  .header {
+    margin-bottom: 24px;
+    padding: 20px 0 0 0;
+  }
+  
+  .header-top {
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 10px;
+    
+    .logo-image {
+      height: 35px;
+    }
+  }
+  
+  .navbar {
+    border-radius: 6px;
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+  }
+  
+  .navbar-left,
+  .navbar-right {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .navbar-item {
+    padding: 10px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid #e2e8f0;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  
+  .view-icons {
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  
+  .calendar-container .view-icons,
+  .map-container .view-icons {
+    padding: 0 16px;
+  }
+  
+  .view-icon {
+    width: 32px;
+    height: 32px;
+    
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+  
   .main-content-cards {
     padding: 0 16px;
   }
@@ -666,6 +840,73 @@ body {
 }
 
 @media (max-width: 480px) {
+  .header {
+    margin-bottom: 20px;
+    padding: 16px 0 0 0;
+  }
+  
+  .header-top {
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 8px;
+    
+    .logo-image {
+      height: 30px;
+    }
+  }
+  
+  .navbar {
+    border-radius: 4px;
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+  }
+  
+  .navbar-left,
+  .navbar-right {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .navbar-item {
+    padding: 12px 20px;
+    font-size: 14px;
+    text-align: center;
+    border-bottom: 1px solid #e2e8f0;
+    border-left: none;
+    border-right: none;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    &.active {
+      border-bottom: 1px solid #e2e8f0;
+      border-left: 3px solid #007acc;
+    }
+  }
+  
+  .view-icons {
+    gap: 4px;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+  
+  .calendar-container .view-icons,
+  .map-container .view-icons {
+    padding: 0 12px;
+  }
+  
+  .view-icon {
+    width: 28px;
+    height: 28px;
+    
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+  
   .main-content-cards {
     padding: 0 12px;
   }

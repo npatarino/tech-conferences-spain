@@ -2,13 +2,17 @@ timezone: "UTC"
 markdown: kramdown
 
 # Site configuration
-title: "Conferencias Tech España"
+title: "TechConf by Chimichurri Code"
 description: "Los próximos eventos tecnológicos más relevantes de España"
 url: "https://conferencias-tech-espana.github.io"
 baseurl: ""
 
 # Google Analytics
 google_analytics: "G-077BBT8NE3"
+
+# Google Maps API Keys
+google_maps_api_key: "AIzaSyAj88BlU6RkgiNfm0Cfg0MqUGv-g8P6Bmc"
+google_maps_api_key_dev: "AIzaSyAj88BlU6RkgiNfm0Cfg0MqUGv-g8P6Bmc"  # Misma key por ahora
 
 # Jekyll plugins
 plugins:
@@ -26,9 +30,11 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - README.md
-
   - SETUP.md
+  - MAPS_SETUP.md
   - setup.sh
+  - serve-dev.sh
+  - _config_dev.yml
   - vendor/
   - .bundle/
   - .sass-cache/

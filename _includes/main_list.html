@@ -1,3 +1,7 @@
+<!-- View icons at the top of the events list -->
+<div class="events-wrapper">
+  {% include view_icons.html %}
+
 {% assign conferences_grouped_by_year = sorted_conferences | group_by_exp:"conference", "conference.date_start | date: '%Y'" %}
 {% for conferences_by_year in conferences_grouped_by_year %}
   {% assign conferences_grouped_by_month = conferences_by_year.items | group_by_exp:"conference", "conference.date_start | date: '%m'" %}
@@ -82,3 +86,5 @@
     </section>
   {% endfor %}
 {% endfor %}
+
+</div> <!-- Close events-wrapper -->

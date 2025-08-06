@@ -1,0 +1,657 @@
+---
+layout: default
+title: Mapa - TechConf by Chimichurri Code
+---
+
+<div class="map-container">
+  {% include view_icons.html %}
+  
+  <div id="map"></div>
+  <div id="map-error" style="display: none; padding: 20px; text-align: center; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px;">
+    <h3>🗺️ Error cargando Google Maps</h3>
+    <p>Usando mapa alternativo (Leaflet.js)...</p>
+    <div id="leaflet-map" style="height: 400px; margin-top: 15px;"></div>
+  </div>
+</div>
+
+<script>
+// Variables globales
+var map;
+var currentInfoWindow = null; // Para manejar el cierre automático de tooltips
+var cityCoordinates = {
+  'Madrid': { lat: 40.4168, lng: -3.7038 },
+  'Barcelona': { lat: 41.3851, lng: 2.1734 },
+  'Valencia': { lat: 39.4699, lng: -0.3763 },
+  'Sevilla': { lat: 37.3891, lng: -5.9845 },
+  'Bilbao': { lat: 43.2627, lng: -2.9253 },
+  'Málaga': { lat: 36.7196, lng: -4.4214 },
+  'Alicante': { lat: 38.3452, lng: -0.4810 },
+  'Zaragoza': { lat: 41.6561, lng: -0.8773 },
+  'A Coruña': { lat: 43.3623, lng: -8.4115 },
+  'Vigo': { lat: 42.2406, lng: -8.7207 },
+  'Burgos': { lat: 42.3439, lng: -3.6969 },
+  'Cáceres': { lat: 39.4753, lng: -6.3724 },
+  'Granada': { lat: 37.1773, lng: -3.5986 },
+  'Córdoba': { lat: 37.8882, lng: -4.7794 },
+  'Logroño': { lat: 42.4627, lng: -2.4449 },
+  'Valladolid': { lat: 41.6523, lng: -4.7245 },
+  'Pamplona': { lat: 42.8169, lng: -1.6432 },
+  'Santander': { lat: 43.4623, lng: -3.8099 },
+  'Gijón': { lat: 43.5322, lng: -5.6611 },
+  'Oviedo': { lat: 43.3614, lng: -5.8593 },
+  'Avilés': { lat: 43.5554, lng: -5.9256 },
+  'Santiago de Compostela': { lat: 42.8805, lng: -8.5456 },
+  'Lleida': { lat: 41.6175, lng: 0.6200 },
+  'Tenerife': { lat: 28.2916, lng: -16.6291 },
+  'Jaén': { lat: 37.7649, lng: -3.7977 },
+  'Ourense': { lat: 42.3360, lng: -7.8640 },
+  'Albacete': { lat: 38.9942, lng: -1.8564 },
+  'Tarragona': { lat: 41.1189, lng: 1.2445 },
+  'Cádiz': { lat: 36.5297, lng: -6.2921 },
+  'Sitges': { lat: 41.2370, lng: 1.8057 },
+  'Benidorm': { lat: 38.5424, lng: -0.1307 },
+  'Conil': { lat: 36.2792, lng: -6.0888 },
+  'Marbella': { lat: 36.5108, lng: -4.8850 },
+  'Pontevedra': { lat: 42.4318, lng: -8.6446 },
+  'Jaca': { lat: 42.5698, lng: -0.5497 },
+  'Aranjuez': { lat: 40.0333, lng: -3.6081 },
+  'Leganés': { lat: 40.3167, lng: -3.7667 },
+  'La Rioja': { lat: 42.2871, lng: -2.5396 },
+  'Girona': { lat: 41.9794, lng: 2.8214 },
+  'Jaen': { lat: 37.7649, lng: -3.7977 },
+  'Las Palmas': { lat: 28.1000, lng: -15.4130 },
+  'Huesca': { lat: 42.1360, lng: -0.4080 },
+  'Badajoz': { lat: 38.8794, lng: -6.9707 },
+  'Salamanca': { lat: 40.9701, lng: -5.6635 },
+  'Vitoria': { lat: 42.8467, lng: -2.6716 },
+  'León': { lat: 42.5987, lng: -5.5671 },
+  'Cuenca': { lat: 40.0704, lng: -2.1374 },
+  'Teruel': { lat: 40.3456, lng: -1.1068 },
+  'Ávila': { lat: 40.6566, lng: -4.6811 },
+  'Segovia': { lat: 40.9429, lng: -4.1088 },
+  'Soria': { lat: 41.7665, lng: -2.4790 },
+  'Palencia': { lat: 42.0096, lng: -4.5288 },
+  'Zamora': { lat: 41.5034, lng: -5.7467 },
+  'Toledo': { lat: 39.8628, lng: -4.0273 },
+  'Ciudad Real': { lat: 38.9848, lng: -3.9308 },
+  'Guadalajara': { lat: 40.6320, lng: -3.1601 },
+  'Illescas': { lat: 40.1243, lng: -3.8495 },
+  'Vizcaya': { lat: 43.2627, lng: -2.9253 }
+};
+
+var futureEvents = [];
+var eventsByCity = {};
+
+// Obtener eventos futuros desde Jekyll
+{% for conference in site.conferences %}
+  {% assign event_date = conference.date_start | date: "%s" %}
+  {% assign today_timestamp = site.time | date: "%s" %}
+  {% if event_date >= today_timestamp %}
+    futureEvents.push({
+      name: "{{ conference.name | escape }}",
+      location: "{{ conference.location | replace: ', Spain', '' | escape }}",
+      date_start: "{{ conference.date_start }}",
+      date_end: "{{ conference.date_end }}",
+      website: "{{ conference.website }}",
+      twitter: "{{ conference.twitter }}",
+      cancelled: {{ conference.cancelled | default: false }},
+      cfp_start: "{{ conference.cfp_start }}",
+      cfp_end: "{{ conference.cfp_end }}",
+      cfp_site: "{{ conference.cfp_site }}"
+    });
+  {% endif %}
+{% endfor %}
+
+// Función para extraer ciudad de la ubicación
+function extractCity(location) {
+  if (location.toLowerCase().includes('online')) {
+    return null;
+  }
+  
+  var parts = location.split(',').map(function(part) {
+    return part.trim();
+  });
+  
+  for (var i = 0; i < parts.length; i++) {
+    var part = parts[i];
+    
+    // Casos especiales
+    if (part === 'BAU Barcelona') return 'Barcelona';
+    if (part === 'Fábrica Artiach') return 'Bilbao';
+    if (part === 'Galicia') return 'A Coruña';
+    if (part === 'Vizcaya') return 'Bilbao';
+    
+    if (cityCoordinates[part]) {
+      return part;
+    }
+  }
+  
+  for (var j = 0; j < parts.length; j++) {
+    if (parts[j] !== 'Spain' && parts[j] !== 'España') {
+      return parts[j];
+    }
+  }
+  
+  return parts[0];
+}
+
+// Agrupar eventos por ciudad
+futureEvents.forEach(function(event) {
+  var city = extractCity(event.location);
+  if (city && cityCoordinates[city]) {
+    if (!eventsByCity[city]) {
+      eventsByCity[city] = [];
+    }
+    eventsByCity[city].push(event);
+  }
+});
+
+// Función para crear contenido del popup
+function createPopupContent(city, events) {
+  var today = new Date();
+  var eventCount = events.length;
+  
+  // Crear header del popup
+  var popupContent = '<div class="map-popup">';
+  popupContent += '<div class="popup-header">';
+  popupContent += '<h3>' + city + '</h3>';
+  popupContent += '<span class="event-count">(' + eventCount + ' evento' + (eventCount > 1 ? 's' : '') + ')</span>';
+  popupContent += '</div>';
+  
+  // Crear contenedor scrollable
+  var maxHeight = events.length > 3 ? '300px' : 'auto';
+  popupContent += '<div class="popup-content" style="max-height: ' + maxHeight + '; overflow-y: auto;">';
+  
+  events.forEach(function(event, index) {
+    popupContent += '<div class="event-item">';
+    popupContent += '<h4>' + event.name + '</h4>';
+    
+    var startDate = new Date(event.date_start);
+    var endDate = new Date(event.date_end);
+    var dateStr = startDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+    if (startDate.toDateString() !== endDate.toDateString()) {
+      dateStr += ' - ' + endDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+    }
+    popupContent += '<p class="event-date">' + dateStr + '</p>';
+    
+    // Crear contenedor para los enlaces
+    popupContent += '<div class="event-actions">';
+    if (event.website) {
+      popupContent += '<a href="' + event.website + '" target="_blank" rel="noopener" class="event-link">Ver evento</a>';
+    }
+    if (event.twitter) {
+      popupContent += '<a href="' + event.twitter + '" target="_blank" rel="noopener" class="event-twitter">X</a>';
+    }
+    
+    if (event.cfp_start && event.cfp_end) {
+      var cfpStart = new Date(event.cfp_start);
+      var cfpEnd = new Date(event.cfp_end);
+      if (today >= cfpStart && today <= cfpEnd) {
+        var cfpUrl = event.cfp_site || event.website;
+        popupContent += '<a href="' + cfpUrl + '" target="_blank" rel="noopener" class="cfp-open">CFP abierto</a>';
+      }
+    }
+    
+    if (event.cancelled) {
+      popupContent += '<span class="cancelled">Cancelado</span>';
+    }
+    popupContent += '</div>'; // Cerrar event-actions
+    
+    popupContent += '</div>'; // Cerrar event-item
+    
+    // Añadir separador entre eventos (excepto el último)
+    if (index < events.length - 1) {
+      popupContent += '<hr class="event-separator">';
+    }
+  });
+  
+  popupContent += '</div>'; // Cerrar popup-content
+  popupContent += '</div>'; // Cerrar map-popup
+  
+  return popupContent;
+}
+
+// Función principal para inicializar Google Maps
+function initMap() {
+  clearTimeout(googleMapsTimeout);
+  
+  try {
+    map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 6,
+      center: { lat: 40.4168, lng: -3.7038 },
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      styles: [
+        {
+          featureType: "poi",
+          elementType: "labels",
+          stylers: [{ visibility: "off" }]
+        },
+        // Estilo general muy desaturado (escala de grises)
+        {
+          featureType: "all",
+          elementType: "all",
+          stylers: [
+            { saturation: -100 },
+            { lightness: 10 },
+            { gamma: 0.8 }
+          ]
+        },
+        // Paisaje en grises claros
+        {
+          featureType: "landscape",
+          elementType: "all",
+          stylers: [
+            { color: "#f5f5f5" },
+            { saturation: -100 }
+          ]
+        },
+        // Agua en gris azulado muy suave
+        {
+          featureType: "water",
+          elementType: "all",
+          stylers: [
+            { color: "#e8e8e8" },
+            { saturation: -100 }
+          ]
+        },
+        // Carreteras principales apenas visibles
+        {
+          featureType: "road.highway",
+          elementType: "all",
+          stylers: [
+            { color: "#d0d0d0" },
+            { saturation: -100 },
+            { visibility: "simplified" }
+          ]
+        },
+        // Carreteras secundarias muy tenues
+        {
+          featureType: "road.arterial",
+          elementType: "all",
+          stylers: [
+            { color: "#e0e0e0" },
+            { saturation: -100 },
+            { visibility: "simplified" }
+          ]
+        },
+        // Fronteras de países en gris medio
+        {
+          featureType: "administrative.country",
+          elementType: "geometry.stroke",
+          stylers: [
+            { color: "#b0b0b0" },
+            { weight: 1 }
+          ]
+        },
+        // Fronteras administrativas españolas más visibles
+        {
+          featureType: "administrative.province",
+          elementType: "geometry.stroke",
+          stylers: [
+            { color: "#999999" },
+            { weight: 0.5 },
+            { visibility: "on" }
+          ]
+        }
+      ]
+    });
+
+    // Listener para cerrar InfoWindows al hacer clic en el mapa
+    map.addListener('click', function() {
+      if (currentInfoWindow) {
+        currentInfoWindow.close();
+        currentInfoWindow = null;
+      }
+    });
+
+    // Crear marcadores para cada ciudad
+    Object.keys(eventsByCity).forEach(function(city) {
+      var coordinates = cityCoordinates[city];
+      if (coordinates) {
+        var events = eventsByCity[city];
+        
+        // Crear icono personalizado con colores del sitio
+        var customIcon = {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 8,
+          fillColor: '#007acc', // Color principal del sitio
+          fillOpacity: 0.9,
+          strokeColor: '#2c5aa0', // Color más oscuro para el borde
+          strokeWeight: 2,
+          strokeOpacity: 1
+        };
+        
+        var marker = new google.maps.Marker({
+          position: coordinates,
+          map: map,
+          title: city + ' (' + events.length + ' evento' + (events.length > 1 ? 's' : '') + ')',
+          icon: customIcon
+        });
+        
+        var infoWindow = new google.maps.InfoWindow({
+          content: createPopupContent(city, events),
+          maxWidth: 450, // Más ancho para mejor legibilidad
+          pixelOffset: new google.maps.Size(0, -10) // Pequeño offset vertical
+        });
+        
+        // Listener para detectar cuando se cierra el InfoWindow
+        infoWindow.addListener('closeclick', function() {
+          currentInfoWindow = null;
+        });
+        
+        marker.addListener('click', function() {
+          // Cerrar el InfoWindow anterior si existe
+          if (currentInfoWindow) {
+            currentInfoWindow.close();
+          }
+          
+          // Abrir el nuevo InfoWindow
+          infoWindow.open(map, marker);
+          
+          // Actualizar la referencia al InfoWindow actual
+          currentInfoWindow = infoWindow;
+        });
+      }
+    });
+  } catch (error) {
+    console.error('Error inicializando Google Maps:', error);
+    initLeafletMap();
+  }
+}
+
+// Función de fallback para Leaflet
+function initLeafletMap() {
+  document.getElementById('map').style.display = 'none';
+  document.getElementById('map-error').style.display = 'block';
+  
+  var link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+  document.head.appendChild(link);
+  
+  var script = document.createElement('script');
+  script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+  script.onload = function() {
+    var leafletMap = L.map('leaflet-map').setView([40.4168, -3.7038], 6);
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(leafletMap);
+    
+    Object.keys(eventsByCity).forEach(function(city) {
+      var coordinates = cityCoordinates[city];
+      if (coordinates) {
+        var events = eventsByCity[city];
+        var leafletCoords = [coordinates.lat, coordinates.lng];
+        
+        // Crear icono personalizado para Leaflet con colores del sitio
+        var customLeafletIcon = L.divIcon({
+          className: 'custom-leaflet-marker',
+          html: '<div style="background-color: #007acc; border: 2px solid #2c5aa0; border-radius: 50%; width: 16px; height: 16px;"></div>',
+          iconSize: [16, 16],
+          iconAnchor: [8, 8]
+        });
+        
+        var marker = L.marker(leafletCoords, { icon: customLeafletIcon }).addTo(leafletMap);
+        marker.bindPopup(createPopupContent(city, events), { 
+          maxWidth: 450,
+          maxHeight: 400,
+          autoPan: true,
+          closeOnEscapeKey: true
+        });
+        marker.bindTooltip(city + ' (' + events.length + ' evento' + (events.length > 1 ? 's' : '') + ')');
+      }
+    });
+  };
+  document.head.appendChild(script);
+}
+
+// Manejo de errores y timeout
+function handleGoogleMapsError() {
+  console.warn('Google Maps falló, usando Leaflet como fallback');
+  initLeafletMap();
+}
+
+var googleMapsTimeout = setTimeout(function() {
+  if (typeof google === 'undefined' || !google.maps) {
+    handleGoogleMapsError();
+  }
+}, 5000);
+
+</script>
+
+<!-- Cargar Google Maps API -->
+{% if jekyll.environment == "production" %}
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ site.google_maps_api_key }}&callback=initMap" onerror="handleGoogleMapsError()"></script>
+{% else %}
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ site.google_maps_api_key_dev }}&callback=initMap" onerror="handleGoogleMapsError()"></script>
+{% endif %}
+
+<style>
+.map-container {
+    width: 100%;
+    height: 80vh;
+    margin: 20px 0;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Estilos para marcadores personalizados de Leaflet */
+.custom-leaflet-marker {
+    border: none !important;
+    background: transparent !important;
+}
+
+.custom-leaflet-marker div {
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 122, 204, 0.3);
+}
+
+.custom-leaflet-marker:hover div {
+    transform: scale(1.2);
+    box-shadow: 0 3px 8px rgba(0, 122, 204, 0.5);
+}
+
+/* Estilos del popup */
+.map-popup {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    min-width: 300px;
+    max-width: 420px;
+}
+
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #667eea;
+}
+
+.popup-header h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.3em;
+    font-weight: 600;
+}
+
+.event-count {
+    color: #666;
+    font-size: 0.9em;
+    font-weight: 500;
+    margin-right: 12px;
+}
+
+.popup-content {
+    border-radius: 4px;
+}
+
+/* Estilos para scroll personalizado */
+.popup-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.popup-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.popup-content::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 3px;
+}
+
+.popup-content::-webkit-scrollbar-thumb:hover {
+    background: #5a67d8;
+}
+
+.event-item {
+    padding: 12px 0;
+    margin-bottom: 0;
+}
+
+.event-item h4 {
+    margin: 0 0 8px 0;
+    color: #2c3e50;
+    font-size: 1.05em;
+    font-weight: 600;
+    line-height: 1.3;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+.event-date {
+    margin: 0 0 10px 0;
+    color: #666;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.event-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+
+.event-link, .event-twitter {
+    display: inline-block;
+    padding: 5px 10px;
+    background: #667eea;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.8em;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.event-link:hover, .event-twitter:hover {
+    background: #5a67d8;
+    text-decoration: none;
+}
+
+.cfp-open {
+    display: inline-block;
+    padding: 5px 10px;
+    background: #10b981;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.8em;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.cfp-open:hover {
+    background: #059669;
+    text-decoration: none;
+}
+
+.cancelled {
+    display: inline-block;
+    padding: 5px 10px;
+    background: #ef4444;
+    color: white;
+    border-radius: 6px;
+    font-size: 0.8em;
+    font-weight: 500;
+}
+
+.event-separator {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 0;
+    width: 100%;
+}
+
+/* Estilos para InfoWindows de Google Maps */
+.gm-style .gm-style-iw {
+    border-radius: 8px;
+}
+
+.gm-style .gm-style-iw-d {
+    overflow: hidden !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .map-container {
+        height: 70vh;
+        margin: 10px 0;
+    }
+    
+    .map-popup {
+        min-width: 280px;
+        max-width: 320px;
+    }
+    
+    .popup-header h3 {
+        font-size: 1.1em;
+    }
+    
+    .event-count {
+        font-size: 0.8em;
+    }
+    
+    .event-item h4 {
+        font-size: 1em;
+        line-height: 1.2;
+    }
+    
+    .event-actions {
+        gap: 4px;
+    }
+    
+    .event-link, .event-twitter, .cfp-open {
+        font-size: 0.75em;
+        padding: 4px 8px;
+    }
+    
+    .popup-content {
+        max-height: 250px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .map-popup {
+        min-width: 260px;
+        max-width: 290px;
+    }
+    
+    .popup-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    
+    .popup-content {
+        max-height: 200px !important;
+    }
+}
+</style>

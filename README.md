@@ -132,7 +132,7 @@ For questions or suggestions about the repository structure, please open an issu
 
 ## License
 
-All content is [CC0][1].
+All content is [CC BY 4.0][1].
 
 
- [1]: https://creativecommons.org/publicdomain/zero/1.0/
+ [1]: https://creativecommons.org/licenses/by/4.0/

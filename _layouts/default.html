@@ -5,19 +5,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Conferencias Tech 🇪🇸</title>
-    <meta name="title" content="Conferencias Tech 🇪🇸">
+    <title>TechConf by Chimichurri Code</title>
+    <meta name="title" content="TechConf by Chimichurri Code">
     <meta name="description" content="A community-curated list of tech conferences around Spain.">
 
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://techconf.es/">
-    <meta property="og:title" content="Conferencias Tech España">
+    <meta property="og:title" content="TechConf by Chimichurri Code">
     <meta property="og:description" content="A community-curated list of tech conferences around Spain.">
     <meta property="og:image" content="https://techconf.es/img/thumbnail.png">
 
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://techconf.es/">
-    <meta property="twitter:title" content="Conferencias Tech España">
+    <meta property="twitter:title" content="TechConf by Chimichurri Code">
     <meta property="twitter:description" content="A community-curated list of tech conferences around Spain.">
     <meta property="twitter:image" content="https://techconf.es/img/thumbnail-twitter.png">
 
@@ -41,15 +41,26 @@
   <body>
     <div class="container">
       <header class="header">
-        <h1 class="main-title">Conferencias Tech 🇪🇸</h1>
+        <div class="header-top">
+          <div class="logo">
+            <a href="{{site.baseurl}}/" title="Ir a la página principal">
+              <img src="{{site.baseurl}}/img/techconf_dark.png" alt="TechConf by Chimichurri Code" class="logo-image">
+            </a>
+          </div>
+          
+          <!-- Navbar a la altura del logo -->
+          <nav class="navbar">
+            <div class="navbar-left">
+              <a href="{{site.baseurl}}/" {% if page.url == "/" %}class="navbar-item active"{% else %}class="navbar-item"{% endif %}>Próximos</a>
+              <a href="{{site.baseurl}}/past.html" {% if page.url == "/past.html" %}class="navbar-item active"{% else %}class="navbar-item"{% endif %}>Pasados</a>
+            </div>
+            <div class="navbar-right">
+              <a href="https://github.com/npatarino/tech-conferences-spain/#adding-a-conference" class="navbar-item add-event">Añadir evento</a>
+            </div>
+          </nav>
+        </div>
         
-        <nav class="navigation">
-          <ul class="nav-links">
-            <li><a href="{{site.baseurl}}/" {% if page.url == "/" %}class="active"{% endif %}>Próximos</a></li>
-            <li><a href="{{site.baseurl}}/past.html" {% if page.url == "/past.html" %}class="active"{% endif %}>Pasados</a></li>
-            <li><a href="https://github.com/npatarino/tech-conferences-spain/#adding-a-conference">Añadir evento</a></li>
-          </ul>
-        </nav>
+
       </header>
 
       <main class="main-content">
@@ -59,10 +70,13 @@
       <footer class="footer">
         <div class="footer-links">
           <a href="conferences.ics">iCalendar</a>
-          <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>
+          <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
           <a href="https://github.com/npatarino/tech-conferences-spain/">GitHub</a>
         </div>
         
+        <div class="footer-credits">
+          Powered with ❤️ by <a href="https://chimi.pro" target="_blank" rel="noopener">Chimichurri Code</a>
+        </div>
       </footer>
     </div>
   </body>
