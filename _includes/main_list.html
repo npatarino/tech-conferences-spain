@@ -7,7 +7,23 @@
   {% assign conferences_grouped_by_month = conferences_by_year.items | group_by_exp:"conference", "conference.date_start | date: '%m'" %}
   {% for conferences_by_month in conferences_grouped_by_month %}
     <section class="month-section">
-      <h2 class="month-title">{{ conferences_by_month.items.first.date_start | date: '%B %Y' }}</h2>
+      {% assign month_number = conferences_by_month.items.first.date_start | date: '%m' | plus: 0 %}
+      {% assign year = conferences_by_month.items.first.date_start | date: '%Y' %}
+      {% case month_number %}
+        {% when 1 %}{% assign month_name = 'Enero' %}
+        {% when 2 %}{% assign month_name = 'Febrero' %}
+        {% when 3 %}{% assign month_name = 'Marzo' %}
+        {% when 4 %}{% assign month_name = 'Abril' %}
+        {% when 5 %}{% assign month_name = 'Mayo' %}
+        {% when 6 %}{% assign month_name = 'Junio' %}
+        {% when 7 %}{% assign month_name = 'Julio' %}
+        {% when 8 %}{% assign month_name = 'Agosto' %}
+        {% when 9 %}{% assign month_name = 'Septiembre' %}
+        {% when 10 %}{% assign month_name = 'Octubre' %}
+        {% when 11 %}{% assign month_name = 'Noviembre' %}
+        {% when 12 %}{% assign month_name = 'Diciembre' %}
+      {% endcase %}
+      <h2 class="month-title">{{ month_name }} de {{ year }}</h2>
       <div class="conference-list">
         {% for conference in conferences_by_month.items %}  
           <div class="conference-item">

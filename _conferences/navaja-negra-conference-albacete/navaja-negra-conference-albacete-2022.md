@@ -1,6 +1,6 @@
 ---
 name: "Navaja Negra Conference 2022"
-website: https://www.navajanegra.com/
+website: https://www.navajanegra.com/2022/
 location: Albacete, Spain
 twitter: https://x.com/navajanegra
 

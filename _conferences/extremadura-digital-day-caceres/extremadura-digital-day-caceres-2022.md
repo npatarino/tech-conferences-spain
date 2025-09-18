@@ -1,6 +1,6 @@
 ---
 name: "Extremadura Digital Day"
-website: https://extremaduradigitalday.com/
+website: https://extremaduradigitalday.com/2022
 twitter: https://x.com/extredigitalday
 location: Cáceres, Spain
 

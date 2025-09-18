@@ -1,7 +1,7 @@
 ---
 name: "Navaja Negra Conference"
-website: https://www.navajanegra.com/2025/index.html
-twitter: https://x.com/navajanegra
+website: https://www.navajanegra.com/2025/
+twitter: https://x.com/NavajaNegra_ab
 location: Albacete, Spain
 
 date_start: 2025-10-02

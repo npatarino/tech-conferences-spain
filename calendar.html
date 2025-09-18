@@ -86,6 +86,7 @@ permalink: /calendar.html
     padding: 12px 0 !important;
     font-size: 16px !important;
     font-weight: 600 !important;
+    text-transform: capitalize !important;
   }
   
   .fc-daygrid-day-number {
@@ -164,6 +165,7 @@ permalink: /calendar.html
     .fc-col-header-cell {
       font-size: 14px !important;
       padding: 8px 0 !important;
+      text-transform: capitalize !important;
     }
     
     .fc-daygrid-day-number {
@@ -208,6 +210,21 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     locale: 'es',
     firstDay: 1, // Lunes como primer día
+    buttonText: {
+      today: 'Hoy'
+    },
+    // Configuración adicional para capitalización correcta en español
+    titleFormat: function(info) {
+      const months = {
+        0: 'Enero', 1: 'Febrero', 2: 'Marzo', 3: 'Abril',
+        4: 'Mayo', 5: 'Junio', 6: 'Julio', 7: 'Agosto',
+        8: 'Septiembre', 9: 'Octubre', 10: 'Noviembre', 11: 'Diciembre'
+      };
+      return months[info.date.month] + ' de ' + info.date.year;
+    },
+    dayHeaderFormat: {
+      weekday: 'short'
+    },
     events: conferences,
     eventDisplay: 'block',
     displayEventTime: false,

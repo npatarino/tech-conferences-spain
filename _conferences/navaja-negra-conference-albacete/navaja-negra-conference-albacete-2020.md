@@ -1,6 +1,6 @@
 ---
 name: "Navaja Negra Conference 2020"
-website: https://www.navajanegra.com/
+website: https://www.navajanegra.com/2020/
 location: Online
 twitter: https://x.com/navajanegra
 
