@@ -1,8 +1,7 @@
 ---
-name: "Wey Wey Web"
-website: https://www.weyweyweb.com/
-twitter: https://x.com/weyweyweb
-bluesky: http://bsky.app/weyweyweb.bsky.social
+name: "Lambda World"
+website: https://lambda.world/
+twitter: https://x.com/lambda_world
 location: Torremolinos, Spain
 
 date_start: 2026-10-29
