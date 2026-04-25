@@ -1,5 +1,5 @@
 ---
-name: "DevBcn (Barcelona Developers Conference)"
+name: "DevBcn"
 website: https://www.devbcn.com
 twitter: https://x.com/devbcn
 location: Barcelona, Spain

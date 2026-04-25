@@ -1,6 +1,6 @@
 ---
 name: "esLibre"
-website: https://eslibre.org/2026/
+website: https://eslib.re/2026/es/
 twitter: https://x.com/esLibre_
 location: Melide, Galicia, Spain
 
