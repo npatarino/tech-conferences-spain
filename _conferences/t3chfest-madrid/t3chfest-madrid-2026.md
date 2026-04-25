@@ -4,8 +4,8 @@ website: https://t3chfest.es/2026/
 twitter: https://x.com/t3chfest
 location: Leganés, Madrid, Spain
 
-date_start: 2026-03-13
-date_end: 2026-03-14
+date_start: 2026-03-12
+date_end: 2026-03-13
 
 
 cfp_start: 2025-09-30

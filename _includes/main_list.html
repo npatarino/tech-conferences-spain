@@ -28,10 +28,14 @@
         {% for conference in conferences_by_month.items %}  
           <div class="conference-item">
             <div class="date-section">
-              <div class="date-badge">
-                <span class="day">{{ conference.date_start | date: "%d" }}</span>
-                {% if conference.date_start != conference.date_end %}
-                  <span class="day-range">-{{ conference.date_end | date: "%d" }}</span>
+              <div class="date-badge{% if conference.date_tbc %} date-badge-tbc{% endif %}">
+                {% if conference.date_tbc %}
+                  <span class="day">TBC</span>
+                {% else %}
+                  <span class="day">{{ conference.date_start | date: "%d" }}</span>
+                  {% if conference.date_start != conference.date_end %}
+                    <span class="day-range">-{{ conference.date_end | date: "%d" }}</span>
+                  {% endif %}
                 {% endif %}
               </div>
             </div>

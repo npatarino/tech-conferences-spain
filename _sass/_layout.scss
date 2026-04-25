@@ -245,6 +245,13 @@ body {
         font-weight: 600;
         color: #3182ce;
       }
+
+      &.date-badge-tbc .day {
+        font-size: 0.95rem;
+        color: #718096;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+      }
     }
   }
   

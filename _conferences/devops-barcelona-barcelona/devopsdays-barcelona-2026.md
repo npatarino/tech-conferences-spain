@@ -6,4 +6,6 @@ location: Barcelona, Spain
 
 date_start: 2026-11-13
 date_end: 2026-11-14
+
+cfp_site: https://talks.devopsdays.org/devopsdays-barcelona-2026/cfp
 ---
