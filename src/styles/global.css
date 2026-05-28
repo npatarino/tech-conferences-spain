@@ -1,0 +1,15 @@
+/*
+ * TechConf global styles.
+ * Inherits reset, tokens and utilities from @chimi/design-system/web.css.
+ * Only narrower page width and tighter type sizes are overridden.
+ */
+@import "@chimichurricode/design-system/web.css";
+
+:root {
+  --page-max: 960px;
+  --page-pad: clamp(16px, 4vw, 48px);
+
+  --web-display-xl: 700 clamp(48px, 7vw, 96px)/0.95   var(--chimi-font-family-display);
+  --web-display-md: 700 clamp(28px, 3.4vw, 44px)/1.05 var(--chimi-font-family-display);
+  --web-display-sm: 700 clamp(22px, 2.4vw, 30px)/1.1  var(--chimi-font-family-display);
+}

@@ -1,0 +1,45 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import ViewSwitcher from "../components/ViewSwitcher.astro";
+import MonthGroup from "../components/MonthGroup.astro";
+import { monthKey, monthLabelEs, todayIso } from "../lib/format.ts";
+import { conferenceListJsonLd, pageJsonLd } from "../seo";
+
+const today = todayIso();
+const all = await getCollection("conferences");
+const past = all
+  .filter((c) => c.data.dateEnd < today)
+  .sort((a, b) => b.data.dateStart.localeCompare(a.data.dateStart));
+
+const groups = new Map<string, typeof past>();
+for (const c of past) {
+  const key = monthKey(c.data.dateStart);
+  if (!groups.has(key)) groups.set(key, []);
+  groups.get(key)!.push(c);
+}
+const orderedKeys = [...groups.keys()].sort().reverse();
+
+const pastConferences = past.map((c) => c.data);
+const pastSeo = {
+  jsonLd: [
+    pageJsonLd({
+      name: "Conferencias pasadas",
+      description: "Histórico de conferencias técnicas en España.",
+      url: "/past",
+    }),
+    conferenceListJsonLd({
+      name: "Histórico de conferencias técnicas",
+      conferences: pastConferences,
+      limit: 50,
+    }),
+  ],
+};
+---
+
+<Base title="Conferencias pasadas" description="Histórico de conferencias técnicas en España. Explorá ediciones anteriores y patrones por mes." seo={pastSeo}>
+  <ViewSwitcher current="list" basePath="/past" />
+  {orderedKeys.map((key) => (
+    <MonthGroup label={monthLabelEs(key)} conferences={groups.get(key)!} />
+  ))}
+</Base>

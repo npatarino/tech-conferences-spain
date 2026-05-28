@@ -1,0 +1,38 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import ViewSwitcher from "../components/ViewSwitcher.astro";
+import MonthGroup from "../components/MonthGroup.astro";
+import { monthKey, monthLabelEs, todayIso } from "../lib/format.ts";
+import { homeJsonLd } from "../seo";
+
+const today = todayIso();
+const all = await getCollection("conferences");
+const upcoming = all
+  .filter((c) => c.data.dateEnd >= today)
+  .sort((a, b) => a.data.dateStart.localeCompare(b.data.dateStart));
+
+const groups = new Map<string, typeof upcoming>();
+for (const c of upcoming) {
+  const key = monthKey(c.data.dateStart);
+  if (!groups.has(key)) groups.set(key, []);
+  groups.get(key)!.push(c);
+}
+const orderedKeys = [...groups.keys()].sort();
+
+const homeSeo = {
+  jsonLd: homeJsonLd(upcoming.map((c) => c.data)),
+};
+---
+
+<Base title="Próximas conferencias" description="Listado curado de conferencias técnicas en España: fechas, ubicación y CFP. Mantenido en abierto desde 2018." seo={homeSeo}>
+  <ViewSwitcher current="list" basePath="/" />
+  {orderedKeys.length === 0 && <p class="empty">No hay próximas conferencias por ahora.</p>}
+  {orderedKeys.map((key) => (
+    <MonthGroup label={monthLabelEs(key)} conferences={groups.get(key)!} />
+  ))}
+</Base>
+
+<style>
+  .empty { color: var(--muted); text-align: center; padding-block: var(--stack-xl); }
+</style>

@@ -1,0 +1,636 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import { pageJsonLd } from "../seo";
+import {
+  buildRows,
+  yearlyEvolution,
+  monthYearMatrix,
+  weekdayDistribution,
+  seriesLongevity,
+  debutsByYear,
+  geographicTrend,
+  durationByYear,
+  cfpStats,
+  busiestWeeks,
+  cadence,
+  dormantSeries,
+  regionBreakdown,
+  weekOfYearHeat,
+} from "../lib/insights.ts";
+
+const all = await getCollection("conferences");
+const rows = buildRows(all);
+
+const today = new Date();
+const currentYear = today.getUTCFullYear();
+const completedYears = rows
+  .filter((r) => r.year < currentYear || (r.year === currentYear && r.endIso < today.toISOString().slice(0, 10)))
+  .map((r) => r.year);
+const lastCompleteYear = Math.max(...new Set(completedYears));
+
+const evolution = yearlyEvolution(rows.filter((r) => !r.cancelled && r.year <= lastCompleteYear));
+const heat = monthYearMatrix(rows.filter((r) => r.year >= currentYear - 6 && r.year <= lastCompleteYear));
+const weekday = weekdayDistribution(rows.filter((r) => r.year <= lastCompleteYear));
+const longevity = seriesLongevity(rows, currentYear);
+const debuts = debutsByYear(rows.filter((r) => r.year <= lastCompleteYear));
+const geo = geographicTrend(rows.filter((r) => r.year <= lastCompleteYear));
+const duration = durationByYear(rows.filter((r) => r.year >= currentYear - 6 && r.year <= lastCompleteYear));
+const cfp = cfpStats(rows.filter((r) => r.year >= currentYear - 3 && r.year <= currentYear + 1));
+const overlap = busiestWeeks(rows);
+const cadenceData = cadence(rows.filter((r) => r.year <= lastCompleteYear)).sort((a, b) => b.editions - a.editions || a.medianGapMonths - b.medianGapMonths);
+const fastest = cadenceData.slice().sort((a, b) => a.medianGapMonths - b.medianGapMonths || b.editions - a.editions).filter((c) => c.editions >= 3).slice(0, 6);
+const annualSeries = cadenceData.filter((c) => c.medianGapMonths >= 11 && c.medianGapMonths <= 13).length;
+const dormant = dormantSeries(rows, currentYear);
+const regions = regionBreakdown(rows.filter((r) => r.year <= lastCompleteYear));
+const weekHeat = weekOfYearHeat(rows);
+
+const totalEvents = rows.filter((r) => !r.cancelled).length;
+const uniqueSeries = longevity.length;
+const aliveSeries = longevity.filter((l) => l.alive).length;
+const survivalPct = Math.round((aliveSeries / uniqueSeries) * 100);
+const cities = new Set(rows.map((r) => r.city).filter(Boolean)).size;
+const yearsCovered = evolution.length;
+
+const topByEditions = longevity.slice().sort((a, b) => b.editions - a.editions || b.lastYear - a.lastYear).slice(0, 10);
+
+// Take-aways
+const peakYear = evolution.slice().sort((a, b) => b.total - a.total)[0];
+const last3Avg = evolution.slice(-3).reduce((a, b) => a + b.total, 0) / Math.max(1, Math.min(3, evolution.length));
+const prev3Avg = evolution.slice(-6, -3).reduce((a, b) => a + b.total, 0) / Math.max(1, Math.min(3, Math.max(0, evolution.length - 3)));
+const growthPct = prev3Avg > 0 ? Math.round(((last3Avg - prev3Avg) / prev3Avg) * 100) : 0;
+
+const madridBcnRecent = geo.recentShare.filter((c) => c.city === "Madrid" || c.city === "Barcelona").reduce((a, b) => a + b.pct, 0);
+const madridBcnEarly = geo.earlyShare.filter((c) => c.city === "Madrid" || c.city === "Barcelona").reduce((a, b) => a + b.pct, 0);
+
+const data = {
+  evolution,
+  heat,
+  weekday,
+  duration,
+  debuts,
+  geo,
+  cfp,
+  topByEditions,
+  weekHeat,
+  regions,
+};
+---
+
+<Base title="Insights del ecosistema" description="Estadísticas y tendencias del ecosistema de conferencias técnicas en España: ciudades, formatos, evolución por año." recipe="canvas-signal" seo={{ jsonLd: [pageJsonLd({ name: "Insights del ecosistema", description: "Estadísticas y tendencias del ecosistema de conferencias técnicas en España.", url: "/insights" })] }}>
+  <header class="hero">
+    <span class="eyebrow">Insights</span>
+    <h1 class="display-md">Cómo se mueve el ecosistema de eventos tech en España</h1>
+    <p class="lede">
+      Datos sobre {totalEvents.toLocaleString("es-ES")} ediciones de {uniqueSeries} eventos distintos,
+      desde {evolution[0]?.year ?? "—"} hasta {lastCompleteYear}. Pensado para quien organiza un evento
+      y quiere saber cuándo, dónde y cómo encaja.
+    </p>
+
+    <div class="kpis">
+      <div class="kpi"><span class="kpi-value">{totalEvents.toLocaleString("es-ES")}</span><span class="kpi-label">Ediciones</span></div>
+      <div class="kpi"><span class="kpi-value">{uniqueSeries}</span><span class="kpi-label">Eventos únicos</span></div>
+      <div class="kpi"><span class="kpi-value">{cities}</span><span class="kpi-label">Ciudades</span></div>
+      <div class="kpi"><span class="kpi-value">{yearsCovered}</span><span class="kpi-label">Años cubiertos</span></div>
+    </div>
+  </header>
+
+  <section class="section">
+    <h2 class="display-sm">Evolución anual</h2>
+    <p class="takeaway">
+      {growthPct >= 0
+        ? `Los últimos 3 años muestran un crecimiento del ${growthPct}% sobre el trienio anterior.`
+        : `Los últimos 3 años muestran una caída del ${Math.abs(growthPct)}% sobre el trienio anterior.`}
+      Pico histórico: <strong>{peakYear?.year}</strong> con <strong>{peakYear?.total}</strong> ediciones.
+    </p>
+    <div class="chart" id="chart-evolution"></div>
+  </section>
+
+  <section class="section">
+    <h2 class="display-sm">Semanas calientes y frías</h2>
+    <p class="takeaway">
+      Las semanas con más eventos en paralelo (en {currentYear - 2}–{currentYear + 1}) compiten por audiencia y patrocinadores.
+      Las semanas vacías de los próximos 12 meses son ventanas libres para colocar tu evento sin competir.
+    </p>
+    <div class="grid-2">
+      <div>
+        <h3 class="kicker">Semanas más saturadas</h3>
+        <ol class="leaderboard">
+          {overlap.busiest.map((w) => (
+            <li>
+              <span class="lb-name">Semana {w.week} de {w.year}</span>
+              <span class="lb-meta">
+                <span class="lb-bar"><span style={`width: ${(w.count / (overlap.busiest[0]?.count || 1)) * 100}%`}></span></span>
+                <span class="lb-count">{w.count}</span>
+              </span>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div>
+        <h3 class="kicker">Próximas semanas libres</h3>
+        {overlap.emptyWeeks.length > 0 ? (
+          <ul class="emerging-list">
+            {overlap.emptyWeeks.map((w) => (
+              <li><span class="city-name">Semana {w.week}</span> <span class="meta">de {w.year}</span></li>
+            ))}
+          </ul>
+        ) : (
+          <p class="muted">No hay huecos libres en los próximos 12 meses.</p>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="display-sm">Mapa de calor semanal</h2>
+    <p class="takeaway">
+      Vista granular por semana del año, últimos 5 años. Útil para encontrar slots concretos: si vas a un mes saturado,
+      mira qué semanas dentro del mes están menos cargadas.
+    </p>
+    <div class="chart chart-tall" id="chart-week-heat"></div>
+  </section>
+
+  <section class="section">
+    <h2 class="display-sm">Estacionalidad por año</h2>
+    <p class="takeaway">
+      Octubre y noviembre suelen ser los meses con más eventos; el verano (julio-agosto) es ventana abierta.
+      Mira tu mes objetivo en los últimos años para ver si es saturado o de oportunidad.
+    </p>
+    <div class="chart chart-tall" id="chart-heat"></div>
+  </section>
+
+  <section class="section split">
+    <div>
+      <h2 class="display-sm">Día de la semana</h2>
+      <p class="takeaway">
+        Viernes y sábado dominan. Los entresemana captan eventos corporativos y meetups; los fin de semana,
+        comunidad y familia.
+      </p>
+      <div class="chart" id="chart-weekday"></div>
+    </div>
+    <div>
+      <h2 class="display-sm">Duración</h2>
+      <p class="takeaway">
+        El formato 1 día sigue siendo mayoritario, pero los 2 días crecen entre los eventos consolidados.
+      </p>
+      <div class="chart" id="chart-duration"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="display-sm">Longevidad: quién aguanta</h2>
+    <p class="takeaway">
+      De {uniqueSeries} eventos registrados, <strong>{aliveSeries}</strong> ({survivalPct}%) tuvieron edición en {currentYear} o están confirmados.
+      Aparecen unos {Math.round(debuts.slice(-3).reduce((a, b) => a + b.debuts, 0) / 3)} eventos nuevos al año en promedio reciente.
+    </p>
+    <div class="grid-2">
+      <div>
+        <h3 class="kicker">Top por número de ediciones</h3>
+        <ol class="leaderboard">
+          {topByEditions.map((s) => (
+            <li>
+              <span class="lb-name">{s.name}</span>
+              <span class="lb-meta">
+                <span class="lb-bar"><span style={`width: ${(s.editions / topByEditions[0].editions) * 100}%`}></span></span>
+                <span class="lb-count">{s.editions}</span>
+              </span>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div>
+        <h3 class="kicker">Debuts vs. retornos por año</h3>
+        <div class="chart" id="chart-debuts"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="display-sm">Cadencia: ¿cada cuánto vuelven?</h2>
+    <p class="takeaway">
+      De los eventos con 2+ ediciones, <strong>{annualSeries}</strong> son anuales canónicos
+      (cada 11–13 meses). Otros aceleran a 6 meses o estiran el ciclo.
+    </p>
+    <div class="grid-2">
+      <div>
+        <h3 class="kicker">Más rápidos (≥3 ediciones)</h3>
+        <ol class="leaderboard">
+          {fastest.map((c) => (
+            <li>
+              <span class="lb-name">{c.name}</span>
+              <span class="lb-meta">
+                <span class="lb-count">{c.medianGapMonths.toFixed(1)} meses</span>
+              </span>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div>
+        <h3 class="kicker">Eventos dormidos (≥3 años sin edición)</h3>
+        {dormant.length > 0 ? (
+          <ol class="leaderboard">
+            {dormant.slice(0, 8).map((s) => (
+              <li>
+                <span class="lb-name">{s.name}</span>
+                <span class="lb-meta">
+                  <span class="lb-count">{s.editions} eds · última {s.lastYear}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p class="muted">Todos los eventos siguen activos.</p>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="display-sm">Concentración geográfica</h2>
+    <p class="takeaway">
+      Madrid + Barcelona representan el <strong>{Math.round(madridBcnRecent)}%</strong> de los eventos en {geo.recentYears[0]}–{geo.recentYears[1]}
+      (eran el <strong>{Math.round(madridBcnEarly)}%</strong> en {geo.earlyYears[0]}–{geo.earlyYears[1]}).
+      {madridBcnRecent < madridBcnEarly ? " El ecosistema se está descentralizando." : " La concentración sigue alta."}
+    </p>
+    <div class="grid-2">
+      <div>
+        <h3 class="kicker">Top ciudades histórico</h3>
+        <ol class="leaderboard">
+          {geo.topAllTime.map((c) => (
+            <li>
+              <span class="lb-name">{c.city}</span>
+              <span class="lb-meta">
+                <span class="lb-bar"><span style={`width: ${(c.count / geo.topAllTime[0].count) * 100}%`}></span></span>
+                <span class="lb-count">{c.count}</span>
+              </span>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div>
+        <h3 class="kicker">Ciudades emergentes (primer evento en {currentYear - 2}–{currentYear})</h3>
+        {geo.emerging.length > 0 ? (
+          <ul class="emerging-list">
+            {geo.emerging.map((c) => (
+              <li><span class="city-name">{c.city}</span> <span class="meta">desde {c.firstYear}</span></li>
+            ))}
+          </ul>
+        ) : (
+          <p class="muted">Sin nuevas ciudades en el periodo.</p>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="display-sm">Por comunidad autónoma</h2>
+    <p class="takeaway">
+      Comparativa entre {regions.earlyYears[0]}–{regions.earlyYears[1]} y {regions.recentYears[0]}–{regions.recentYears[1]}.
+      Permite ver qué regiones están ganando peso en el ecosistema.
+    </p>
+    <div class="chart" id="chart-regions"></div>
+  </section>
+
+  <section class="section">
+    <h2 class="display-sm">Call for Papers</h2>
+    <p class="takeaway">
+      De los eventos recientes, <strong>{cfp.withCfp}</strong> documentan su CFP en este repositorio.
+      {cfp.medianLeadDays != null && (
+        <> El cierre típico ocurre <strong>{cfp.medianLeadDays} días</strong> antes del evento.</>
+      )}
+    </p>
+    <div class="chart" id="chart-cfp"></div>
+  </section>
+
+  <section class="section">
+    <h2 class="display-sm">El bache 2020</h2>
+    <p class="takeaway">
+      La pandemia recortó eventos presenciales: el dip de 2020 sigue siendo visible en los datos. La recuperación
+      tomó hasta 2023 para volver a niveles previos.
+    </p>
+  </section>
+
+  <p class="footnote">
+    Datos a {today.toISOString().slice(0, 10)}. Generado a partir del repositorio
+    <a href="https://github.com/npatarino/tech-conferences-spain" target="_blank" rel="noopener">tech-conferences-spain</a>.
+    Estadísticas calculadas sobre años completos; {currentYear} aparece sólo en gráficos donde tiene sentido.
+  </p>
+
+  <script type="application/json" id="insights-data" set:html={JSON.stringify(data)} />
+</Base>
+
+<script>
+  import * as echarts from "echarts";
+
+  type Data = {
+    evolution: { year: number; total: number; cancelled: number }[];
+    heat: { years: number[]; values: [number, number, number][] };
+    weekday: { all: number[]; recent: number[] };
+    duration: { years: number[]; oneDay: number[]; twoDay: number[]; threePlus: number[] };
+    debuts: { year: number; debuts: number; returning: number }[];
+    geo: { recentYears: [number, number]; earlyYears: [number, number] };
+    cfp: { withCfp: number; withoutCfp: number; closingMonths: number[]; medianLeadDays: number | null };
+    weekHeat: { years: number[]; values: [number, number, number][] };
+    regions: {
+      recent: { region: string; count: number; pct: number }[];
+      early: { region: string; count: number; pct: number }[];
+      recentYears: [number, number];
+      earlyYears: [number, number];
+    };
+  };
+
+  const dataEl = document.getElementById("insights-data") as HTMLScriptElement | null;
+  if (!dataEl) throw new Error("missing insights data");
+  const d: Data = JSON.parse(dataEl.textContent || "{}");
+
+  // ECharts needs concrete colors in JS-land. We resolve --recipe-* against
+  // the body (which carries data-recipe) so colors track the active recipe
+  // even on this dashboard page (canvas-signal). `accentSoft` no longer maps
+  // 1:1 to a recipe role; we synthesize via color-mix in CSS land instead
+  // by passing the same accent at 60% mix for hover-state highlights.
+  const recipeRoot = document.body;
+  const css = (name: string) =>
+    getComputedStyle(recipeRoot).getPropertyValue(name).trim();
+
+  const COLORS = {
+    text: css("--recipe-ink"),
+    muted: css("--muted") || "rgba(255,255,255,0.5)",
+    accent: css("--recipe-accent"),
+    accentSoft: css("--recipe-accent"),
+    energy: css("--recipe-em"),
+    // `critical` is plasma in the original semantic mapping. Recipes don't
+    // expose plasma to non-critical hosts, so we reach for the primitive
+    // directly — same artifact-color escape hatch as in blog/sobre-mi.
+    critical: css("--chimi-primitives-color-plasma-base"),
+    grid: "rgba(255,255,255,0.08)",
+  };
+
+  const baseAxis = {
+    axisLine: { lineStyle: { color: COLORS.muted } },
+    axisLabel: { color: COLORS.muted, fontFamily: css("--chimi-font-family-code") || "monospace" },
+    splitLine: { lineStyle: { color: COLORS.grid } },
+  };
+
+  function fontFamily() {
+    return css("--recipe-font-body") || "system-ui, sans-serif";
+  }
+
+  function init(id: string, opt: any) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const chart = echarts.init(el, null, { renderer: "canvas" });
+    chart.setOption({
+      textStyle: { color: COLORS.text, fontFamily: fontFamily() },
+      tooltip: {
+        backgroundColor: "rgba(20,20,20,0.95)",
+        borderColor: COLORS.grid,
+        textStyle: { color: COLORS.text },
+      },
+      ...opt,
+    });
+    window.addEventListener("resize", () => chart.resize());
+  }
+
+  // 1. Evolution
+  init("chart-evolution", {
+    grid: { left: 50, right: 16, top: 16, bottom: 28 },
+    xAxis: { type: "category", data: d.evolution.map((p) => String(p.year)), ...baseAxis },
+    yAxis: { type: "value", ...baseAxis },
+    series: [
+      {
+        type: "bar",
+        data: d.evolution.map((p) => p.total),
+        itemStyle: { color: COLORS.accent, borderRadius: [4, 4, 0, 0] },
+        emphasis: { itemStyle: { color: COLORS.energy } },
+      },
+    ],
+    tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
+  });
+
+  // 2. Heatmap
+  init("chart-heat", {
+    grid: { left: 70, right: 24, top: 24, bottom: 36 },
+    xAxis: { type: "category", data: ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"], splitArea: { show: true }, ...baseAxis },
+    yAxis: { type: "category", data: d.heat.years.map(String), splitArea: { show: true }, ...baseAxis },
+    visualMap: {
+      min: 0,
+      max: Math.max(...d.heat.values.map((v) => v[2])),
+      calculable: false,
+      orient: "horizontal",
+      left: "center",
+      bottom: 4,
+      inRange: { color: ["transparent", COLORS.accent, COLORS.energy] },
+      textStyle: { color: COLORS.muted },
+    },
+    series: [{ type: "heatmap", data: d.heat.values, label: { show: true, color: COLORS.text, fontSize: 10 } }],
+    tooltip: {
+      formatter: (p: any) => {
+        const months = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+        return `<strong>${months[p.value[0]]} ${d.heat.years[p.value[1]]}</strong><br/>${p.value[2]} eventos`;
+      },
+    },
+  });
+
+  // 3. Weekday
+  const days = ["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
+  init("chart-weekday", {
+    grid: { left: 50, right: 16, top: 30, bottom: 28 },
+    legend: { textStyle: { color: COLORS.muted }, top: 0, right: 0 },
+    xAxis: { type: "category", data: days, ...baseAxis },
+    yAxis: { type: "value", ...baseAxis },
+    series: [
+      { name: "Histórico", type: "bar", data: d.weekday.all, itemStyle: { color: COLORS.accent, borderRadius: [4, 4, 0, 0] } },
+      { name: "Últimos 3 años", type: "bar", data: d.weekday.recent, itemStyle: { color: COLORS.energy, borderRadius: [4, 4, 0, 0] } },
+    ],
+    tooltip: { trigger: "axis" },
+  });
+
+  // 4. Duration stacked
+  init("chart-duration", {
+    grid: { left: 50, right: 16, top: 30, bottom: 28 },
+    legend: { textStyle: { color: COLORS.muted }, top: 0, right: 0 },
+    xAxis: { type: "category", data: d.duration.years.map(String), ...baseAxis },
+    yAxis: { type: "value", ...baseAxis },
+    series: [
+      { name: "1 día", type: "bar", stack: "d", data: d.duration.oneDay, itemStyle: { color: COLORS.accent } },
+      { name: "2 días", type: "bar", stack: "d", data: d.duration.twoDay, itemStyle: { color: COLORS.energy } },
+      { name: "3+ días", type: "bar", stack: "d", data: d.duration.threePlus, itemStyle: { color: COLORS.critical } },
+    ],
+    tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
+  });
+
+  // 5. Debuts vs returning
+  init("chart-debuts", {
+    grid: { left: 50, right: 16, top: 30, bottom: 28 },
+    legend: { textStyle: { color: COLORS.muted }, top: 0, right: 0 },
+    xAxis: { type: "category", data: d.debuts.map((p) => String(p.year)), ...baseAxis },
+    yAxis: { type: "value", ...baseAxis },
+    series: [
+      { name: "Retornos", type: "bar", stack: "x", data: d.debuts.map((p) => p.returning), itemStyle: { color: COLORS.accent } },
+      { name: "Debuts", type: "bar", stack: "x", data: d.debuts.map((p) => p.debuts), itemStyle: { color: COLORS.energy } },
+    ],
+    tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
+  });
+
+  // 5b. Week-of-year heatmap
+  init("chart-week-heat", {
+    grid: { left: 70, right: 24, top: 16, bottom: 36 },
+    xAxis: { type: "category", data: Array.from({ length: 53 }, (_, i) => `S${i + 1}`), splitArea: { show: false }, axisLabel: { ...baseAxis.axisLabel, fontSize: 9, interval: 3 }, axisLine: baseAxis.axisLine },
+    yAxis: { type: "category", data: d.weekHeat.years.map(String), splitArea: { show: true }, ...baseAxis },
+    visualMap: {
+      min: 0,
+      max: Math.max(1, ...d.weekHeat.values.map((v) => v[2])),
+      calculable: false,
+      orient: "horizontal",
+      left: "center",
+      bottom: 0,
+      inRange: { color: ["transparent", COLORS.accent, COLORS.energy] },
+      textStyle: { color: COLORS.muted },
+    },
+    series: [{ type: "heatmap", data: d.weekHeat.values }],
+    tooltip: {
+      formatter: (p: any) => `<strong>Semana ${p.value[0] + 1}, ${d.weekHeat.years[p.value[1]]}</strong><br/>${p.value[2]} eventos`,
+    },
+  });
+
+  // 5c. Region comparison (grouped bars)
+  const regionLabels = [...new Set([...d.regions.recent.map((r) => r.region), ...d.regions.early.map((r) => r.region)])];
+  const recentMap = new Map(d.regions.recent.map((r) => [r.region, r.pct]));
+  const earlyMap = new Map(d.regions.early.map((r) => [r.region, r.pct]));
+  const sortedRegions = regionLabels.sort((a, b) => (recentMap.get(b) ?? 0) - (recentMap.get(a) ?? 0));
+  init("chart-regions", {
+    grid: { left: 50, right: 16, top: 30, bottom: 60 },
+    legend: { textStyle: { color: COLORS.muted }, top: 0, right: 0 },
+    xAxis: { type: "category", data: sortedRegions, axisLabel: { ...baseAxis.axisLabel, rotate: 25 }, axisLine: baseAxis.axisLine, splitLine: baseAxis.splitLine },
+    yAxis: { type: "value", axisLabel: { ...baseAxis.axisLabel, formatter: "{value}%" }, axisLine: baseAxis.axisLine, splitLine: baseAxis.splitLine },
+    series: [
+      { name: `${d.regions.earlyYears[0]}–${d.regions.earlyYears[1]}`, type: "bar", data: sortedRegions.map((r) => Number((earlyMap.get(r) ?? 0).toFixed(1))), itemStyle: { color: COLORS.accent, borderRadius: [4, 4, 0, 0] } },
+      { name: `${d.regions.recentYears[0]}–${d.regions.recentYears[1]}`, type: "bar", data: sortedRegions.map((r) => Number((recentMap.get(r) ?? 0).toFixed(1))), itemStyle: { color: COLORS.energy, borderRadius: [4, 4, 0, 0] } },
+    ],
+    tooltip: { trigger: "axis", axisPointer: { type: "shadow" }, valueFormatter: (v: any) => `${v}%` },
+  });
+
+  // 6. CFP closing month
+  const months = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+  init("chart-cfp", {
+    grid: { left: 50, right: 16, top: 16, bottom: 28 },
+    xAxis: { type: "category", data: months, ...baseAxis },
+    yAxis: { type: "value", ...baseAxis },
+    series: [{ type: "bar", data: d.cfp.closingMonths, itemStyle: { color: COLORS.energy, borderRadius: [4, 4, 0, 0] } }],
+    tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
+  });
+</script>
+
+<style>
+  .hero { padding-block: var(--stack-lg) var(--stack-md); }
+  .hero .display-md { margin-block: var(--stack-sm) var(--stack-md); max-width: 28ch; }
+  .lede { color: var(--muted-strong); max-width: 60ch; margin: 0; font-size: 16px; }
+
+  .kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--stack-sm);
+    margin-top: var(--stack-lg);
+  }
+  .kpi {
+    padding: 16px 18px;
+    background: var(--row-bg);
+    border-radius: 10px;
+    border: 1px solid var(--hairline);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .kpi-value {
+    font-family: var(--recipe-font-data);
+    font-weight: var(--recipe-weight-data);
+    font-size: clamp(24px, 3vw, 32px);
+    letter-spacing: var(--recipe-letter-spacing-primary);
+    color: var(--recipe-accent);
+    line-height: 1;
+  }
+  .kpi-label { font: var(--web-eyebrow); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted-strong); }
+
+  .section { padding-block: var(--stack-lg) 0; }
+  .section .display-sm { margin: 0 0 var(--stack-sm); }
+  .takeaway { color: var(--muted-strong); max-width: 70ch; margin: 0 0 var(--stack-md); }
+  .takeaway strong { color: var(--recipe-ink); }
+
+  /* Mobile-first: every multi-column composition stacks until --md, then
+     splits to the editorial 2-up grid. */
+  .section.split { display: grid; grid-template-columns: 1fr; gap: var(--stack-lg); }
+  .section.split > div { display: flex; flex-direction: column; }
+  @media (--md) {
+    .section.split { grid-template-columns: 1fr 1fr; }
+  }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr; gap: var(--stack-lg); }
+  @media (--md) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+
+  .kicker {
+    font: var(--web-eyebrow);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--recipe-accent);
+    margin: 0 0 var(--stack-sm);
+  }
+
+  /* Mobile-first chart heights: shorter by default to keep the page
+     scrollable on phones; taller from --md onwards for the desktop view. */
+  .chart { width: 100%; height: 260px; }
+  .chart-tall { height: 360px; }
+  @media (--md) {
+    .chart { height: 320px; }
+    .chart-tall { height: 380px; }
+  }
+
+  .leaderboard {
+    list-style: none;
+    counter-reset: rank;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 6px;
+  }
+  .leaderboard li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 12px;
+    counter-increment: rank;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--row-bg);
+  }
+  .leaderboard li::before {
+    content: counter(rank);
+    font: var(--web-mono-sm);
+    color: var(--muted);
+    width: 22px;
+    text-align: right;
+  }
+  .lb-name {
+    font-family: var(--recipe-font-body);
+    font-weight: var(--recipe-weight-body);
+    font-size: 14px;
+    letter-spacing: var(--recipe-letter-spacing-secondary);
+  }
+  .lb-meta { display: inline-flex; align-items: center; gap: 10px; }
+  .lb-bar { display: inline-block; width: clamp(80px, 14vw, 160px); height: 6px; border-radius: 999px; background: color-mix(in srgb, var(--recipe-ink) 8%, transparent); overflow: hidden; }
+  .lb-bar > span { display: block; height: 100%; background: linear-gradient(90deg, var(--recipe-accent), var(--recipe-em)); }
+  .lb-count { font: var(--web-mono-sm); color: var(--muted-strong); min-width: 28px; text-align: right; }
+
+  .emerging-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+  .emerging-list li { display: flex; justify-content: space-between; padding: 8px 12px; border-radius: 8px; background: var(--row-bg); }
+  .emerging-list .city-name {
+    font-family: var(--recipe-font-body);
+    font-weight: var(--recipe-weight-body);
+    letter-spacing: var(--recipe-letter-spacing-secondary);
+  }
+  .emerging-list .meta { font: var(--web-mono-sm); color: var(--muted); }
+
+  .footnote { margin-top: var(--stack-xl); color: var(--muted); font: var(--web-meta); }
+  .footnote a { color: var(--recipe-accent); }
+  .muted { color: var(--muted); }
+</style>

@@ -1,0 +1,64 @@
+---
+/**
+ * TechConf — Base layout (post-C2).
+ *
+ * Thin wrapper over `@chimi/web-app-kit/BaseLayout.astro`. Pre-C2
+ * this file was 124 LOC of largely-duplicated boilerplate.
+ */
+import "../styles/global.css";
+import BaseLayout from "@chimichurricode/web-app-kit/BaseLayout.astro";
+import type { BaseLayoutProps, Recipe, SEOOverrides } from "@chimichurricode/web-app-kit/types";
+
+interface Props {
+  title: string;
+  description?: string;
+  recipe?: Recipe;
+  seo?: SEOOverrides;
+}
+
+const {
+  title,
+  description = "TechConf — listado curado de conferencias técnicas en España con foco en mobile, plataforma y backend.",
+  recipe = "canvas-quiet",
+  seo,
+} = Astro.props;
+
+const headerProps: NonNullable<BaseLayoutProps["header"]> = {
+  brand: {
+    label: "TechConf",
+    href: "/",
+    logoSrc: { light: "/logo-light.svg", dark: "/logo-dark.svg" },
+    ariaLabel: "TechConf — Inicio",
+  },
+  links: [
+    { href: "/",     label: "Próximos" },
+    { href: "/past", label: "Pasados" },
+    {
+      href: "https://github.com/npatarino/tech-conferences-spain/#adding-a-conference",
+      label: "Añadir evento",
+      external: true,
+      cta: true,
+    },
+  ],
+};
+
+const footerProps: BaseLayoutProps["footer"] = {
+  variant: "minimal",
+  metaLinks: [
+    { href: "https://creativecommons.org/licenses/by/4.0/", label: "CC BY 4.0", external: true },
+    { href: "https://github.com/npatarino/tech-conferences-spain", label: "GitHub", external: true },
+  ],
+};
+---
+
+<BaseLayout
+  siteId="techconf"
+  title={title}
+  description={description}
+  recipe={recipe}
+  seo={seo}
+  header={headerProps}
+  footer={footerProps}
+>
+  <slot />
+</BaseLayout>

@@ -1,0 +1,10 @@
+dist/
+.astro/
+.vercel/
+node_modules/
+.DS_Store
+.env
+.env.*
+!.env.example
+public/fonts/
+.cache/

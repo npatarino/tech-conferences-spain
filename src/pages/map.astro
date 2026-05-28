@@ -1,0 +1,251 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import ViewSwitcher from "../components/ViewSwitcher.astro";
+import { todayIso } from "../lib/format.ts";
+import { pageJsonLd } from "../seo";
+
+const apiKey = process.env.GOOGLE_MAPS_API_KEY ?? "";
+const today = todayIso();
+const all = await getCollection("conferences");
+const upcoming = all.filter((c) => c.data.dateEnd >= today);
+const withCoords = upcoming.filter((c) => c.data.lat != null && c.data.lng != null);
+
+const markers = withCoords.map((c) => ({
+  id: c.id,
+  name: c.data.name,
+  city: c.data.location.split(",")[0]?.trim() ?? c.data.location,
+  dateStart: c.data.dateStart,
+  dateEnd: c.data.dateEnd,
+  website: c.data.website ?? null,
+  lat: c.data.lat!,
+  lng: c.data.lng!,
+}));
+
+const cityCounts = new Map<string, number>();
+for (const c of upcoming) {
+  const city = c.data.location.split(",")[0]?.trim() || c.data.location;
+  if (!city) continue;
+  cityCounts.set(city, (cityCounts.get(city) ?? 0) + 1);
+}
+const topCities = [...cityCounts.entries()]
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 8);
+---
+
+<Base title="Mapa" description="Mapa interactivo de conferencias técnicas en España. Buscá por ciudad, fecha o foco temático." seo={{ jsonLd: [pageJsonLd({ name: "Mapa de conferencias", description: "Mapa interactivo de conferencias técnicas en España.", url: "/map" })] }}>
+  <ViewSwitcher current="map" basePath="/" />
+
+  <div class="map-wrap">
+    <div id="map" class="map" data-api-key={apiKey} data-markers={JSON.stringify(markers)}></div>
+
+    <div id="map-fallback" class="map-fallback" hidden>
+      <div class="fallback-inner">
+        <span class="eyebrow">El mapa se está echando una siesta</span>
+        <h2 class="display-md">Mientras tanto, las próximas conferencias se reparten así:</h2>
+        <ul class="city-list">
+          {topCities.map(([city, count]) => (
+            <li>
+              <span class="city-name">{city}</span>
+              <span class="city-bar" style={`--w: ${(count / topCities[0][1]) * 100}%`}></span>
+              <span class="city-count">{count}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="fallback-hint">
+          ¿Eres dev y querés ver el mapa de verdad? Habilita el referrer
+          <code>localhost</code> en la
+          <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener">
+            consola de Google Cloud
+          </a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<script>
+  type Marker = {
+    id: string; name: string; city: string;
+    dateStart: string; dateEnd: string;
+    website: string | null;
+    lat: number; lng: number;
+  };
+
+  const el = document.getElementById("map") as HTMLDivElement | null;
+  const fallback = document.getElementById("map-fallback") as HTMLDivElement | null;
+
+  function showFallback() {
+    if (!el || !fallback) return;
+    el.hidden = true;
+    fallback.hidden = false;
+  }
+
+  if (!el) {
+    // nothing to do
+  } else {
+    const apiKey = el.dataset.apiKey ?? "";
+    const markers: Marker[] = JSON.parse(el.dataset.markers ?? "[]");
+
+    function init() {
+      const w = window as any;
+      const map = new w.google.maps.Map(el, {
+        center: { lat: 40.0, lng: -3.7 },
+        zoom: 6,
+        mapTypeControl: true,
+        streetViewControl: true,
+      });
+      const info = new w.google.maps.InfoWindow();
+      for (const m of markers) {
+        const pin = new w.google.maps.Marker({
+          position: { lat: m.lat, lng: m.lng },
+          map,
+          title: m.name,
+        });
+        pin.addListener("click", () => {
+          const dates = m.dateStart === m.dateEnd ? m.dateStart : `${m.dateStart} → ${m.dateEnd}`;
+          const link = m.website ? `<a href="${m.website}" target="_blank" rel="noopener">Sitio web</a>` : "";
+          info.setContent(`<strong>${m.name}</strong><br/>${m.city}<br/><small>${dates}</small><br/>${link}`);
+          info.open({ anchor: pin, map });
+        });
+      }
+    }
+
+    if (!apiKey) {
+      showFallback();
+    } else {
+      (window as any).gm_authFailure = showFallback;
+      (window as any).__initTechConfMap = init;
+      const s = document.createElement("script");
+      s.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&callback=__initTechConfMap&loading=async`;
+      s.async = true;
+      s.onerror = showFallback;
+      document.head.appendChild(s);
+
+      // Safety net: if after 6s the map div is still empty, treat as failure.
+      setTimeout(() => {
+        if (el && !el.hidden && el.childElementCount === 0) showFallback();
+      }, 6000);
+    }
+  }
+</script>
+
+<style>
+  .map-wrap { position: relative; }
+  .map {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    min-height: 480px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--row-bg);
+    border: 1px solid var(--hairline);
+  }
+
+  .map-fallback {
+    width: 100%;
+    min-height: 480px;
+    border-radius: 12px;
+    border: 1px solid var(--hairline);
+    background:
+      radial-gradient(120% 80% at 0% 0%, color-mix(in srgb, var(--recipe-accent) 16%, transparent), transparent 60%),
+      radial-gradient(120% 80% at 100% 100%, color-mix(in srgb, var(--recipe-em) 14%, transparent), transparent 60%),
+      var(--recipe-surface);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(24px, 5vw, 56px);
+    position: relative;
+  }
+  .map-fallback::before,
+  .map-fallback::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .map-fallback::before {
+    inset: auto auto -120px -80px;
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(closest-side, var(--recipe-accent), transparent 70%);
+    opacity: 0.18;
+  }
+  .map-fallback::after {
+    inset: -90px -80px auto auto;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(closest-side, var(--recipe-em), transparent 70%);
+    opacity: 0.18;
+  }
+
+  .fallback-inner {
+    position: relative;
+    max-width: 620px;
+    width: 100%;
+  }
+  .fallback-inner .eyebrow { display: block; margin-bottom: var(--stack-sm); }
+  .fallback-inner .display-md {
+    color: var(--recipe-ink);
+    margin-bottom: var(--stack-md);
+    font-size: clamp(22px, 3vw, 32px);
+  }
+
+  .city-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--stack-md);
+    display: grid;
+    gap: 8px;
+  }
+  /* Mobile-first: tighter city column to fit narrow phones; --sm onwards
+     gets a wider city label. */
+  .city-list li {
+    display: grid;
+    grid-template-columns: 90px 1fr auto;
+    align-items: center;
+    gap: 8px;
+    font: var(--web-mono-sm);
+  }
+  @media (--sm) {
+    .city-list li {
+      grid-template-columns: 110px 1fr auto;
+      gap: 12px;
+    }
+  }
+  .city-name { color: var(--recipe-ink); }
+  .city-bar {
+    height: 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--recipe-ink) 8%, transparent);
+    position: relative;
+    overflow: hidden;
+  }
+  .city-bar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: var(--w, 0%);
+    background: linear-gradient(90deg, var(--recipe-accent), var(--recipe-em));
+    border-radius: inherit;
+  }
+  .city-count { color: var(--muted-strong); }
+
+  .fallback-hint {
+    margin: var(--stack-md) 0 0;
+    color: var(--muted);
+    font: var(--web-meta);
+  }
+  .fallback-hint code {
+    font-family: var(--chimi-font-family-code);
+    background: color-mix(in srgb, var(--recipe-ink) 8%, transparent);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+  .fallback-hint a {
+    color: var(--recipe-accent);
+    border-bottom: 1px solid color-mix(in srgb, var(--recipe-accent) 50%, transparent);
+  }
+  .fallback-hint a:hover { color: var(--recipe-em); border-color: var(--recipe-em); }
+</style>

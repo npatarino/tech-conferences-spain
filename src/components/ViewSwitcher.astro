@@ -1,0 +1,86 @@
+---
+import { Tabs } from "@chimichurricode/preact-ui";
+
+interface Props { current: "list" | "map" | "calendar"; basePath: "/" | "/past"; }
+const { current, basePath } = Astro.props;
+
+const tabs = [
+  { id: "list",     label: "Lista" },
+  { id: "map",      label: "Mapa" },
+  { id: "calendar", label: "Calendario" },
+];
+
+// Helper to resolve HREFs (static nav via SSR-rendered Tabs-like UI)
+function getHref(id: string) {
+  if (id === "list") return basePath;
+  if (id === "map") return "/map";
+  return "/calendar";
+}
+---
+
+<div class="view-switcher-container">
+  {/* We use the Tabs component as a static UI element by not passing client:load
+      and wrapping it in an SSR-safe way. Since preact-ui Tabs is built for interactive
+      state, we might need a simpler wrapper or use it with client:load if we want
+      to handle navigation via JS, but for techconf it was <a> links.
+      Let's use the local Buttons + Pill pattern instead if Tabs forces client state.
+  */}
+  <nav class="view-switcher" aria-label="Cambiar vista">
+    {tabs.map((v) => (
+      <a
+        href={getHref(v.id)}
+        class:list={["view-btn", { active: v.id === current }]}
+        aria-label={v.label}
+        aria-current={v.id === current ? "page" : undefined}
+      >
+        {v.id === "list" && (
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+        )}
+        {v.id === "map" && (
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M12 21s7-7.5 7-12a7 7 0 1 0-14 0c0 4.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        )}
+        {v.id === "calendar" && (
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 10h18M8 3v4M16 3v4"/></svg>
+        )}
+      </a>
+    ))}
+  </nav>
+</div>
+
+<style>
+  .view-switcher-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-block: var(--stack-md) var(--stack-lg);
+  }
+  .view-switcher {
+    display: inline-flex;
+    gap: 6px;
+    background: var(--surface-raised);
+    padding: 4px;
+    border-radius: 12px;
+    border: 1px solid var(--hairline);
+  }
+  .view-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: var(--muted-strong);
+    transition: color 120ms ease, border-color 120ms ease, background 120ms ease;
+  }
+  @media (--md) {
+    .view-btn { width: 40px; height: 40px; }
+  }
+  .view-btn:hover { color: var(--recipe-accent); }
+  .view-btn.active {
+    color: var(--recipe-accent);
+    background: var(--recipe-surface);
+    border-color: var(--hairline-strong);
+    box-shadow: var(--shadow-sm);
+  }
+</style>

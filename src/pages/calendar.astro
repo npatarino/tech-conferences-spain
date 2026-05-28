@@ -1,0 +1,311 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import ViewSwitcher from "../components/ViewSwitcher.astro";
+import { pageJsonLd } from "../seo";
+
+const all = await getCollection("conferences");
+const events = all
+  .filter((c) => !c.data.dateTbc)
+  .map((c) => ({
+    id: c.id,
+    name: c.data.name,
+    start: c.data.dateStart,
+    end: c.data.dateEnd,
+    website: c.data.website ?? null,
+    cancelled: c.data.cancelled,
+  }));
+---
+
+<Base title="Calendario" description="Vista anual de conferencias técnicas en España. Buscá ventanas libres, conflictos de fecha y oportunidades para CFP." seo={{ jsonLd: [pageJsonLd({ name: "Calendario de conferencias", description: "Vista anual de conferencias técnicas en España.", url: "/calendar" })] }}>
+  <ViewSwitcher current="calendar" basePath="/" />
+
+  <div class="cal" id="cal" data-events={JSON.stringify(events)}>
+    <header class="cal-header">
+      <div class="cal-nav">
+        <button type="button" class="cal-btn" data-action="prev" aria-label="Mes anterior">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6 6 6"/></svg>
+        </button>
+        <button type="button" class="cal-btn" data-action="next" aria-label="Mes siguiente">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 6l6 6-6 6"/></svg>
+        </button>
+        <button type="button" class="cal-btn today" data-action="today">Hoy</button>
+      </div>
+      <h2 class="cal-title" id="cal-title"></h2>
+      <span></span>
+    </header>
+
+    <div class="cal-grid" id="cal-grid"></div>
+  </div>
+</Base>
+
+<script>
+  type Event = { id: string; name: string; start: string; end: string; website: string | null; cancelled: boolean };
+
+  const root = document.getElementById("cal") as HTMLDivElement;
+  const grid = document.getElementById("cal-grid") as HTMLDivElement;
+  const titleEl = document.getElementById("cal-title") as HTMLHeadingElement;
+  const events: Event[] = JSON.parse(root.dataset.events ?? "[]");
+  const MONTHS = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+  const DAYS = ["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
+
+  let cursor = new Date();
+  cursor.setDate(1);
+
+  function isoDay(d: Date): string {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  }
+
+  function render() {
+    titleEl.textContent = `${MONTHS[cursor.getMonth()]} de ${cursor.getFullYear()}`;
+    grid.innerHTML = "";
+
+    const headRow = document.createElement("div");
+    headRow.className = "cal-headrow";
+    for (const d of DAYS) {
+      const head = document.createElement("div");
+      head.className = "cal-dayhead";
+      head.textContent = d;
+      headRow.appendChild(head);
+    }
+    grid.appendChild(headRow);
+
+    const first = new Date(cursor);
+    const startWeekday = (first.getDay() + 6) % 7;
+    const gridStart = new Date(first);
+    gridStart.setDate(first.getDate() - startWeekday);
+
+    const todayIso = isoDay(new Date());
+
+    for (let week = 0; week < 6; week++) {
+      const weekDays: Date[] = [];
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(gridStart);
+        d.setDate(gridStart.getDate() + week * 7 + i);
+        weekDays.push(d);
+      }
+
+      const row = document.createElement("div");
+      row.className = "cal-week";
+
+      for (const day of weekDays) {
+        const cell = document.createElement("div");
+        cell.className = "cal-cell";
+        if (day.getMonth() !== cursor.getMonth()) cell.classList.add("muted");
+        if (isoDay(day) === todayIso) cell.classList.add("today");
+
+        const num = document.createElement("span");
+        num.className = "cal-daynum";
+        num.textContent = String(day.getDate());
+        cell.appendChild(num);
+        row.appendChild(cell);
+      }
+
+      const weekStart = isoDay(weekDays[0]);
+      const weekEnd = isoDay(weekDays[6]);
+      const weekEvents = events
+        .filter((e) => e.start <= weekEnd && e.end >= weekStart)
+        .sort((a, b) => a.start.localeCompare(b.start) || b.end.localeCompare(a.end));
+
+      const lanes: string[][] = [];
+      for (const e of weekEvents) {
+        const startCol = Math.max(0, weekDays.findIndex((d) => isoDay(d) === e.start || isoDay(d) >= e.start));
+        const endIdx = (() => {
+          let last = -1;
+          for (let i = 0; i < 7; i++) if (isoDay(weekDays[i]) <= e.end) last = i;
+          return last;
+        })();
+        const span = endIdx - startCol + 1;
+        if (span <= 0) continue;
+
+        let lane = 0;
+        while (lanes[lane] && lanes[lane].slice(startCol, startCol + span).some((x) => x)) lane++;
+        if (!lanes[lane]) lanes[lane] = new Array(7).fill("");
+        for (let i = startCol; i < startCol + span; i++) lanes[lane][i] = e.id;
+
+        const bar = document.createElement(e.website ? "a" : "div");
+        bar.className = "cal-event";
+        if (e.cancelled) bar.classList.add("cancelled");
+        if (e.website && bar instanceof HTMLAnchorElement) {
+          bar.href = e.website;
+          bar.target = "_blank";
+          bar.rel = "noopener";
+        }
+        bar.textContent = e.name;
+        bar.title = e.name;
+        bar.style.gridColumn = `${startCol + 1} / span ${span}`;
+        bar.style.gridRow = String(lane + 2);
+        row.appendChild(bar);
+      }
+      row.style.setProperty("--lanes", String(Math.max(1, lanes.length)));
+      grid.appendChild(row);
+    }
+  }
+
+  root.querySelectorAll<HTMLButtonElement>("[data-action]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const action = btn.dataset.action;
+      if (action === "prev") cursor.setMonth(cursor.getMonth() - 1);
+      else if (action === "next") cursor.setMonth(cursor.getMonth() + 1);
+      else if (action === "today") { cursor = new Date(); cursor.setDate(1); }
+      render();
+    });
+  });
+
+  render();
+</script>
+
+<style is:global>
+  /* Mobile-first: stacked header (title above nav). At --sm we have the
+     room for the original 3-column row. */
+  #cal .cal-header {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    gap: var(--stack-sm);
+    margin-bottom: var(--stack-md);
+  }
+  #cal .cal-title {
+    text-align: center;
+    font: var(--web-display-sm);
+    font-size: 22px;
+    margin: 0;
+  }
+  #cal .cal-nav { justify-self: start; }
+  @media (--sm) {
+    #cal .cal-header {
+      grid-template-columns: auto 1fr auto;
+      gap: var(--stack-md);
+    }
+    #cal .cal-title { font-size: inherit; }
+    #cal .cal-nav { justify-self: auto; }
+  }
+  #cal .cal-nav { display: inline-flex; gap: 6px; }
+  #cal .cal-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 12px;
+    border: 1px solid var(--hairline-strong);
+    background: transparent;
+    color: var(--recipe-ink);
+    border-radius: 8px;
+    font: var(--web-eyebrow);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color 120ms ease, border-color 120ms ease, background 120ms ease;
+  }
+  #cal .cal-btn:hover { color: var(--recipe-accent); border-color: var(--recipe-accent); }
+
+  #cal .cal-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    background: var(--recipe-surface);
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  #cal .cal-headrow {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    border-bottom: 1px solid var(--hairline);
+  }
+  #cal .cal-dayhead {
+    padding: 6px 4px;
+    font: var(--web-eyebrow);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted-strong);
+    text-align: left;
+    border-left: 1px solid var(--hairline);
+  }
+  @media (--md) {
+    #cal .cal-dayhead {
+      padding: 10px 12px;
+      font-size: inherit;
+      letter-spacing: 0.14em;
+    }
+  }
+  #cal .cal-dayhead:first-child { border-left: 0; }
+  /* Mobile-first: dense cells (small text, tight padding). At --md the
+     cells expand to the comfortable size used on tablet/desktop. */
+  #cal .cal-week {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-rows: auto;
+    grid-auto-rows: 22px;
+    row-gap: 2px;
+    background: var(--recipe-surface);
+    min-height: 80px;
+    padding-bottom: 4px;
+    border-top: 1px solid var(--hairline);
+  }
+  @media (--md) {
+    #cal .cal-week {
+      row-gap: 4px;
+      min-height: 120px;
+      padding-bottom: 6px;
+    }
+  }
+  #cal .cal-week:first-of-type { border-top: 0; }
+  #cal .cal-cell {
+    grid-row: 1;
+    padding: 4px;
+    min-width: 0;
+    min-height: 24px;
+    border-left: 1px solid var(--hairline);
+  }
+  @media (--md) {
+    #cal .cal-cell {
+      padding: 8px;
+      min-height: 30px;
+    }
+  }
+  #cal .cal-cell:first-child { border-left: 0; }
+  #cal .cal-daynum {
+    display: block;
+    font: var(--web-mono-sm);
+    font-size: 11px;
+    color: var(--muted-strong);
+  }
+  @media (--md) {
+    #cal .cal-daynum { font-size: inherit; }
+  }
+  #cal .cal-cell.muted .cal-daynum { color: var(--muted); opacity: 0.5; }
+  #cal .cal-cell.today .cal-daynum { color: var(--recipe-accent); font-weight: 700; }
+
+  #cal .cal-event {
+    align-self: start;
+    margin-inline: 1px;
+    background: var(--recipe-accent);
+    color: var(--recipe-surface);
+    font: 500 10px/1.2 var(--chimi-font-family-body);
+    padding: 2px 4px;
+    border-radius: 3px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    min-height: 16px;
+    display: flex;
+    align-items: center;
+  }
+  @media (--md) {
+    #cal .cal-event {
+      margin-inline: 4px;
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      min-height: 20px;
+    }
+  }
+  #cal .cal-event.cancelled { opacity: 0.5; text-decoration: line-through; }
+  #cal a.cal-event:hover { background: color-mix(in srgb, var(--recipe-accent) 80%, transparent); }
+</style>

@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from "astro:content";
+import EventRow from "./EventRow.astro";
+
+interface Props { label: string; conferences: CollectionEntry<"conferences">[]; }
+const { label, conferences } = Astro.props;
+---
+
+<section class="month-group">
+  <header class="month-header">
+    <h2 class="month-title">{label}</h2>
+    <hr class="hairline" />
+  </header>
+  <div class="month-rows">
+    {conferences.map((c) => <EventRow conf={c} />)}
+  </div>
+</section>
+
+<style>
+  .month-group { margin-bottom: var(--stack-lg); }
+  .month-header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: var(--stack-md);
+    margin-bottom: var(--stack-md);
+  }
+  .month-title { font: var(--web-display-sm); letter-spacing: -0.01em; margin: 0; }
+  .month-rows { display: grid; gap: 8px; }
+</style>

@@ -1,0 +1,179 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props { conf: CollectionEntry<"conferences">; }
+const { conf } = Astro.props;
+const d = conf.data;
+
+function formatDay(start: string, end: string, tbc: boolean): string {
+  if (tbc) return "TBC";
+  const s = new Date(start + "T00:00:00");
+  const e = new Date(end + "T00:00:00");
+  const sd = String(s.getUTCDate()).padStart(2, "0");
+  const ed = String(e.getUTCDate()).padStart(2, "0");
+  if (start === end) return sd;
+  if (s.getUTCMonth() === e.getUTCMonth() && s.getUTCFullYear() === e.getUTCFullYear()) return `${sd}–${ed}`;
+  return `${sd}–${ed}`;
+}
+
+const dayLabel = formatDay(d.dateStart, d.dateEnd, d.dateTbc);
+const cityShort = d.location.split(",")[0]?.trim() ?? d.location;
+
+const todayIso = new Date().toISOString().slice(0, 10);
+const cfpOpen = d.cfpEnd != null && d.cfpEnd >= todayIso && d.dateStart >= todayIso;
+const cfpHref = d.cfpSite ?? d.website;
+---
+
+<article class:list={["event-row", { tbc: d.dateTbc, cancelled: d.cancelled }]}>
+  <span class="event-day">{dayLabel}</span>
+  <h3 class="event-name">
+    {d.name}
+    {cfpOpen && cfpHref && (
+      <a class="cfp-chip" href={cfpHref} target="_blank" rel="noopener" title={`CFP abierto hasta ${d.cfpEnd}`}>
+        CFP abierto
+      </a>
+    )}
+    {cfpOpen && !cfpHref && (
+      <span class="cfp-chip" title={`CFP abierto hasta ${d.cfpEnd}`}>CFP abierto</span>
+    )}
+  </h3>
+  <span class="event-city">{cityShort}</span>
+  <div class="event-links">
+    {d.website && (
+      <a href={d.website} target="_blank" rel="noopener" aria-label={`Sitio web de ${d.name}`}>
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="none" stroke="currentColor" stroke-width="2" d="M3 12h18M12 3c2.5 3 4 6 4 9s-1.5 6-4 9c-2.5-3-4-6-4-9s1.5-6 4-9Z"/></svg>
+      </a>
+    )}
+    {d.twitter && (
+      <a href={d.twitter} target="_blank" rel="noopener" aria-label={`X / Twitter de ${d.name}`}>
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/></svg>
+      </a>
+    )}
+  </div>
+</article>
+
+<style>
+  /* Mobile-first: compact 3-column layout where name + city stack inside
+     column 2. From --md upward, expand to the comfortable 4-column row
+     used on tablets and desktop. */
+  .event-row {
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: var(--row-bg);
+    transition: background 120ms ease;
+  }
+  @media (--md) {
+    .event-row {
+      grid-template-columns: 76px 1fr auto auto;
+      gap: clamp(10px, 2vw, 20px);
+      padding: 12px 16px;
+    }
+  }
+  .event-row:hover { background: var(--row-bg-hover); }
+  .event-row.cancelled { opacity: 0.55; text-decoration: line-through; }
+
+  .event-day {
+    font: var(--web-mono-sm);
+    color: var(--recipe-accent);
+    letter-spacing: 0.04em;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  @media (--md) {
+    .event-day { font-size: 16px; }
+  }
+  .event-row.tbc .event-day { color: var(--muted); }
+
+  .event-name {
+    font-family: var(--chimi-font-family-display);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    margin: 0;
+    grid-column: 2;
+    grid-row: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  @media (--md) {
+    .event-name {
+      font-size: 20px;
+      grid-column: auto;
+      grid-row: auto;
+    }
+  }
+
+  /* CFP chip uses --recipe-em for the "open call" emphasis. On canvas-quiet
+     dark mode that's lemon (high-energy yellow); in light mode the recipe
+     override flips em to red automatically (lemon-on-ivory is unreadable),
+     so this block needs no theme-specific code path. paper/cool keep
+     red or patagonia as their em values. */
+  .cfp-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font: var(--web-eyebrow);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--recipe-em);
+    border: 1px solid color-mix(in srgb, var(--recipe-em) 50%, transparent);
+    background: color-mix(in srgb, var(--recipe-em) 10%, transparent);
+    transition: background 120ms ease, color 120ms ease;
+  }
+  a.cfp-chip:hover {
+    background: var(--recipe-em);
+    color: var(--recipe-surface);
+    border-color: var(--recipe-em);
+  }
+
+  .event-city {
+    font: var(--web-meta);
+    color: var(--muted);
+    grid-column: 2;
+    grid-row: 2;
+    font-size: 12px;
+  }
+  @media (--md) {
+    .event-city {
+      grid-column: auto;
+      grid-row: auto;
+      font-size: inherit;
+    }
+  }
+  .event-links {
+    display: inline-flex;
+    gap: 12px;
+    color: var(--muted-strong);
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
+  @media (--md) {
+    .event-links {
+      grid-column: auto;
+      grid-row: auto;
+    }
+  }
+  /* Tap targets: each external link must be ≥ 44×44 on mobile. */
+  .event-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+  @media (--md) {
+    .event-links a {
+      min-width: 0;
+      min-height: 0;
+    }
+  }
+  .event-links a:hover { color: var(--recipe-accent); }
+</style>

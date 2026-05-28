@@ -1,0 +1,31 @@
+{
+  "name": "TechConf",
+  "short_name": "TechConf",
+  "description": "Conferencias técnicas en España con foco en mobile, plataforma y backend.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#02898C",
+  "theme_color": "#02898C",
+  "lang": "es",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
