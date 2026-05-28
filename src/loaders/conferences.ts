@@ -44,6 +44,11 @@ export function conferencesLoader(): Loader {
 
           const id = file.replace(/\.md$/, "");
           const location = typeof fm.location === "string" ? fm.location : "";
+
+          // Include geocoding capability in the digest so that adding or
+          // removing GOOGLE_MAPS_API_KEY invalidates cached entries and
+          // triggers a fresh geocoding pass on the next build.
+          const geocodeSlot = process.env.GOOGLE_MAPS_API_KEY ? "geo:1" : "geo:0";
           const coords = location ? await geocode(location) : null;
 
           const data = await parseData({
@@ -68,7 +73,7 @@ export function conferencesLoader(): Loader {
           store.set({
             id,
             data,
-            digest: generateDigest(raw),
+            digest: generateDigest(raw + geocodeSlot),
             filePath: relative(process.cwd(), filePath),
           });
           count++;
