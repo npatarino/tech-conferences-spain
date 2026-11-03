@@ -14,7 +14,7 @@ A community-curated list of software development conferences held in Spain — p
 
 The site (in Spanish) is generated from `content/conferences/` and renders:
 
-- **Upcoming events** (`/`) grouped by month, with links to the website, Twitter/X and CFP
+- **Upcoming events** (`/`) grouped by month, with links to the website, Twitter/X, Bluesky and CFP
 - **Past events** archive (`/past`)
 - **Calendar** view (`/calendar`)
 - **Map** view (`/map`, Google Maps — needs an API key, see [Environment variables](#environment-variables))
@@ -65,6 +65,7 @@ Copy this, then delete the optional lines you don't need:
 name: "CoolConf"
 website: https://coolconf.es/2026/
 twitter: https://x.com/coolconf
+bluesky: https://bsky.app/profile/coolconf.bsky.social
 location: Valencia, Spain
 
 date_start: 2026-10-15
@@ -85,6 +86,7 @@ Real example: [`content/conferences/t3chfest-madrid/t3chfest-madrid-2026.md`](co
 | `name` | Yes | Display name of the conference. Do not include city or year — the city comes from `location`. |
 | `website` | Yes | Full URL to the edition's homepage. |
 | `twitter` | No | Twitter/X profile of the event. |
+| `bluesky` | No | Bluesky profile URL of the event (`https://bsky.app/profile/<handle>`). |
 | `location` | Yes | `City, Region, Spain`. The **first** comma-separated part is shown as the city; the full string is used for map geocoding, so be specific enough to disambiguate. |
 | `date_start` | Yes | ISO date `YYYY-MM-DD`. **Files without a valid `date_start` are silently skipped.** |
 | `date_end` | Yes | ISO date `YYYY-MM-DD`. Same as `date_start` for single-day events. |
@@ -133,7 +135,7 @@ To check your change, run `npm run dev` (see below): the terminal prints `Loaded
 **Prerequisites:** Node.js and npm (tested with Node 22 / npm 10).
 
 ```bash
-npm install
+npm ci            # install the exact versions from package-lock.json
 npm run dev       # dev server at http://localhost:4321
 npm run build     # production build → dist/
 npm run preview   # serve dist/ locally
@@ -164,7 +166,7 @@ cp .env.example .env
 
 `GOOGLE_MAPS_API_KEY` is used at build time to geocode each `location` (Google Geocoding API) and in the browser to load Google Maps on `/map`. Because it ends up in the page source, restrict it by HTTP referrer in the Google Cloud console.
 
-Without a key the site still builds; the map just shows no markers. Geocoding results (including failures) are cached in `.cache/geocode.json` — delete that file to force a fresh lookup.
+Without a key the site still builds; the map just shows no markers. Successful geocoding results are cached in `.cache/geocode.json` — delete that file to force a fresh lookup. Failed lookups are not cached, so they are retried on the next build.
 
 ---
 
