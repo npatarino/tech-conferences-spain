@@ -2,17 +2,25 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
 interface Coords { lat: number; lng: number; }
-type Cache = Record<string, Coords | null>;
+type Cache = Record<string, Coords>;
 
 const CACHE_PATH = resolve(process.cwd(), ".cache/geocode.json");
 
 let cache: Cache | null = null;
+// Locations that failed during this build. Kept in memory only, so a
+// location shared by several editions is looked up once per build, but a
+// transient failure (network, quota, typo fixed later) is retried next build.
+const failed = new Set<string>();
 
 async function loadCache(): Promise<Cache> {
   if (cache) return cache;
   try {
     const raw = await readFile(CACHE_PATH, "utf-8");
-    cache = JSON.parse(raw) as Cache;
+    const parsed = JSON.parse(raw) as Record<string, Coords | null>;
+    // Older caches stored failures as null; drop them so they get retried.
+    cache = Object.fromEntries(
+      Object.entries(parsed).filter((e): e is [string, Coords] => e[1] != null),
+    );
   } catch {
     cache = {};
   }
@@ -27,18 +35,15 @@ async function saveCache(): Promise<void> {
 
 /**
  * Geocode a free-form location string via Google Geocoding API.
- * Cached on disk so repeated builds don't re-hit the API.
+ * Successful lookups are cached on disk so repeated builds don't re-hit the
+ * API; failures are not persisted and are retried on the next build.
  * Returns null when geocoding is unavailable or fails.
  */
 export async function geocode(location: string): Promise<Coords | null> {
   const key = process.env.GOOGLE_MAPS_API_KEY;
   const c = await loadCache();
   if (location in c) return c[location];
-
-  if (!key) {
-    c[location] = null;
-    return null;
-  }
+  if (!key || failed.has(location)) return null;
 
   try {
     const url = new URL("https://maps.googleapis.com/maps/api/geocode/json");
@@ -52,13 +57,13 @@ export async function geocode(location: string): Promise<Coords | null> {
     if (data.status === "OK" && data.results && data.results[0]) {
       const { lat, lng } = data.results[0].geometry.location;
       c[location] = { lat, lng };
-    } else {
-      c[location] = null;
+      await saveCache();
+      return c[location];
     }
   } catch {
-    c[location] = null;
+    // fall through: treat network/parse errors as a failed lookup
   }
 
-  await saveCache();
-  return c[location];
+  failed.add(location);
+  return null;
 }
