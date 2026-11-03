@@ -153,7 +153,7 @@ npm run preview   # serve dist/ locally
 | `npm run build` | Sync assets, then build the static site to `dist/`. |
 | `npm run preview` | Serve the built `dist/` folder. |
 | `npm run sync` | Run `sync:fonts` and `sync:seo`. |
-| `npm run sync:fonts` | Copy design-system fonts to `public/fonts/` ([`scripts/sync-fonts.mjs`](scripts/sync-fonts.mjs)). |
+| `npm run sync:fonts` | Copy the brand fonts to `public/fonts/` ([`scripts/sync-fonts.mjs`](scripts/sync-fonts.mjs), see [Fonts](#fonts)). |
 | `npm run sync:seo` | Copy favicons and app icons to `public/` ([`scripts/sync-seo.mjs`](scripts/sync-seo.mjs)). |
 | `npm run astro` | Run the Astro CLI directly (e.g. `npm run astro -- --help`). |
 
@@ -211,6 +211,15 @@ A few conventions to keep things consistent:
 - If an event is recurring but skipped a year, there's no need to add a cancelled file unless you want to document the cancellation.
 
 ---
+
+## Fonts
+
+The brand fonts are licensed, so they are not in this repo or in the design-system package: they live in the private repo [`npatarino/cv-fonts`](https://github.com/npatarino/cv-fonts). `npm run sync:fonts` ([`scripts/sync-fonts.mjs`](scripts/sync-fonts.mjs), using [`scripts/fetch-fonts.mjs`](scripts/fetch-fonts.mjs) vendored from the design system) copies them into `public/fonts/` (git-ignored) from the first source available:
+
+- `CHIMI_FONTS_DIR`: a local folder, e.g. `CHIMI_FONTS_DIR=~/code/cv-fonts/fonts` with a clone of cv-fonts (local dev).
+- `CHIMI_FONTS_TOKEN`: a fine-grained GitHub token with *Contents: read-only* on `npatarino/cv-fonts`. Set it in the Vercel project (Production and Preview). The download is cached in `node_modules/.cache/chimi-fonts`.
+- The fonts still bundled in `@chimichurricode/design-system` ≤ 0.8.0 (temporary, until the token is set and the design system is upgraded).
+- None: the build still passes, with a warning, and the site falls back to system fonts.
 
 ## License
 
