@@ -1,5 +1,7 @@
 # tech-conferences-spain
 
+[![CI](https://github.com/npatarino/tech-conferences-spain/actions/workflows/ci.yml/badge.svg)](https://github.com/npatarino/tech-conferences-spain/actions/workflows/ci.yml)
+
 A community-curated list of software development conferences held in Spain — past, present, and upcoming. Every edition is a small Markdown file in this repo; the site is rebuilt from them.
 
 **Live site:** [techconf.chimi.pro](https://techconf.chimi.pro)
