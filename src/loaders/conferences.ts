@@ -57,6 +57,7 @@ export function conferencesLoader(): Loader {
               name: String(fm.name ?? id),
               website: typeof fm.website === "string" ? fm.website : undefined,
               twitter: typeof fm.twitter === "string" ? fm.twitter : undefined,
+              bluesky: typeof fm.bluesky === "string" ? fm.bluesky : undefined,
               location,
               dateStart,
               dateEnd: dateEnd ?? dateStart,

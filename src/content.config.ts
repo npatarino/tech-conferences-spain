@@ -7,6 +7,7 @@ const conferences = defineCollection({
     name: z.string(),
     website: z.string().optional(),
     twitter: z.string().optional(),
+    bluesky: z.string().optional(),
     location: z.string(),
     dateStart: z.string(),
     dateEnd: z.string(),
