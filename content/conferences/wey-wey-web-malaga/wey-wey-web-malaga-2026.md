@@ -2,7 +2,7 @@
 name: "Wey Wey Web"
 website: https://www.weyweyweb.com/
 twitter: https://x.com/weyweyweb
-bluesky: http://bsky.app/weyweyweb.bsky.social
+bluesky: https://bsky.app/profile/weyweyweb.bsky.social
 location: Torremolinos, Spain
 
 date_start: 2026-10-29
