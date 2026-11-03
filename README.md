@@ -1,24 +1,37 @@
 # tech-conferences-spain
 
-A community-curated list of software development conferences held in Spain — past, present, and upcoming.
+A community-curated list of software development conferences held in Spain — past, present, and upcoming. Every edition is a small Markdown file in this repo; the site is rebuilt from them.
 
 **Live site:** [techconf.chimi.pro](https://techconf.chimi.pro)
 
+<p align="center">
+  <img src="docs/images/home.png" alt="TechConf home page listing upcoming conferences grouped by month" width="760">
+</p>
+
 ---
 
-## What's tracked
+## Features
 
-Each conference edition is a single Markdown file with YAML frontmatter. The site builds automatically from the `content/conferences/` directory and renders:
+The site (in Spanish) is generated from `content/conferences/` and renders:
 
-- An upcoming events index
-- A past events archive
-- A calendar view
-- A map view (Google Maps)
-- An insights page (edition trends, city breakdown)
+- **Upcoming events** (`/`) grouped by month, with links to the website, Twitter/X and CFP
+- **Past events** archive (`/past`)
+- **Calendar** view (`/calendar`)
+- **Map** view (`/map`, Google Maps — needs an API key, see [Environment variables](#environment-variables))
+- **Insights** (`/insights`): yearly evolution, city breakdown and other trends across all editions
+- Cancelled editions are shown struck through; editions with unconfirmed dates show `TBC`
+- SEO out of the box: sitemap, JSON-LD, Open Graph image, web manifest
+
+<p align="center">
+  <img src="docs/images/insights.png" alt="Insights page with edition, event and city counts" width="560">
+  <img src="docs/images/home-mobile.png" alt="Home page on a phone" width="180">
+</p>
 
 ---
 
 ## Adding a conference
+
+This is the main way to contribute: add or edit one Markdown file and open a pull request.
 
 ### 1. Find (or create) the event directory
 
@@ -39,39 +52,13 @@ content/conferences/
 
 **Folder naming:** `event-name-city/` — lowercase, hyphen-separated.
 
-**File naming:** `event-name-city-YYYY.md` — same slug as folder, plus the year.
+**File naming:** `event-name-city-YYYY.md` — same slug as the folder, plus the year. The file name (without `.md`) is the edition's ID, so it must be unique across all folders.
+
+Only `.md` files one level inside a folder of `content/conferences/` are loaded.
 
 ### 2. Create the conference file
 
-```yaml
----
-name: "CoolConf"
-website: https://coolconf.es/2026/
-twitter: https://x.com/coolconf
-location: Valencia, Spain
-
-date_start: 2026-10-15
-date_end:   2026-10-16
----
-```
-
-### Full field reference
-
-| Field | Required | Description |
-|---|---|---|
-| `name` | Yes | The display name of the conference. Do not include city — it's rendered from `location`. |
-| `website` | Yes | Full URL to the edition's homepage. |
-| `twitter` | No | Twitter/X profile of the event. |
-| `location` | Yes | `City, Region, Spain` — used for map geocoding. Be specific enough to disambiguate. |
-| `date_start` | Yes | ISO date `YYYY-MM-DD`. |
-| `date_end` | Yes | ISO date `YYYY-MM-DD`. Same as `date_start` for single-day events. |
-| `cfp_start` | No | When the Call for Papers opens. |
-| `cfp_end` | No | When the Call for Papers closes. |
-| `cfp_site` | No | Direct URL to the CFP page. Defaults to `website` if omitted. |
-| `cancelled` | No | Set to `true` if the edition was cancelled. |
-| `date_tbc` | No | Set to `true` if dates are not yet confirmed (use approximate dates in `date_start`/`date_end`). |
-
-### Full example with all fields
+Copy this, then delete the optional lines you don't need:
 
 ```yaml
 ---
@@ -88,6 +75,26 @@ cfp_end:   2026-07-31
 cfp_site:  https://coolconf.es/2026/call-for-papers
 ---
 ```
+
+Real example: [`content/conferences/t3chfest-madrid/t3chfest-madrid-2026.md`](content/conferences/t3chfest-madrid/t3chfest-madrid-2026.md).
+
+### Field reference
+
+| Field | Required | Description |
+|---|---|---|
+| `name` | Yes | Display name of the conference. Do not include city or year — the city comes from `location`. |
+| `website` | Yes | Full URL to the edition's homepage. |
+| `twitter` | No | Twitter/X profile of the event. |
+| `location` | Yes | `City, Region, Spain`. The **first** comma-separated part is shown as the city; the full string is used for map geocoding, so be specific enough to disambiguate. |
+| `date_start` | Yes | ISO date `YYYY-MM-DD`. **Files without a valid `date_start` are silently skipped.** |
+| `date_end` | Yes | ISO date `YYYY-MM-DD`. Same as `date_start` for single-day events. |
+| `cfp_start` | No | `YYYY-MM-DD` — when the Call for Papers opens. |
+| `cfp_end` | No | `YYYY-MM-DD` — when the Call for Papers closes. |
+| `cfp_site` | No | Direct URL to the CFP page. Defaults to `website` if omitted. |
+| `cancelled` | No | Set to `true` if the edition was cancelled. |
+| `date_tbc` | No | Set to `true` if dates are not yet confirmed (put approximate dates in `date_start`/`date_end`). TBC editions are left out of the calendar view. |
+
+Any other key is ignored. The frontmatter is read by a minimal parser ([`src/lib/frontmatter.ts`](src/lib/frontmatter.ts)), so keep to one `key: value` per line — no lists or multi-line values. Quotes around values are optional; text after ` #` is treated as a comment.
 
 ### Cancelled edition example
 
@@ -117,64 +124,79 @@ date_tbc: true
 ---
 ```
 
+To check your change, run `npm run dev` (see below): the terminal prints `Loaded N conferences`, and your edition should appear on `/` (upcoming) or `/past`.
+
 ---
 
 ## Running locally
 
+**Prerequisites:** Node.js and npm (tested with Node 22 / npm 10).
+
 ```bash
 npm install
-npm run dev
+npm run dev       # dev server at http://localhost:4321
+npm run build     # production build → dist/
+npm run preview   # serve dist/ locally
 ```
 
-The site starts at [http://localhost:4000](http://localhost:4000) (port may vary — check terminal output).
+`dev` and `build` first run `npm run sync` automatically, which copies fonts and icons from the `@chimichurricode/design-system` package into `public/`.
 
-### First-time setup
+### Scripts
 
-The build syncs fonts and SEO assets from the design system package before starting:
-
-```bash
-npm run sync   # sync fonts + SEO assets from node_modules
-npm run build  # production build → dist/
-```
+| Script | What it does |
+|---|---|
+| `npm run dev` | Sync assets, then start the Astro dev server. |
+| `npm run build` | Sync assets, then build the static site to `dist/`. |
+| `npm run preview` | Serve the built `dist/` folder. |
+| `npm run sync` | Run `sync:fonts` and `sync:seo`. |
+| `npm run sync:fonts` | Copy design-system fonts to `public/fonts/` ([`scripts/sync-fonts.mjs`](scripts/sync-fonts.mjs)). |
+| `npm run sync:seo` | Copy favicons and app icons to `public/` ([`scripts/sync-seo.mjs`](scripts/sync-seo.mjs)). |
+| `npm run astro` | Run the Astro CLI directly (e.g. `npm run astro -- --help`). |
 
 ### Environment variables
 
-Copy `.env.example` and fill in values if you want the map page to work locally:
+Only needed for the map page. Copy `.env.example` and fill in the key:
 
 ```bash
 cp .env.example .env
 # Edit .env and add your GOOGLE_MAPS_API_KEY
 ```
 
-The map will silently degrade (no markers rendered) if the key is missing.
+`GOOGLE_MAPS_API_KEY` is used at build time to geocode each `location` (Google Geocoding API) and in the browser to load Google Maps on `/map`. Because it ends up in the page source, restrict it by HTTP referrer in the Google Cloud console.
+
+Without a key the site still builds; the map just shows no markers. Geocoding results (including failures) are cached in `.cache/geocode.json` — delete that file to force a fresh lookup.
 
 ---
 
 ## Project structure
 
 ```
-content/conferences/      ← all conference data (Markdown + YAML)
-public/                   ← static assets (icons, OG image, fonts)
+content/conferences/      ← all conference data (one folder per event, one .md per edition)
+public/                   ← static assets (icons, logos, OG image, manifest, robots.txt)
 scripts/                  ← build helpers (font sync, SEO asset sync)
+docs/images/              ← README screenshots
 src/
 ├── components/           ← Astro components (EventRow, MonthGroup, ViewSwitcher)
 ├── layouts/              ← Base layout wrapping every page
-├── lib/                  ← utilities (date formatting, geocoding, insights logic)
+├── lib/                  ← utilities (frontmatter parser, date formatting, geocoding, insights)
 ├── loaders/              ← Astro content loader (reads content/conferences/)
-├── pages/                ← one file per route (index, calendar, map, past, insights)
+├── pages/                ← one file per route (index, past, calendar, map, insights)
 ├── seo/                  ← JSON-LD helpers
-└── styles/               ← global CSS (design-system tokens + overrides)
+├── styles/               ← global CSS (design-system tokens + overrides)
+└── content.config.ts     ← content collection schema
 astro.config.mjs          ← Astro config (via @chimichurricode/web-app-kit)
-package.json
 ```
+
+Built with [Astro](https://astro.build) 5 (static output), Preact islands and [ECharts](https://echarts.apache.org) for the insights charts.
 
 ---
 
 ## Contributing
 
 1. **Fork** this repo and create a branch.
-2. **Add or update** a conference file following the format above.
-3. **Open a pull request** with a short description of what you added.
+2. **Add or update** a conference file following the [format above](#adding-a-conference).
+3. Optionally run `npm run dev` to check it renders.
+4. **Open a pull request** with a short description of what you added.
 
 A few conventions to keep things consistent:
 
