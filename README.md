@@ -4,7 +4,7 @@
 
 A community-curated list of software development conferences held in Spain — past, present, and upcoming. Every edition is a small Markdown file in this repo; the site is rebuilt from them.
 
-**Live site:** [techconf.chimi.pro](https://techconf.chimi.pro)
+**Live site:** [techconf.es](https://techconf.es)
 
 <p align="center">
   <img src="docs/images/home.png" alt="TechConf home page listing upcoming conferences grouped by month" width="760">
