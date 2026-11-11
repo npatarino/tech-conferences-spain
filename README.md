@@ -55,7 +55,7 @@ content/conferences/
 
 **Folder naming:** `event-name-city/` — lowercase, hyphen-separated.
 
-**File naming:** `event-name-city-YYYY.md` — same slug as the folder, plus the year. The file name (without `.md`) is the edition's ID, so it must be unique across all folders.
+**File naming:** `event-name-city-YYYY.md` — same slug as the folder, plus the year. The file name (without `.md`) is the edition's ID, so it must be unique across all folders. It is also the edition's public identifier in the [open data feed](#open-data-feed-opentechevents): **don't rename existing files**, or feed consumers will see a brand-new event.
 
 Only `.md` files one level inside a folder of `content/conferences/` are loaded.
 
@@ -232,7 +232,7 @@ src/
 astro.config.mjs          ← Astro config (via @chimichurricode/web-app-kit)
 ```
 
-Built with [Astro](https://astro.build) 5 (static output), Preact islands and [ECharts](https://echarts.apache.org) for the insights charts.
+Built with [Astro](https://astro.build) 7 (static output), Preact islands and [ECharts](https://echarts.apache.org) for the insights charts.
 
 ---
 
@@ -248,6 +248,7 @@ A few conventions to keep things consistent:
 - Use the official conference name in `name`, without city or year.
 - Prefer `https://` URLs.
 - For location, use the full `City, Region, Spain` format — this is what the geocoder uses.
+- Add `city`, `tags` and `languages` when you know them — they are what people filter by in the [open data feed](#open-data-feed-opentechevents). Reuse the tags of similar events (`grep -rh '^tags:' content | sort | uniq -c`) before inventing new ones, and leave `languages` out rather than guessing.
 - If a CFP hasn't opened yet but the website is live, add `cfp_start` and `cfp_end` when you know them.
 - If an event is recurring but skipped a year, there's no need to add a cancelled file unless you want to document the cancellation.
 
