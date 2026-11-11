@@ -3,6 +3,9 @@ name: "J On The Beach"
 website: http://www.jonthebeach.com
 twitter: https://x.com/jotbconf
 location: Torremolinos, Spain
+city: Torremolinos
+tags: data, distributed-systems, jvm
+languages: en
 
 date_start: 2026-10-29
 date_end: 2026-10-30

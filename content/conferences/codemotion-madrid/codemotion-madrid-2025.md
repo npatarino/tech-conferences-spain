@@ -3,6 +3,9 @@ name: "Codemotion Madrid"
 website: https://conferences.codemotion.com/madrid2025/es/home-es/
 twitter: https://x.com/codemotionit
 location: Madrid, Spain
+city: Madrid
+tags: software-development
+languages: es, en
 
 date_start: 2025-05-20
 date_end: 2025-05-21

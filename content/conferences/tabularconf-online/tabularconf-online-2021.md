@@ -2,6 +2,8 @@
 name: "TabularConf 2021"
 website: https://tabularconf.es/
 location: Online
+tags: data, power-bi, microsoft
+languages: es
 twitter: https://x.com/tabularconf
 
 date_start: 2021-01-30

@@ -3,6 +3,8 @@ name:       "Codemotion Tech Online"
 website:    https://events.codemotion.com/conferences/online/2021/online-tech-conference-spanish-edition-autumn
 twitter:    https://x.com/CodemoMadrid
 location:   Online
+tags: software-development
+languages: es
 
 date_start: 2021-10-19
 date_end:   2021-10-21

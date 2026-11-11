@@ -3,6 +3,9 @@ name: "Atlántica Conf"
 website: http://atlanticaconf.com/
 twitter: https://x.com/atlanticaconf
 location: A Coruña, Spain
+city: A Coruña
+tags: software-development
+languages: es
 
 date_start: 2023-09-22
 date_end:   2023-09-23

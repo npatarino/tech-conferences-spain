@@ -3,6 +3,9 @@ name: "Navaja Negra Conference"
 website: https://www.navajanegra.com/2019/
 twitter: https://x.com/navajanegra_ab
 location: Albacete, Spain
+city: Albacete
+tags: security
+languages: es
 
 date_start: 2019-10-03
 date_end:   2019-10-05

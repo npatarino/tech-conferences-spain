@@ -3,6 +3,9 @@ name: "Big Things"
 website: https://www.bigthingsconference.com/
 twitter: https://x.com/BigThingsConf
 location: Madrid, Spain
+city: Madrid
+tags: data, ai, big-data
+languages: es, en
 
 date_start: 2019-11-20
 date_end:   2019-11-21

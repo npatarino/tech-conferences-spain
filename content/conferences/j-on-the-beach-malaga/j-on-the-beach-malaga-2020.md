@@ -3,6 +3,9 @@ name:     "J On the Beach"
 website:  http://jonthebeach.com
 twitter:  https://x.com/jotb2020
 location: Málaga, Spain
+city: Málaga
+tags: data, distributed-systems, jvm
+languages: en
 
 cancelled: true
 

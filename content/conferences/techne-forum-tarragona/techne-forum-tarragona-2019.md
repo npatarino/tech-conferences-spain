@@ -3,6 +3,8 @@ name: "Techne Forum"
 website: https://techneforum.com/
 twitter: https://x.com/techneforum
 location: Tarragona, Spain
+city: Tarragona
+tags: software-development
 
 date_start: 2019-10-19
 date_end:   2019-10-19

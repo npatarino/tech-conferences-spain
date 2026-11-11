@@ -2,6 +2,9 @@
 name: "TarugoConf 2023"
 website: https://github.com/DivergerThinking/TRGCON23
 location: Madrid, Spain
+city: Madrid
+tags: product, startups
+languages: es
 
 date_start: 2023-10-26
 date_end: 2023-10-26

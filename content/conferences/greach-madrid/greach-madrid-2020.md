@@ -3,6 +3,9 @@ name:     "Greach"
 website:  http://greachconf.com/
 twitter:  https://x.com/greachconf
 location: Madrid, Spain
+city: Madrid
+tags: groovy, jvm
+languages: en
 cancelled: true
 
 date_start: 2020-03-26

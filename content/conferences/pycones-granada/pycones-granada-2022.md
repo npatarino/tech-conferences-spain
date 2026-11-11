@@ -3,6 +3,9 @@ name: "PyConEs"
 website: https://2022.es.pycon.org
 twitter: https://x.com/pycones
 location: Granada, Spain
+city: Granada
+tags: python
+languages: es, en
 
 date_start: 2022-09-30
 date_end:   2022-10-02

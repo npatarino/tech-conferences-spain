@@ -3,6 +3,9 @@ name: "WTM"
 website: http://wtmz19.mullerestech.es
 twitter: https://x.com/WTMZaragoza
 location: Zaragoza, Spain
+city: Zaragoza
+tags: women-in-tech
+languages: es
 
 date_start: 2019-11-16
 date_end:   2019-11-16

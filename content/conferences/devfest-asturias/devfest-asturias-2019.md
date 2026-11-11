@@ -3,6 +3,8 @@ name: "DevFest"
 website: http://devfest.gdgasturias.com/
 twitter: https://x.com/GDGAsturias
 location: Asturias, Spain
+tags: google, software-development
+languages: es
 
 date_start: 2019-11-16
 date_end:   2019-11-16

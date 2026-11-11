@@ -3,6 +3,9 @@ name: "Informática Para Tod@s"
 website: https://ipt.acm.org/
 twitter: https://x.com/IPT_ACMW_es
 location: Valencia, Spain
+city: Valencia
+tags: education, computer-science
+languages: es
 cancelled: true
 
 date_start: 2020-04-24

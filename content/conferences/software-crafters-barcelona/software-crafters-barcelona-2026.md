@@ -3,6 +3,9 @@ name: "Software Crafters Barcelona"
 website: https://softwarecrafters.barcelona/
 twitter: https://x.com/bcnswcraft
 location: Barcelona, Spain
+city: Barcelona
+tags: software-craftsmanship
+languages: es, en
 
 date_start: 2026-10-16
 date_end: 2026-10-17

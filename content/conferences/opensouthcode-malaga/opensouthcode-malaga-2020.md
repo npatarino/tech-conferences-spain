@@ -3,6 +3,9 @@ name: "Opensouthcode"
 website: https://www.opensouthcode.org/
 twitter: https://x.com/opensouthcode
 location: Malaga, Spain
+city: Málaga
+tags: open-source, free-software
+languages: es
 cancelled: true
 
 date_start: 2020-04-24

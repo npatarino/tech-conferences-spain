@@ -3,6 +3,9 @@ name: "DevFest Madrid"
 website: https://gdg.community.dev/events/details/google-gdg-madrid-presents-devfest-madrid-2025/
 twitter: https://x.com/gdgmadrid
 location: Madrid, Spain
+city: Madrid
+tags: google, software-development
+languages: es
 
 date_start: 2025-11-21
 date_end: 2025-11-21

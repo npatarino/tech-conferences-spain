@@ -3,6 +3,9 @@ name: "DevFest"
 website: http://devfestalicante.com/ 
 twitter: https://x.com/GDGAlicante
 location: Alicante, Spain
+city: Alicante
+tags: google, software-development
+languages: es
 
 date_start: 2019-11-16
 date_end:   2019-11-16

@@ -3,6 +3,9 @@ name:       "DyploFest"
 website:    https://dyplofest.com/
 twitter:    https://x.com/DscMalaga
 location:   Málaga, Spain
+city: Málaga
+tags: devops, cloud
+languages: es
 
 date_start: 2022-06-04
 date_end:   2022-06-04

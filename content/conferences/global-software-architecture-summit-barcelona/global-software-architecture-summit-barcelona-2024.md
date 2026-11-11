@@ -3,6 +3,9 @@ name:     "Global Software Architecture Summit"
 website:  https://gsas.io/
 twitter:  https://x.com/gsas_io
 location: Barcelona, Spain
+city: Barcelona
+tags: architecture
+languages: en
 
 date_start: 2024-10-14
 date_end:   2024-10-16

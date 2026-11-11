@@ -5,10 +5,17 @@ const conferences = defineCollection({
   loader: conferencesLoader(),
   schema: z.object({
     name: z.string(),
+    /** Folder of the recurring event this edition belongs to. */
+    series: z.string(),
     website: z.string().optional(),
     twitter: z.string().optional(),
     bluesky: z.string().optional(),
     location: z.string(),
+    /** City as written in the frontmatter; absent for online or region-only editions. */
+    city: z.string().optional(),
+    tags: z.array(z.string()).default([]),
+    /** Languages spoken at the event, as BCP 47 tags. Empty means unknown. */
+    languages: z.array(z.string()).default([]),
     dateStart: z.string(),
     dateEnd: z.string(),
     dateTbc: z.boolean().default(false),

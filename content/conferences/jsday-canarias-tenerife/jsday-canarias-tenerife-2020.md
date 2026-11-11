@@ -3,6 +3,7 @@ name:     "JSDay Canarias"
 website:  http://jsdaycanarias.com/
 twitter:  https://x.com/canariasjs
 location: Tenerife, Spain
+tags: javascript, web
 cancelled: true
 
 date_start: 2020-11-13

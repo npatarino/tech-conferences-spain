@@ -3,6 +3,8 @@ name: "FlutterConf"
 website: http://flutterconf.gdgmarbella.com/
 twitter: https://x.com/GDGMarbella
 location: Marbella, Spain
+city: Marbella
+tags: flutter, dart, mobile
 
 date_start: 2019-10-18
 date_end:   2019-10-19

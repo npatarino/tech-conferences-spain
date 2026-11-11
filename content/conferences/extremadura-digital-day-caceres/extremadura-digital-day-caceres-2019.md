@@ -3,6 +3,9 @@ name: "Extremadura Digital Day"
 website: https://2019.extremaduradigitalday.com/
 twitter: https://x.com/extredigitalday
 location: Cáceres, Spain
+city: Cáceres
+tags: software-development
+languages: es
 
 date_start: 2019-10-05
 date_end:   2019-10-05

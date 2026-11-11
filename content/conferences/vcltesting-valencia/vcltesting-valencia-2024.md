@@ -3,6 +3,9 @@ name:     "VCLTesting"
 website:  https://vlctesting.es
 twitter:  https://x.com/iti_tic
 location: Valencia, Spain
+city: Valencia
+tags: testing, qa
+languages: es
 
 date_start: 2024-10-02
 date_end:   2024-10-03

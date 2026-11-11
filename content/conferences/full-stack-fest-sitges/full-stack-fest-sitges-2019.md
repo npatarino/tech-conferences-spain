@@ -3,6 +3,9 @@ name:       "Full Stack Fest"
 website:    https://2019.fullstackfest.com/
 twitter:    https://x.com/fullstackfest
 location:   Sitges, Barcelona, Spain
+city: Sitges
+tags: web, frontend, backend
+languages: en
 
 date_start: 2019-09-03
 date_end:   2019-09-06

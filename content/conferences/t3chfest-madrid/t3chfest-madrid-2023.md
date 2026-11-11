@@ -3,6 +3,9 @@ name: "T3chFest"
 website: https://t3chfest.es/2023/
 twitter: https://x.com/t3chfest/
 location: Leganes, Madrid, Spain
+city: Leganés
+tags: software-development
+languages: es, en
 
 date_start: 2023-03-02
 date_end:   2023-03-03

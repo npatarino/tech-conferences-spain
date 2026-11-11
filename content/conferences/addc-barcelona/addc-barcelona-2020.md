@@ -3,6 +3,9 @@ name:       "ADDC"
 website:    https://addconf.com/2020
 twitter:    https://x.com/addconf
 location:   Barcelona, Spain
+city: Barcelona
+tags: mobile, design, ios, android
+languages: en
 cancelled: true
 
 date_start: 2020-06-24

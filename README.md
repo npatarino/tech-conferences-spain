@@ -23,6 +23,7 @@ The site (in Spanish) is generated from `content/conferences/` and renders:
 - **Insights** (`/insights`): yearly evolution, city breakdown and other trends across all editions
 - Cancelled editions are shown struck through; editions with unconfirmed dates show `TBC`
 - SEO out of the box: sitemap, JSON-LD, Open Graph image, web manifest
+- **Open data**: every edition is also published as an [OpenTechEvents](https://opentechevents.org) feed (`/events.json`) and an iCalendar file (`/events.ics`) — see [Open data feed](#open-data-feed-opentechevents)
 
 <p align="center">
   <img src="docs/images/insights.png" alt="Insights page with edition, event and city counts" width="560">
@@ -54,7 +55,7 @@ content/conferences/
 
 **Folder naming:** `event-name-city/` — lowercase, hyphen-separated.
 
-**File naming:** `event-name-city-YYYY.md` — same slug as the folder, plus the year. The file name (without `.md`) is the edition's ID, so it must be unique across all folders.
+**File naming:** `event-name-city-YYYY.md` — same slug as the folder, plus the year. The file name (without `.md`) is the edition's ID, so it must be unique across all folders. It is also the edition's public identifier in the [open data feed](#open-data-feed-opentechevents): **don't rename existing files**, or feed consumers will see a brand-new event.
 
 Only `.md` files one level inside a folder of `content/conferences/` are loaded.
 
@@ -69,6 +70,9 @@ website: https://coolconf.es/2026/
 twitter: https://x.com/coolconf
 bluesky: https://bsky.app/profile/coolconf.bsky.social
 location: Valencia, Spain
+city: Valencia
+tags: javascript, frontend, web
+languages: es, en
 
 date_start: 2026-10-15
 date_end:   2026-10-16
@@ -90,6 +94,9 @@ Real example: [`content/conferences/t3chfest-madrid/t3chfest-madrid-2026.md`](co
 | `twitter` | No | Twitter/X profile of the event. |
 | `bluesky` | No | Bluesky profile URL of the event (`https://bsky.app/profile/<handle>`). |
 | `location` | Yes | `City, Region, Spain`. The **first** comma-separated part is shown as the city; the full string is used for map geocoding, so be specific enough to disambiguate. |
+| `city` | No | City where it takes place, in its usual local spelling (`Málaga`, `A Coruña`). Shown on the site and used for the city stats; falls back to the first part of `location`. Leave it out for online editions or when only the region is known. |
+| `tags` | No | Comma-separated topics, lowercase, hyphenated, in English (`python`, `women-in-tech`). Use `software-development` for generalist events. |
+| `languages` | No | Comma-separated [BCP 47](https://en.wikipedia.org/wiki/IETF_language_tag) codes of the languages **spoken at the event** (`es`, `en`, `ca`, `gl`, `eu`), main one first. Leave it out if you don't know — absent means unknown. |
 | `date_start` | Yes | ISO date `YYYY-MM-DD`. **Files without a valid `date_start` are silently skipped.** |
 | `date_end` | Yes | ISO date `YYYY-MM-DD`. Same as `date_start` for single-day events. |
 | `cfp_start` | No | `YYYY-MM-DD` — when the Call for Papers opens. |
@@ -98,7 +105,7 @@ Real example: [`content/conferences/t3chfest-madrid/t3chfest-madrid-2026.md`](co
 | `cancelled` | No | Set to `true` if the edition was cancelled. |
 | `date_tbc` | No | Set to `true` if dates are not yet confirmed (put approximate dates in `date_start`/`date_end`). TBC editions are left out of the calendar view. |
 
-Any other key is ignored. The frontmatter is read by a minimal parser ([`src/lib/frontmatter.ts`](src/lib/frontmatter.ts)), so keep to one `key: value` per line — no lists or multi-line values. Quotes around values are optional; text after ` #` is treated as a comment.
+Any other key is ignored. The frontmatter is read by a minimal parser ([`src/lib/frontmatter.ts`](src/lib/frontmatter.ts)), so keep to one `key: value` per line — no YAML lists or multi-line values (`tags` and `languages` are comma-separated on one line). Quotes around values are optional; text after ` #` is treated as a comment.
 
 ### Cancelled edition example
 
@@ -155,6 +162,7 @@ npm run preview   # serve dist/ locally
 | `npm run sync` | Run `sync:fonts` and `sync:seo`. |
 | `npm run sync:fonts` | Copy the brand fonts to `public/fonts/` ([`scripts/sync-fonts.mjs`](scripts/sync-fonts.mjs), see [Fonts](#fonts)). |
 | `npm run sync:seo` | Copy favicons and app icons to `public/` ([`scripts/sync-seo.mjs`](scripts/sync-seo.mjs)). |
+| `npm run validate:ote` | Validate the built `dist/events.json` against the OpenTechEvents spec (run `npm run build` first). |
 | `npm run astro` | Run the Astro CLI directly (e.g. `npm run astro -- --help`). |
 
 ### Environment variables
@@ -172,6 +180,39 @@ Without a key the site still builds; the map just shows no markers. Successful g
 
 ---
 
+## Open data feed (OpenTechEvents)
+
+The build also publishes the whole list in [OpenTechEvents](https://opentechevents.org) (OTE) format, an open spec for tech events that directories, calendars and bots can read without scraping:
+
+| URL | What it is |
+|---|---|
+| [`/events.json`](https://techconf.es/events.json) | OTE Spec v0.6 feed with every edition (CC BY 4.0). |
+| [`/events.ics`](https://techconf.es/events.ics) | The same feed as iCalendar, to subscribe from any calendar app. |
+
+Nothing changes for contributors: the Markdown files stay the source of truth and the feed is generated from them by [`src/lib/ote.ts`](src/lib/ote.ts). How each frontmatter field travels:
+
+| Frontmatter | OTE field | Notes |
+|---|---|---|
+| file name | `id` | `https://techconf.es/conferences/<file-name>`. **Renaming a file changes the id**, and consumers will see a new event — avoid it. |
+| folder name | `partOf` | `https://techconf.es/series/<folder>`, `type: series`. Groups the editions of one event. |
+| `name` | `name`, `partOf.name` | The edition year is appended to `name` (`T3chFest 2026`). |
+| `website` | `url`, `source.url` | |
+| `date_start` / `date_end` | `startDate` / `endDate` | All-day dates; `timezone` is `Europe/Madrid` (`Atlantic/Canary` for the Canary Islands). |
+| `city` | `location.address.locality` | |
+| `tags` | `tags` | |
+| `languages` | `languages` | |
+| `location` | `location.venue`, `attendanceMode` | `Online` / `Twitch` become `attendanceMode: online` with no venue. Coordinates go to `location.geo` when the build has a geocoding key. |
+| `cfp_site`, `cfp_start`, `cfp_end` | `cfp.url`, `cfp.opensAt`, `cfp.closesAt` | Dates become instants: start of `cfp_start`, 23:59:59 of `cfp_end`, local time. |
+| `cancelled` | `status` | `cancelled`, otherwise `scheduled`. Cancelled editions stay in the feed, as the spec requires. |
+| `twitter`, `bluesky` | `techconf:twitter`, `techconf:bluesky` | Prefixed extension fields: OTE has no core field for an event's social profiles. |
+| `date_tbc` | — | Editions with unconfirmed dates are **left out** of the feed: OTE cannot say "date unknown", and the placeholder dates would be read as real. |
+
+Pages announce the feeds with `<link rel="alternate">` tags (added by [`src/middleware.ts`](src/middleware.ts)), and [`vercel.json`](vercel.json) serves them with `Access-Control-Allow-Origin: *` so browser-based tools can read them.
+
+`npm run validate:ote` (after a build) checks `dist/events.json` with the official validator; CI runs it on every push. OTE is still a `0.x` draft, so a new spec version can mean updating the mapping.
+
+---
+
 ## Project structure
 
 ```
@@ -182,16 +223,16 @@ docs/images/              ← README screenshots
 src/
 ├── components/           ← Astro components (EventRow, MonthGroup, ViewSwitcher)
 ├── layouts/              ← Base layout wrapping every page
-├── lib/                  ← utilities (frontmatter parser, date formatting, geocoding, insights)
+├── lib/                  ← utilities (frontmatter parser, date formatting, geocoding, insights, OTE feed mapping)
 ├── loaders/              ← Astro content loader (reads content/conferences/)
-├── pages/                ← one file per route (index, past, calendar, map, insights)
+├── pages/                ← one file per route (index, past, calendar, map, insights, events.json, events.ics)
 ├── seo/                  ← JSON-LD helpers
 ├── styles/               ← global CSS (design-system tokens + overrides)
 └── content.config.ts     ← content collection schema
 astro.config.mjs          ← Astro config (via @chimichurricode/web-app-kit)
 ```
 
-Built with [Astro](https://astro.build) 5 (static output), Preact islands and [ECharts](https://echarts.apache.org) for the insights charts.
+Built with [Astro](https://astro.build) 7 (static output), Preact islands and [ECharts](https://echarts.apache.org) for the insights charts.
 
 ---
 
@@ -207,6 +248,7 @@ A few conventions to keep things consistent:
 - Use the official conference name in `name`, without city or year.
 - Prefer `https://` URLs.
 - For location, use the full `City, Region, Spain` format — this is what the geocoder uses.
+- Add `city`, `tags` and `languages` when you know them — they are what people filter by in the [open data feed](#open-data-feed-opentechevents). Reuse the tags of similar events (`grep -rh '^tags:' content | sort | uniq -c`) before inventing new ones, and leave `languages` out rather than guessing.
 - If a CFP hasn't opened yet but the website is live, add `cfp_start` and `cfp_end` when you know them.
 - If an event is recurring but skipped a year, there's no need to add a cancelled file unless you want to document the cancellation.
 

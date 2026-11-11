@@ -3,6 +3,9 @@ name: "DevFest Sevilla 2024"
 website: https://devfest24.gdgsevilla.com/
 twitter: https://x.com/GDGSevilla
 location: Sevilla, Spain
+city: Sevilla
+tags: google, software-development
+languages: es
 
 date_start: 2024-11-24
 date_end:   2024-11-24

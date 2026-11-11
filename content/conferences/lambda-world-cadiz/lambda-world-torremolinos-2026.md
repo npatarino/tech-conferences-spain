@@ -3,6 +3,9 @@ name: "Lambda World"
 website: https://lambda.world/
 twitter: https://x.com/lambda_world
 location: Torremolinos, Spain
+city: Torremolinos
+tags: functional-programming
+languages: en
 
 date_start: 2026-10-29
 date_end: 2026-10-30

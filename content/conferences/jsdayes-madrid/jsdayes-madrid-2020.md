@@ -3,6 +3,9 @@ name:     "JSDayES"
 website:  http://2019.jsday.es/
 twitter:  https://x.com/jsdayes
 location: Madrid, Spain
+city: Madrid
+tags: javascript, web
+languages: es
 
 date_start: 2020-05-09
 date_end:   2020-05-09

@@ -3,6 +3,9 @@ name: "AsturCon Tech"
 website: https://asturcon.tech/
 twitter: https://x.com/AsturCONtech
 location: Oviedo, Spain
+city: Oviedo
+tags: software-development
+languages: es
 
 date_start: 2023-11-10
 date_end:   2023-11-11

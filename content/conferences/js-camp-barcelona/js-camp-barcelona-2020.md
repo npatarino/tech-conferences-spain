@@ -3,6 +3,9 @@ name: "JS Camp"
 website: https://jscamp.tech/
 twitter: https://x.com/jscamp
 location: Barcelona, Spain
+city: Barcelona
+tags: javascript, frontend, web
+languages: en
 cancelled: true
 
 date_start: 2020-07-16

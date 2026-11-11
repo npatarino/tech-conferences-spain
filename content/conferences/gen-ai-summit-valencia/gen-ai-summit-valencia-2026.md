@@ -3,6 +3,9 @@ name: "Gen AI Summit"
 website: https://genaisummit.eu/en/home/
 twitter: https://x.com/genaisummit
 location: Valencia, Spain
+city: Valencia
+tags: ai, generative-ai
+languages: en
 
 date_start: 2026-04-17
 date_end: 2026-04-18

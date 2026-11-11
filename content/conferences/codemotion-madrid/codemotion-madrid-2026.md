@@ -3,6 +3,9 @@ name: "Codemotion"
 website: https://conferences.codemotion.com/madrid/
 twitter: https://x.com/CodemoMadrid
 location: Madrid, Spain
+city: Madrid
+tags: software-development
+languages: es, en
 
 date_start: 2026-04-20
 date_end: 2026-04-21
