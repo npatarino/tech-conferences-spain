@@ -9,4 +9,6 @@ languages: es
 
 date_start: 2026-11-19
 date_end: 2026-11-21
+
+cfp_site: https://2026.drupalcamp.es/es/criterios-de-seleccion-de-charlas
 ---

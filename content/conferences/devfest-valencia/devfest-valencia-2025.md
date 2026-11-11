@@ -9,4 +9,8 @@ languages: es
 
 date_start: 2025-11-14
 date_end: 2025-11-14
+
+cfp_start: 2025-08-01
+cfp_end: 2025-09-07
+cfp_site: https://sessionize.com/devfest-valencia2025/
 ---
