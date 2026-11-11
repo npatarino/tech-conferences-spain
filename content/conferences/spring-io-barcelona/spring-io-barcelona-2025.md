@@ -3,6 +3,9 @@ name: "Spring I/O"
 website: https://2025.springio.net/
 twitter: https://x.com/springio_
 location: Barcelona, Spain
+city: Barcelona
+tags: spring, java, jvm
+languages: en
 
 date_start: 2025-05-21
 date_end: 2025-05-23

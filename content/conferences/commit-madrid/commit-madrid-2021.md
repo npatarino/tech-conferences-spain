@@ -3,6 +3,8 @@ name: "Commit"
 website: https://2021.commit-conf.com/
 twitter: https://x.com/commitconf
 location: Online
+tags: software-development
+languages: es, en
 cancelled: true
 
 date_start: 2021-11-26

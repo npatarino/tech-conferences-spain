@@ -3,6 +3,9 @@ name: "SOS"
 website: http://sosz19.cachirulovalley.com
 twitter: https://x.com/cachiruloValley
 location: Zaragoza, Spain
+city: Zaragoza
+tags: startups, open-space
+languages: es
 
 date_start: 2019-03-23
 date_end:   2019-03-23

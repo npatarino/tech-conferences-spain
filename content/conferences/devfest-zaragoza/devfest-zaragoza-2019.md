@@ -3,6 +3,9 @@ name: "DevFest"
 website: http://gdgzaragoza.es/devfest/
 twitter: https://x.com/GDGZaragoza
 location: Zaragoza, Spain
+city: Zaragoza
+tags: google, software-development
+languages: es
 
 date_start: 2019-11-23
 date_end:   2019-11-23

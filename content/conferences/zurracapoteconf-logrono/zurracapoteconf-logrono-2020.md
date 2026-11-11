@@ -3,6 +3,9 @@ name: "Zurracapoteconf"
 website: https://zurracapoteconf.appspot.com/
 twitter: https://x.com/zurracapoteconf
 location: Logroño, Spain
+city: Logroño
+tags: software-development
+languages: es
 
 date_start: 2020-02-21
 date_end:   2020-02-22

@@ -3,6 +3,9 @@ name: "T3chFest"
 website: https://t3chfest.es/2026/
 twitter: https://x.com/t3chfest
 location: Leganés, Madrid, Spain
+city: Leganés
+tags: software-development
+languages: es, en
 
 date_start: 2026-03-12
 date_end: 2026-03-13

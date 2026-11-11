@@ -12,6 +12,12 @@ function toIsoDate(value: unknown): string | undefined {
   return m ? value : undefined;
 }
 
+/** Split a comma-separated frontmatter value (`tags: a, b`) into a clean list. */
+function toList(value: unknown): string[] {
+  if (typeof value !== "string") return [];
+  return [...new Set(value.split(",").map((v) => v.trim().toLowerCase()).filter(Boolean))];
+}
+
 export function conferencesLoader(): Loader {
   return {
     name: "conferences",
@@ -60,6 +66,9 @@ export function conferencesLoader(): Loader {
               twitter: typeof fm.twitter === "string" ? fm.twitter : undefined,
               bluesky: typeof fm.bluesky === "string" ? fm.bluesky : undefined,
               location,
+              city: typeof fm.city === "string" && fm.city ? fm.city : undefined,
+              tags: toList(fm.tags),
+              languages: toList(fm.languages),
               dateStart,
               dateEnd: dateEnd ?? dateStart,
               dateTbc: fm.date_tbc === true,

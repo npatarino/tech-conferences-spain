@@ -3,6 +3,9 @@ name: "Wey Wey Web"
 website: https://weyweyweb.com/
 twitter: https://x.com/WeyWeyWeb
 location: Málaga, Spain
+city: Málaga
+tags: web, frontend, design
+languages: en
 
 date_start: 2023-11-23
 date_end:   2023-11-24

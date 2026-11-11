@@ -3,6 +3,7 @@ name: "JSDay Canarias"
 website: https://jsdaycanarias.com/
 twitter: https://x.com/canariasjs
 location: Tenerife, Spain
+tags: javascript, web
 
 date_start: 2019-11-08
 date_end:   2019-11-10

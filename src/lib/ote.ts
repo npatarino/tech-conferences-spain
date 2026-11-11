@@ -33,6 +33,9 @@ export interface OteSourceConference {
   twitter?: string;
   bluesky?: string;
   location: string;
+  city?: string;
+  tags: string[];
+  languages: string[];
   dateStart: string;
   dateEnd: string;
   dateTbc: boolean;
@@ -107,7 +110,7 @@ function cfpFor(c: OteSourceConference, timeZone: string): Record<string, unknow
  * `license` are inherited from the feed).
  *
  * What is deliberately NOT emitted, because the repo does not know it:
- * `description`, `image`, `organizers`, `tags`, `languages`, `offers`.
+ * `description`, `image`, `organizers`, `offers`.
  * They are "recommended", not required — the feed is valid without them
  * and the validator reports them as warnings.
  */
@@ -129,10 +132,14 @@ export function conferenceToOteEvent(c: OteSourceConference): OteEvent {
   if (!online) {
     event.location = {
       venue: c.location,
-      address: { country: "ES" },
+      address: { ...(c.city ? { locality: c.city } : {}), country: "ES" },
       ...(c.lat != null && c.lng != null ? { geo: { lat: c.lat, lon: c.lng } } : {}),
     };
   }
+
+  // Absent means unknown in OTE; an empty list is not allowed.
+  if (c.tags.length) event.tags = c.tags;
+  if (c.languages.length) event.languages = c.languages;
 
   const cfp = cfpFor(c, timeZone);
   if (cfp) event.cfp = cfp;

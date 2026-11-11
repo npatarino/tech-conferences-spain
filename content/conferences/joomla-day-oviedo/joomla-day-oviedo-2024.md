@@ -3,6 +3,9 @@ name:     "Joomla Day"
 website:  https://jday.joomlaes.org/
 twitter:  https://x.com/Joomla_ES
 location: Oviedo, Spain
+city: Oviedo
+tags: joomla, php, web
+languages: es
 
 date_start: 2024-10-04
 date_end:   2024-10-05

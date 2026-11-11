@@ -3,6 +3,8 @@ name: "DevFest Zaragoza 2020"
 website: http://gdgzaragoza.es/devfest/
 twitter: https://x.com/GDGZaragoza
 location: Online
+tags: google, software-development
+languages: es
 
 date_start: 2020-11-21
 date_end:   2020-11-21

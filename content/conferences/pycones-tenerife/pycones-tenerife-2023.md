@@ -3,6 +3,8 @@ name: "PyConEs"
 website: https://2023.es.pycon.org/
 twitter: https://x.com/pycones
 location: Tenerife, Spain
+tags: python
+languages: es, en
 
 date_start: 2023-10-06
 date_end:   2023-10-08

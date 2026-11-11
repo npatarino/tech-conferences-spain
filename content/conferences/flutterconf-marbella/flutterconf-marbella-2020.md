@@ -3,6 +3,8 @@ name: "FlutterConf"
 website: https://flutterconf.dev/
 twitter: https://x.com/flutterconfdev
 location: Marbella, Spain
+city: Marbella
+tags: flutter, dart, mobile
 cancelled: true
 date_start: 2020-10-01
 date_end:   2020-10-02

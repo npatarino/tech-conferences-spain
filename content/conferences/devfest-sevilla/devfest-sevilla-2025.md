@@ -3,6 +3,9 @@ name: "DevFest Sevilla"
 website: https://gdg.community.dev/gdg-sevilla/
 twitter: https://x.com/GDGSevilla
 location: Sevilla, Spain
+city: Sevilla
+tags: google, software-development
+languages: es
 
 date_start: 2025-11-09
 date_end: 2025-11-09

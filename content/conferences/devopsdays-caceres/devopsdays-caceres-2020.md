@@ -3,6 +3,8 @@ name:     "DevOpsDays"
 website:  https://devopsdays.org/events/2020-caceres/welcome/
 twitter:  https://x.com/DevOpsDaysCC
 location: Cáceres, Spain
+city: Cáceres
+tags: devops
 
 date_start: 2020-03-05
 date_end:   2020-03-06

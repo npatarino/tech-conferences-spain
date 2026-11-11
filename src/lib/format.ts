@@ -15,3 +15,11 @@ export function monthLabelEs(key: string): string {
 export function todayIso(): string {
   return new Date().toISOString().slice(0, 10);
 }
+
+/**
+ * City to show for an edition: the explicit `city` field, or — for online
+ * and region-only editions, which have none — the first part of `location`.
+ */
+export function cityOf(d: { city?: string; location: string }): string {
+  return d.city ?? (d.location.split(",")[0]?.trim() || d.location);
+}

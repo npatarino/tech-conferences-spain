@@ -3,6 +3,9 @@ name:     "Open Biko"
 website:  https://www.biko2.com/open-space/
 twitter:  https://x.com/biko2
 location: Pamplona, Spain
+city: Pamplona
+tags: open-space, software-development
+languages: es
 
 date_start: 2022-05-27
 date_end:   2022-05-27

@@ -4,6 +4,9 @@ website: https://www.weyweyweb.com/
 twitter: https://x.com/weyweyweb
 bluesky: https://bsky.app/profile/weyweyweb.bsky.social
 location: Torremolinos, Spain
+city: Torremolinos
+tags: web, frontend, design
+languages: en
 
 date_start: 2026-10-29
 date_end: 2026-10-30

@@ -3,6 +3,9 @@ name: "JBCNConf"
 website: http://www.jbcnconf.com/2020/
 twitter: https://x.com/jbcnconf/
 location: Barcelona, Spain
+city: Barcelona
+tags: java, jvm
+languages: en
 cancelled: true
 
 date_start: 2020-07-06

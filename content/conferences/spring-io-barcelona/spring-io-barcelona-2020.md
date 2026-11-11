@@ -3,6 +3,9 @@ name:     "Spring I/O"
 website:  https://springio.net
 twitter:  https://x.com/spring_io
 location: Barcelona, Spain
+city: Barcelona
+tags: spring, java, jvm
+languages: en
 
 cancelled: true
 

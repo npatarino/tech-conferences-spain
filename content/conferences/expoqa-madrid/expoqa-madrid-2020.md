@@ -3,6 +3,9 @@ name: "expo:QA"
 website: http://www.expoqa.com
 twitter: https://x.com/expoqa
 location: Madrid, Spain
+city: Madrid
+tags: testing, qa
+languages: en, es
 cancelled: true
 
 date_start: 2020-06-15

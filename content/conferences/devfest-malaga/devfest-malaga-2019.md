@@ -3,6 +3,9 @@ name: "DevFest"
 website: https://devfest.gdgmalaga.com/
 twitter: https://x.com/GDGMalaga
 location: Malaga, Spain
+city: Málaga
+tags: google, software-development
+languages: es
 
 date_start: 2019-12-14
 date_end:   2019-12-14

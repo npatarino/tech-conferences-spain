@@ -3,6 +3,8 @@ name:     "Joomla Day"
 website:  https://jday.joomlaes.org/
 twitter:  https://x.com/Joomla_ES
 location: Tenerife, Spain
+tags: joomla, php, web
+languages: es
 
 date_start: 2023-10-05
 date_end:   2023-10-06

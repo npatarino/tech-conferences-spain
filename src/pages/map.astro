@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
 import ViewSwitcher from "../components/ViewSwitcher.astro";
-import { todayIso } from "../lib/format.ts";
+import { cityOf, todayIso } from "../lib/format.ts";
 import { pageJsonLd } from "../seo";
 
 const apiKey = process.env.GOOGLE_MAPS_API_KEY ?? "";
@@ -14,7 +14,7 @@ const withCoords = upcoming.filter((c) => c.data.lat != null && c.data.lng != nu
 const markers = withCoords.map((c) => ({
   id: c.id,
   name: c.data.name,
-  city: c.data.location.split(",")[0]?.trim() ?? c.data.location,
+  city: cityOf(c.data),
   dateStart: c.data.dateStart,
   dateEnd: c.data.dateEnd,
   website: c.data.website ?? null,
@@ -24,7 +24,7 @@ const markers = withCoords.map((c) => ({
 
 const cityCounts = new Map<string, number>();
 for (const c of upcoming) {
-  const city = c.data.location.split(",")[0]?.trim() || c.data.location;
+  const city = cityOf(c.data);
   if (!city) continue;
   cityCounts.set(city, (cityCounts.get(city) ?? 0) + 1);
 }

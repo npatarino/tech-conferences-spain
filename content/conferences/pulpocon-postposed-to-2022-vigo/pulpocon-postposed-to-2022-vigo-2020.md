@@ -3,6 +3,9 @@ name: "PulpoCon - POSTPOSED TO 2022"
 website: https://pulpocon.es
 twitter: https://x.com/phpulpocon
 location: Vigo, Spain
+city: Vigo
+tags: software-development
+languages: es
 cancelled: true
 
 date_start: 2020-09-05

@@ -3,6 +3,9 @@ name: "Lambda World"
 website: https://www.lambda.world
 twitter: https://x.com/Lambda_World
 location: Cadiz, Spain
+city: Cádiz
+tags: functional-programming
+languages: en
 
 date_start: 2024-10-02
 date_end: 2024-10-04

@@ -3,6 +3,9 @@ name:       "PHP.Barcelona"
 website:    https://php.barcelona/
 twitter:    https://x.com/phpbcnconf
 location:   Barcelona, Spain
+city: Barcelona
+tags: php
+languages: en
 
 date_start: 2019-11-12
 date_end:   2019-11-13

@@ -3,6 +3,9 @@ name: "DevFest Granada"
 website: https://gdg.community.dev/events/details/google-gdg-granada-presents-devfest-granada-2025/
 twitter: https://x.com/GDGGranada
 location: Granada, Spain
+city: Granada
+tags: google, software-development
+languages: es
 
 date_start: 2025-11-28
 date_end: 2025-11-28

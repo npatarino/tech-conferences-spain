@@ -3,6 +3,9 @@ name: "Droidcon"
 website: https://www.madrid.droidcon.com/
 twitter: https://x.com/droidconMAD
 location: Madrid, Spain
+city: Madrid
+tags: android, mobile
+languages: en
 
 date_start: 2019-12-20
 date_end:   2019-12-21

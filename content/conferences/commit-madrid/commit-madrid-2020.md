@@ -3,6 +3,9 @@ name: "Commit"
 website: https://2020.commit-conf.com/
 twitter: https://x.com/commitconf
 location: Madrid, Spain
+city: Madrid
+tags: software-development
+languages: es, en
 cancelled: true
 
 date_start: 2020-11-27

@@ -3,6 +3,9 @@ name: "Pucela Tech Day"
 website: https://pucelatechday.com/
 twitter: https://x.com/pucelatechday/
 location: Valladolid, Spain
+city: Valladolid
+tags: software-development
+languages: es
 
 cancelled: true
 

@@ -1,4 +1,5 @@
 import type { CollectionEntry } from "astro:content";
+import { cityOf } from "./format.ts";
 
 type Conf = CollectionEntry<"conferences">;
 
@@ -46,7 +47,7 @@ export function buildRows(confs: Conf[]): ConfRow[] {
       id: c.id,
       series: seriesId(c.id),
       name: d.name.replace(/\s+\d{4}$/, ""),
-      city: d.location.split(",")[0]?.trim() || d.location,
+      city: cityOf(d),
       year,
       month,
       weekday,

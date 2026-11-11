@@ -3,6 +3,8 @@ name:     "AdaloversConf"
 website:  http://adaloversconf.es/
 twitter:  https://x.com/adalovedev
 location: Tenerife, Spain
+tags: women-in-tech, software-development
+languages: es
 
 date_start: 2019-09-28
 date_end:   2019-09-28

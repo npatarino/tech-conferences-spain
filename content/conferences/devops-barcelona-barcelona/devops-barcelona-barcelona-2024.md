@@ -3,6 +3,9 @@ name: "Devops Barcelona"
 website: https://devops.barcelona
 twitter: https://x.com/devopsbarcelona
 location: Barcelona, Spain
+city: Barcelona
+tags: devops
+languages: en
 
 date_start: 2024-11-14
 date_end:   2024-11-15

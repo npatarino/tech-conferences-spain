@@ -3,6 +3,9 @@ name: "DevFest"
 website: https://devfest-sev.firebaseapp.com/
 twitter: https://x.com/GDGSevilla
 location: Sevilla, Spain
+city: Sevilla
+tags: google, software-development
+languages: es
 
 date_start: 2019-10-11
 date_end:   2019-10-11
