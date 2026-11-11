@@ -9,4 +9,7 @@ languages: es
 
 date_start: 2026-01-24
 date_end: 2026-01-24
+
+cfp_end: 2025-12-10
+cfp_site: https://zaragoza.wordcamp.org/2026/participan/llamada-a-ponentes/
 ---
