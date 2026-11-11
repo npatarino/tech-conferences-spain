@@ -5,6 +5,8 @@ const conferences = defineCollection({
   loader: conferencesLoader(),
   schema: z.object({
     name: z.string(),
+    /** Folder of the recurring event this edition belongs to. */
+    series: z.string(),
     website: z.string().optional(),
     twitter: z.string().optional(),
     bluesky: z.string().optional(),

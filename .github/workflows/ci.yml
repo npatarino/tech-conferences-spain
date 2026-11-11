@@ -20,4 +20,6 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      # The OTE feed (dist/events.json) must validate against the spec version it declares.
+      - run: npm run validate:ote
       # No test script yet. GOOGLE_MAPS_API_KEY is optional at build time.
