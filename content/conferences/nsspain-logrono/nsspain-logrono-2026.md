@@ -7,7 +7,6 @@ city: Logroño
 tags: ios, swift, apple, mobile
 languages: en
 
-date_start: 2026-09-01
-date_end: 2026-09-30
-date_tbc: true
+date_start: 2026-09-16
+date_end: 2026-09-18
 ---

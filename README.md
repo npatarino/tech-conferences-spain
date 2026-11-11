@@ -265,4 +265,4 @@ The brand fonts are licensed, so they are not in this repo or in the design-syst
 
 ## License
 
-All conference data is [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+All conference data is [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Part of it was imported from [eventos.wiki](https://eventos.wiki) (CC BY 4.0), cross-checked against each event's own website where possible.

@@ -1,13 +1,12 @@
 ---
 name: "Nerdearla España"
-website: https://nerdearla.com/
+website: https://nerdearla.es/
 twitter: https://x.com/nerdearla
 location: Madrid, Spain
 city: Madrid
 tags: software-development
 languages: es
 
-date_start: 2027-01-01
-date_end: 2027-12-31
-date_tbc: true
+date_start: 2027-11-03
+date_end: 2027-11-05
 ---

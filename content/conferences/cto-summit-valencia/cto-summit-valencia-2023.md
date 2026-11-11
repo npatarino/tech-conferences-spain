@@ -1,10 +1,10 @@
 ---
-name:     "CAS"
+name: "CTO Summit"
 website:  https://ctosummit.geekshubs.com/
 twitter:  https://x.com/geeksctosummit
 location: Valencia, Spain
 city: Valencia
-tags: agile
+tags: engineering-management, leadership
 languages: es
 
 date_start: 2023-05-26
