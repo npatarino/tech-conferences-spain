@@ -4,7 +4,7 @@ website: https://asturcon.tech/
 twitter: https://x.com/AsturCONtech
 location: Avilés, Spain
 city: Avilés
-tags: software-development
+tags: security
 languages: es
 
 date_start: 2024-11-08
