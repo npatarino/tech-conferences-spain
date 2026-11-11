@@ -1,429 +1,555 @@
+/**
+ * Insights — every number on /insights is computed here, at build time,
+ * from the conference collection. Nothing in the page copy is hardcoded:
+ * if the data changes, the story changes with it.
+ *
+ * Pure functions over plain data, no I/O.
+ */
 import type { CollectionEntry } from "astro:content";
 import { cityOf } from "./format.ts";
+import { CITY_COORDS } from "../data/spain.ts";
 
 type Conf = CollectionEntry<"conferences">;
 
-export interface ConfRow {
+// ───────────────────────────── vocabulary ─────────────────────────────
+
+export type State = "held" | "cancelled" | "upcoming";
+export type LangGroup = "es" | "en" | "mixed" | "other" | "unknown";
+
+export interface TopicDef { id: string; label: string; tags: string[] }
+
+/**
+ * Topic groups, in priority order: an edition belongs to the first group
+ * one of its tags falls in. "general" is the catch-all.
+ */
+export const TOPICS: TopicDef[] = [
+  { id: "ia", label: "IA", tags: ["ai", "ai-agents", "generative-ai"] },
+  { id: "seguridad", label: "Seguridad", tags: ["security"] },
+  { id: "diversidad", label: "Mujeres en tech", tags: ["women-in-tech", "stem"] },
+  { id: "movil", label: "Móvil", tags: ["mobile", "ios", "android", "flutter", "swift", "kotlin", "dart", "apple"] },
+  { id: "web", label: "Web y frontend", tags: ["javascript", "frontend", "react", "angular", "css", "webassembly", "wordpress", "drupal", "joomla", "accessibility", "web"] },
+  { id: "plataformas", label: "Lenguajes y plataformas", tags: ["java", "jvm", "spring", "groovy", "python", "dotnet", "microsoft", "elixir", "erlang", "functional-programming", "php", "cakephp"] },
+  { id: "datos", label: "Datos, cloud y DevOps", tags: ["data", "big-data", "devops", "cloud", "distributed-systems", "api", "power-bi"] },
+  { id: "calidad", label: "Testing, agile y crafters", tags: ["testing", "qa", "test-automation", "agile", "scrum", "software-craftsmanship", "open-space", "embedded"] },
+  { id: "abierto", label: "Open source", tags: ["open-source", "free-software", "maker", "hardware"] },
+  { id: "producto", label: "Producto y negocio", tags: ["product", "startups", "innovation", "engineering-management", "leadership", "careers", "design", "technology", "education", "computer-science", "gamedev"] },
+  { id: "general", label: "Generalistas", tags: ["software-development", "google"] },
+];
+const TOPIC_BY_TAG = new Map<string, string>();
+for (const t of TOPICS) for (const tag of t.tags) if (!TOPIC_BY_TAG.has(tag)) TOPIC_BY_TAG.set(tag, t.id);
+export const TOPIC_LABEL: Record<string, string> = Object.fromEntries(TOPICS.map((t) => [t.id, t.label]));
+
+/** Brands that travel or have one folder per city: grouped under one family. */
+const FAMILY_RULES: [RegExp, string][] = [
+  [/^biznagafest/i, "BiznagaFest"],
+  [/^devfest/i, "DevFest"],
+  [/^(wtm|women techmakers)/i, "Women Techmakers"],
+  [/^wordcamp/i, "WordCamp"],
+  [/^rooted/i, "RootedCON"],
+  [/^netcoreconf/i, "NetCoreConf"],
+  [/^agentcamp/i, "AgentCamp"],
+  [/^pycon/i, "PyConES"],
+  [/^drupal ?camp/i, "DrupalCamp"],
+  [/^eslibre/i, "esLibre"],
+  [/^(cas\b|conferencia agile spain)/i, "CAS"],
+  [/^(aos\b|agile open spain)/i, "Agile Open Spain"],
+  [/^codemotion/i, "Codemotion"],
+  [/^#?tarugoconf/i, "TarugoConf"],
+  [/^(vlc|vcl) ?testing/i, "VLC Testing"],
+  [/^wecode/i, "WeCodeFest"],
+  [/^s?pamplona (sw|software) crafters/i, "Pamplona Software Crafters"],
+  [/^software crafters/i, "Software Crafters Barcelona"],
+  [/^(gsas|global software architecture)/i, "GSAS"],
+  [/^sou(8)?th summit/i, "South Summit"],
+  [/^devops(days)? barcelona/i, "DevOps Barcelona"],
+  [/^devopsdays/i, "DevOpsDays"],
+  [/^(startup open space|sos\b|sosz)/i, "Startup Open Space"],
+  [/^j on the beach/i, "J On The Beach"],
+  [/^nerdearla/i, "Nerdearla"],
+  [/^opensouthcode/i, "OpenSouthCode"],
+  [/^commit/i, "Commit Conf"],
+  [/^stem women/i, "STEM Women Congress"],
+  [/^pulpocon/i, "PulpoCon"],
+  [/^navaja negra/i, "Navaja Negra"],
+  [/^bilbao (international )?games/i, "Bilbao Games Conference"],
+  [/^bilbao maker faire/i, "Bilbao Maker Faire"],
+  [/^react alicante/i, "React Alicante"],
+  [/^fredcon/i, "FredCon"],
+  [/^try it/i, "Try IT!"],
+  [/^drupal day/i, "Drupal Day"],
+  [/^cto summit/i, "CTO Summit"],
+];
+
+const REGION_BY_CITY: Record<string, string> = {
+  "Madrid": "Madrid", "Aranjuez": "Madrid", "Leganés": "Madrid", "Torrelodones": "Madrid", "Boadilla del Monte": "Madrid",
+  "Barcelona": "Cataluña", "Sitges": "Cataluña", "Tarragona": "Cataluña", "Girona": "Cataluña", "Lleida": "Cataluña", "L'Hospitalet de Llobregat": "Cataluña",
+  "Valencia": "C. Valenciana", "Alicante": "C. Valenciana", "San Vicente del Raspeig": "C. Valenciana", "Benidorm": "C. Valenciana",
+  "Sevilla": "Andalucía", "Málaga": "Andalucía", "Granada": "Andalucía", "Córdoba": "Andalucía", "Cádiz": "Andalucía",
+  "Conil": "Andalucía", "Jaén": "Andalucía", "Marbella": "Andalucía", "Torremolinos": "Andalucía",
+  "Bilbao": "País Vasco", "Vizcaya": "País Vasco",
+  "A Coruña": "Galicia", "Santiago de Compostela": "Galicia", "Vigo": "Galicia", "Pontevedra": "Galicia", "Ourense": "Galicia", "Melide": "Galicia", "Galicia": "Galicia",
+  "Asturias": "Asturias", "Gijón": "Asturias", "Oviedo": "Asturias", "Avilés": "Asturias",
+  "Valladolid": "Castilla y León", "Salamanca": "Castilla y León", "Burgos": "Castilla y León", "Ponferrada": "Castilla y León",
+  "Albacete": "Castilla-La Mancha", "Toledo": "Castilla-La Mancha",
+  "Zaragoza": "Aragón", "Jaca": "Aragón",
+  "Pamplona": "Navarra",
+  "Logroño": "La Rioja", "La Rioja": "La Rioja",
+  "Cáceres": "Extremadura",
+  "Santander": "Cantabria",
+  "Menorca": "Baleares",
+  "Tenerife": "Canarias", "Las Palmas de Gran Canaria": "Canarias",
+};
+
+/** Autonomous communities (and cities) of Spain, to count the ones with no conference. */
+const ALL_REGIONS = [
+  "Andalucía", "Aragón", "Asturias", "Baleares", "Canarias", "Cantabria", "Castilla-La Mancha", "Castilla y León",
+  "Cataluña", "C. Valenciana", "Extremadura", "Galicia", "La Rioja", "Madrid", "Murcia", "Navarra", "País Vasco",
+];
+
+const ONLINE_RE = /^(online|twitch)\b/i;
+export const MONTHS_SHORT = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+export const MONTHS_LONG = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+export const WEEKDAYS = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+
+// ───────────────────────────── editions ─────────────────────────────
+
+export interface Edition {
   id: string;
-  series: string;
+  /** Brand key: editions of the same event, wherever it is held. */
+  family: string;
+  /** Edition name without year or annotations. */
   name: string;
-  city: string;
+  /** Place shown on charts ("Online" for online editions). */
+  place: string;
+  online: boolean;
+  /** The edition names a city (not just a region or island). */
+  hasCity: boolean;
+  region: string | null;
   year: number;
+  /** 1–12 */
   month: number;
+  /** 0 = Monday … 6 = Sunday, of the first day. */
   weekday: number;
-  durationDays: number;
-  startIso: string;
-  endIso: string;
-  cancelled: boolean;
-  hasCfp: boolean;
-  cfpLeadDays: number | null;
-  cfpEndIso: string | null;
-}
-
-const SERIES_PATTERN = /-(19|20)\d{2}$/;
-
-function seriesId(id: string): string {
-  return id.replace(SERIES_PATTERN, "");
+  days: number;
+  start: string;
+  end: string;
+  state: State;
+  /** Dates are placeholders: kept out of every calendar statistic. */
+  tbc: boolean;
+  tags: string[];
+  topic: string;
+  lang: LangGroup;
+  website: string | null;
+  cfpStart: string | null;
+  cfpEnd: string | null;
+  cfpSite: string | null;
 }
 
 function diffDays(a: string, b: string): number {
-  const ad = new Date(a + "T00:00:00Z").getTime();
-  const bd = new Date(b + "T00:00:00Z").getTime();
-  return Math.round((bd - ad) / 86_400_000);
+  return Math.round((Date.parse(b + "T00:00:00Z") - Date.parse(a + "T00:00:00Z")) / 86_400_000);
 }
 
-export function buildRows(confs: Conf[]): ConfRow[] {
-  const rows: ConfRow[] = [];
+function cleanName(raw: string): string {
+  return raw
+    .replace(/\s*\(.*?\)\s*/g, " ")
+    .replace(/\s+-\s+POSTPOSED.*$/i, "")
+    .replace(/\s*\b(19|20)\d{2}\b.*$/, "")
+    .replace(/\s+/g, " ")
+    .trim() || raw;
+}
+
+function familyOf(name: string): string {
+  for (const [re, fam] of FAMILY_RULES) if (re.test(name)) return fam;
+  return name;
+}
+
+function langGroup(langs: string[]): LangGroup {
+  if (langs.length === 0) return "unknown";
+  const hasEs = langs.includes("es");
+  const hasEn = langs.includes("en");
+  if (hasEs && hasEn) return "mixed";
+  if (langs.length === 1 && hasEs) return "es";
+  if (langs.length === 1 && hasEn) return "en";
+  return "other";
+}
+
+function topicOf(tags: string[]): string {
+  let best = TOPICS.length;
+  for (const tag of tags) {
+    const id = TOPIC_BY_TAG.get(tag);
+    if (!id) continue;
+    const idx = TOPICS.findIndex((t) => t.id === id);
+    if (idx < best) best = idx;
+  }
+  return TOPICS[Math.min(best, TOPICS.length - 1)].id;
+}
+
+export function buildEditions(confs: Conf[], todayIso: string): Edition[] {
+  const out: Edition[] = [];
   for (const c of confs) {
     const d = c.data;
     const start = new Date(d.dateStart + "T00:00:00Z");
-    const end = new Date(d.dateEnd + "T00:00:00Z");
-    const year = start.getUTCFullYear();
-    const month = start.getUTCMonth() + 1;
-    const weekday = start.getUTCDay();
-    const durationDays = Math.max(1, diffDays(d.dateStart, d.dateEnd) + 1);
-    const cfpLeadDays = d.cfpEnd ? diffDays(d.cfpEnd, d.dateStart) : null;
-    rows.push({
-      id: c.id,
-      series: seriesId(c.id),
-      name: d.name.replace(/\s+\d{4}$/, ""),
-      city: cityOf(d),
-      year,
-      month,
-      weekday,
-      durationDays,
-      startIso: d.dateStart,
-      endIso: d.dateEnd,
-      cancelled: d.cancelled,
-      hasCfp: !!(d.cfpEnd || d.cfpStart),
-      cfpLeadDays,
-      cfpEndIso: d.cfpEnd ?? null,
-    });
-  }
-  return rows;
-}
-
-export interface YearlyEvolutionPoint { year: number; total: number; cancelled: number; }
-
-export function yearlyEvolution(rows: ConfRow[]): YearlyEvolutionPoint[] {
-  const byYear = new Map<number, { total: number; cancelled: number }>();
-  for (const r of rows) {
-    const e = byYear.get(r.year) ?? { total: 0, cancelled: 0 };
-    e.total++;
-    if (r.cancelled) e.cancelled++;
-    byYear.set(r.year, e);
-  }
-  return [...byYear.entries()]
-    .sort((a, b) => a[0] - b[0])
-    .map(([year, v]) => ({ year, ...v }));
-}
-
-export function monthYearMatrix(rows: ConfRow[]): { years: number[]; values: [number, number, number][] } {
-  const years = [...new Set(rows.map((r) => r.year))].sort();
-  const months = Array.from({ length: 12 }, (_, i) => i + 1);
-  const map = new Map<string, number>();
-  for (const r of rows) {
-    if (r.cancelled) continue;
-    const k = `${r.year}-${r.month}`;
-    map.set(k, (map.get(k) ?? 0) + 1);
-  }
-  const values: [number, number, number][] = [];
-  for (let yi = 0; yi < years.length; yi++) {
-    for (let mi = 0; mi < months.length; mi++) {
-      const v = map.get(`${years[yi]}-${months[mi]}`) ?? 0;
-      values.push([mi, yi, v]);
-    }
-  }
-  return { years, values };
-}
-
-export function weekdayDistribution(rows: ConfRow[]): { all: number[]; recent: number[] } {
-  const cur = new Date().getUTCFullYear();
-  const recent = rows.filter((r) => r.year >= cur - 2 && !r.cancelled);
-  const count = (rs: ConfRow[]) => {
-    const c = new Array(7).fill(0);
-    for (const r of rs) c[r.weekday]++;
-    // Reorder to Mon..Sun
-    return [c[1], c[2], c[3], c[4], c[5], c[6], c[0]];
-  };
-  return { all: count(rows.filter((r) => !r.cancelled)), recent: count(recent) };
-}
-
-export interface SeriesLongevity { series: string; name: string; editions: number; firstYear: number; lastYear: number; alive: boolean; }
-
-export function seriesLongevity(rows: ConfRow[], currentYear: number): SeriesLongevity[] {
-  const groups = new Map<string, ConfRow[]>();
-  for (const r of rows) {
-    if (!groups.has(r.series)) groups.set(r.series, []);
-    groups.get(r.series)!.push(r);
-  }
-  const out: SeriesLongevity[] = [];
-  for (const [series, rs] of groups) {
-    const sorted = rs.slice().sort((a, b) => a.year - b.year);
-    const firstYear = sorted[0].year;
-    const lastYear = sorted[sorted.length - 1].year;
+    const online = ONLINE_RE.test(d.location.trim());
+    const place = online ? "Online" : cityOf(d);
+    const name = cleanName(d.name);
     out.push({
-      series,
-      name: sorted[sorted.length - 1].name,
-      editions: rs.length,
-      firstYear,
-      lastYear,
-      alive: lastYear >= currentYear,
+      id: c.id,
+      family: familyOf(name),
+      name,
+      place,
+      online,
+      hasCity: !online && !!d.city,
+      region: online ? null : REGION_BY_CITY[place] ?? null,
+      year: start.getUTCFullYear(),
+      month: start.getUTCMonth() + 1,
+      weekday: (start.getUTCDay() + 6) % 7,
+      days: Math.max(1, diffDays(d.dateStart, d.dateEnd) + 1),
+      start: d.dateStart,
+      end: d.dateEnd,
+      state: d.cancelled ? "cancelled" : d.dateStart > todayIso ? "upcoming" : "held",
+      tbc: d.dateTbc,
+      tags: d.tags,
+      topic: topicOf(d.tags),
+      lang: langGroup(d.languages),
+      website: d.website && /^https?:\/\//.test(d.website) ? d.website : null,
+      cfpStart: d.cfpStart ?? null,
+      cfpEnd: d.cfpEnd ?? null,
+      cfpSite: d.cfpSite ?? null,
     });
   }
-  return out;
+  return out.sort((a, b) => a.start.localeCompare(b.start) || a.id.localeCompare(b.id));
 }
 
-export function debutsByYear(rows: ConfRow[]): { year: number; debuts: number; returning: number }[] {
-  const longevity = seriesLongevity(rows, new Date().getUTCFullYear());
-  const debutYearOf = new Map<string, number>();
-  for (const l of longevity) debutYearOf.set(l.series, l.firstYear);
-  const byYear = new Map<number, { debuts: number; returning: number }>();
-  for (const r of rows) {
-    const e = byYear.get(r.year) ?? { debuts: 0, returning: 0 };
-    if (debutYearOf.get(r.series) === r.year) e.debuts++;
-    else e.returning++;
-    byYear.set(r.year, e);
+// ───────────────────────────── helpers ─────────────────────────────
+
+function countBy<T>(items: T[], key: (t: T) => string | number | null | undefined): Map<string, number> {
+  const m = new Map<string, number>();
+  for (const it of items) {
+    const k = key(it);
+    if (k == null || k === "") continue;
+    m.set(String(k), (m.get(String(k)) ?? 0) + 1);
   }
-  return [...byYear.entries()].sort((a, b) => a[0] - b[0]).map(([year, v]) => ({ year, ...v }));
+  return m;
 }
 
-export function geographicTrend(rows: ConfRow[]): {
-  topAllTime: { city: string; count: number }[];
-  recentShare: { city: string; pct: number }[];
-  earlyShare: { city: string; pct: number }[];
-  emerging: { city: string; firstYear: number }[];
-  recentYears: [number, number];
-  earlyYears: [number, number];
-} {
-  const cur = new Date().getUTCFullYear();
-  const recentYears: [number, number] = [cur - 2, cur];
-  const earlyYears: [number, number] = [cur - 5, cur - 3];
-
-  const all = new Map<string, number>();
-  const recent = new Map<string, number>();
-  const early = new Map<string, number>();
-  const firstSeen = new Map<string, number>();
-
-  for (const r of rows) {
-    if (r.cancelled) continue;
-    if (!r.city) continue;
-    all.set(r.city, (all.get(r.city) ?? 0) + 1);
-    if (r.year >= recentYears[0] && r.year <= recentYears[1]) recent.set(r.city, (recent.get(r.city) ?? 0) + 1);
-    if (r.year >= earlyYears[0] && r.year <= earlyYears[1]) early.set(r.city, (early.get(r.city) ?? 0) + 1);
-    const fs = firstSeen.get(r.city);
-    if (fs == null || r.year < fs) firstSeen.set(r.city, r.year);
-  }
-
-  const totalRecent = [...recent.values()].reduce((a, b) => a + b, 0) || 1;
-  const totalEarly = [...early.values()].reduce((a, b) => a + b, 0) || 1;
-
-  const topAllTime = [...all.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8).map(([city, count]) => ({ city, count }));
-  const recentShare = [...recent.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8).map(([city, count]) => ({ city, pct: (count / totalRecent) * 100 }));
-  const earlyShare = [...early.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8).map(([city, count]) => ({ city, pct: (count / totalEarly) * 100 }));
-  const emerging = [...firstSeen.entries()]
-    .filter(([_, y]) => y >= cur - 2)
-    .sort((a, b) => b[1] - a[1])
-    .map(([city, firstYear]) => ({ city, firstYear }));
-
-  return { topAllTime, recentShare, earlyShare, emerging, recentYears, earlyYears };
+function sorted(m: Map<string, number>): [string, number][] {
+  return [...m.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "es"));
 }
 
-export function durationByYear(rows: ConfRow[]): { years: number[]; oneDay: number[]; twoDay: number[]; threePlus: number[] } {
-  const years = [...new Set(rows.map((r) => r.year))].sort();
-  const buckets = new Map<number, { one: number; two: number; three: number }>();
-  for (const r of rows) {
-    if (r.cancelled) continue;
-    const e = buckets.get(r.year) ?? { one: 0, two: 0, three: 0 };
-    if (r.durationDays === 1) e.one++;
-    else if (r.durationDays === 2) e.two++;
-    else e.three++;
-    buckets.set(r.year, e);
+function median(values: number[]): number | null {
+  if (values.length === 0) return null;
+  const s = values.slice().sort((a, b) => a - b);
+  const mid = Math.floor(s.length / 2);
+  return s.length % 2 ? s[mid] : Math.round((s[mid - 1] + s[mid]) / 2);
+}
+
+const pct = (n: number, total: number) => (total > 0 ? Math.round((n / total) * 100) : 0);
+
+export function formatDateEs(iso: string, withYear = true): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  return `${d} de ${MONTHS_LONG[m - 1]}${withYear ? ` de ${y}` : ""}`;
+}
+
+function isoWeek(iso: string): number {
+  const d = new Date(iso + "T00:00:00Z");
+  const dayNum = (d.getUTCDay() + 6) % 7;
+  d.setUTCDate(d.getUTCDate() - dayNum + 3);
+  const firstThursday = new Date(Date.UTC(d.getUTCFullYear(), 0, 4));
+  return 1 + Math.round(((d.getTime() - firstThursday.getTime()) / 86_400_000 - 3 + ((firstThursday.getUTCDay() + 6) % 7)) / 7);
+}
+
+/** Week slot 0–52 inside the edition's own calendar year (for the swarm). */
+export function weekSlot(iso: string): number {
+  const d = new Date(iso + "T00:00:00Z");
+  const jan1 = Date.UTC(d.getUTCFullYear(), 0, 1);
+  return Math.min(52, Math.floor((d.getTime() - jan1) / (7 * 86_400_000)));
+}
+
+// ───────────────────────────── the report ─────────────────────────────
+
+export interface FamilyStat {
+  family: string;
+  editions: number;
+  held: number;
+  firstYear: number;
+  lastYear: number;
+  places: string[];
+  website: string | null;
+  topic: string;
+  /** state per year, for the lifeline grid */
+  byYear: Record<number, State>;
+  hasUpcoming: boolean;
+}
+
+export interface PlaceStat {
+  place: string;
+  region: string | null;
+  lat: number;
+  lon: number;
+  total: number;
+  byYear: Record<number, number>;
+  firstYear: number;
+  families: { family: string; editions: number; website: string | null }[];
+  topTopic: string;
+}
+
+export function buildReport(all: Edition[], todayIso: string) {
+  const currentYear = Number(todayIso.slice(0, 4));
+  const real = all.filter((e) => e.state !== "cancelled");
+  const held = all.filter((e) => e.state === "held");
+  const dated = real.filter((e) => !e.tbc);
+  const inPerson = real.filter((e) => !e.online);
+  const firstYear = Math.min(...all.map((e) => e.year));
+  const years: number[] = [];
+  for (let y = firstYear; y <= Math.max(...all.map((e) => e.year)); y++) years.push(y);
+  const pastYears = years.filter((y) => y <= currentYear);
+
+  // ── families
+  const famMap = new Map<string, Edition[]>();
+  for (const e of all) {
+    if (!famMap.has(e.family)) famMap.set(e.family, []);
+    famMap.get(e.family)!.push(e);
   }
-  return {
-    years,
-    oneDay: years.map((y) => buckets.get(y)?.one ?? 0),
-    twoDay: years.map((y) => buckets.get(y)?.two ?? 0),
-    threePlus: years.map((y) => buckets.get(y)?.three ?? 0),
+  const families: FamilyStat[] = [...famMap.entries()].map(([family, eds]) => {
+    const byYear: Record<number, State> = {};
+    const rank: Record<State, number> = { held: 3, upcoming: 2, cancelled: 1 };
+    for (const e of eds) if (!byYear[e.year] || rank[e.state] > rank[byYear[e.year]]) byYear[e.year] = e.state;
+    const last = eds[eds.length - 1];
+    return {
+      family,
+      editions: eds.filter((e) => e.state !== "cancelled").length,
+      held: eds.filter((e) => e.state === "held").length,
+      firstYear: eds[0].year,
+      lastYear: Math.max(...eds.filter((e) => e.state !== "cancelled").map((e) => e.year), eds[0].year),
+      places: [...new Set(eds.filter((e) => !e.online && e.state !== "cancelled").map((e) => e.place))],
+      website: [...eds].reverse().find((e) => e.website)?.website ?? null,
+      topic: last.topic,
+      byYear,
+      hasUpcoming: eds.some((e) => e.state === "upcoming"),
+    };
+  });
+
+  // ── totals
+  const placesSet = new Set(inPerson.filter((e) => e.hasCity).map((e) => e.place));
+  const totals = {
+    editions: all.length,
+    held: held.length,
+    cancelled: all.length - real.length,
+    upcoming: all.filter((e) => e.state === "upcoming").length,
+    families: families.length,
+    places: placesSet.size,
+    regions: new Set(inPerson.map((e) => e.region).filter(Boolean)).size,
+    firstYear,
+    currentYear,
+    daysOfConference: held.filter((e) => !e.tbc && e.days <= 7).reduce((a, e) => a + e.days, 0),
   };
-}
 
-const REGION_BY_CITY: Record<string, string> = {
-  // Madrid
-  "Madrid": "Madrid", "Aranjuez": "Madrid", "Leganes": "Madrid", "Leganés": "Madrid",
-  "Campus de Google": "Madrid",
-  // Cataluña
-  "Barcelona": "Cataluña", "Sitges": "Cataluña", "Tarragona": "Cataluña", "Girona": "Cataluña",
-  "Auditori AXA": "Cataluña", "BAU Barcelona": "Cataluña",
-  // Comunidad Valenciana
-  "Valencia": "Comunidad Valenciana", "Alicante": "Comunidad Valenciana",
-  "San Vicente del Raspeig": "Comunidad Valenciana", "Benidorm": "Comunidad Valenciana",
-  // Andalucía
-  "Sevilla": "Andalucía", "Málaga": "Andalucía", "Malaga": "Andalucía", "Granada": "Andalucía",
-  "Córdoba": "Andalucía", "Cádiz": "Andalucía", "Cadiz": "Andalucía", "Conil": "Andalucía",
-  "Jaen": "Andalucía", "Jaén": "Andalucía", "Marbella": "Andalucía", "Torremolinos": "Andalucía",
-  // País Vasco
-  "Bilbao": "País Vasco", "Vizcaya": "País Vasco", "Euskalduna Centre": "País Vasco",
-  "Palacio Euskalduna": "País Vasco", "Fábrica Artiach": "País Vasco",
-  // Galicia
-  "A Coruña": "Galicia", "Santiago de Compostela": "Galicia", "Vigo": "Galicia",
-  "Pontevedra": "Galicia", "Ourense": "Galicia", "Melide": "Galicia",
-  // Asturias
-  "Asturias": "Asturias", "Gijón": "Asturias", "Oviedo": "Asturias", "Avilés": "Asturias",
-  // Castilla y León
-  "Valladolid": "Castilla y León", "Salamanca": "Castilla y León", "Burgos": "Castilla y León",
-  // Castilla-La Mancha
-  "Albacete": "Castilla-La Mancha",
-  // Aragón
-  "Zaragoza": "Aragón", "Jaca": "Aragón",
-  // Navarra
-  "Pamplona": "Navarra",
-  // La Rioja
-  "Logroño": "La Rioja", "La Rioja": "La Rioja",
-  // Extremadura
-  "Cáceres": "Extremadura",
-  // Murcia, Cataluña, etc.
-  "Lleida": "Cataluña",
-  // Canarias
-  "Tenerife": "Canarias",
-  // Online
-  "Online": "Online", "Online.": "Online", "Twitch": "Online",
-};
+  // ── per year
+  const perYear = years.map((year) => {
+    const ys = all.filter((e) => e.year === year);
+    return {
+      year,
+      total: ys.length,
+      inPerson: ys.filter((e) => e.state === "held" && !e.online).length,
+      online: ys.filter((e) => e.state === "held" && e.online).length,
+      cancelled: ys.filter((e) => e.state === "cancelled").length,
+      upcoming: ys.filter((e) => e.state === "upcoming").length,
+      debuts: families.filter((f) => f.firstYear === year).length,
+    };
+  });
+  const worstYear = perYear.filter((p) => p.year <= currentYear).slice().sort((a, b) => b.cancelled - a.cancelled)[0];
+  const quietYear = perYear.filter((p) => p.year < currentYear).slice().sort((a, b) => (a.inPerson + a.online) - (b.inPerson + b.online))[0];
+  const peakYear = perYear.filter((p) => p.year <= currentYear).slice().sort((a, b) => (b.inPerson + b.online + b.upcoming) - (a.inPerson + a.online + a.upcoming))[0];
+  const onlinePeak = perYear.slice().sort((a, b) => b.online - a.online)[0];
 
-function regionFor(city: string): string {
-  return REGION_BY_CITY[city] ?? "Otra";
-}
-
-export interface BusyWeek { isoWeek: string; year: number; week: number; count: number; events: string[]; }
-
-function isoWeekOf(d: Date): { year: number; week: number } {
-  // ISO week algorithm
-  const target = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
-  const dayNum = (target.getUTCDay() + 6) % 7;
-  target.setUTCDate(target.getUTCDate() - dayNum + 3);
-  const firstThursday = new Date(Date.UTC(target.getUTCFullYear(), 0, 4));
-  const diff = (target.getTime() - firstThursday.getTime()) / 86_400_000;
-  const week = 1 + Math.round((diff - 3 + ((firstThursday.getUTCDay() + 6) % 7)) / 7);
-  return { year: target.getUTCFullYear(), week };
-}
-
-export function busiestWeeks(rows: ConfRow[]): { busiest: BusyWeek[]; emptyWeeks: BusyWeek[] } {
-  const byKey = new Map<string, { year: number; week: number; events: Set<string>; }>();
-  const cur = new Date().getUTCFullYear();
-  const window = rows.filter((r) => !r.cancelled && r.year >= cur - 2 && r.year <= cur + 1);
-  for (const r of window) {
-    const start = new Date(r.startIso + "T00:00:00Z");
-    const end = new Date(r.endIso + "T00:00:00Z");
-    for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
-      const { year, week } = isoWeekOf(d);
-      const key = `${year}-${String(week).padStart(2, "0")}`;
-      const e = byKey.get(key) ?? { year, week, events: new Set<string>() };
-      e.events.add(r.series);
-      byKey.set(key, e);
-    }
-  }
-  const all: BusyWeek[] = [...byKey.entries()].map(([isoWeek, v]) => ({
-    isoWeek, year: v.year, week: v.week, count: v.events.size, events: [...v.events],
-  }));
-  const busiest = all.slice().sort((a, b) => b.count - a.count || a.isoWeek.localeCompare(b.isoWeek)).slice(0, 8);
-
-  // Empty weeks: weeks 1..52 in the next 12 months that have 0 events.
-  const todayIsoStr = new Date().toISOString().slice(0, 10);
-  const futureWeeks = new Set<string>();
-  const probe = new Date();
-  for (let i = 0; i < 52; i++) {
-    probe.setUTCDate(probe.getUTCDate() + 7);
-    const { year, week } = isoWeekOf(probe);
-    futureWeeks.add(`${year}-${String(week).padStart(2, "0")}`);
-  }
-  const occupied = new Set([...byKey.keys()]);
-  const empty: BusyWeek[] = [...futureWeeks]
-    .filter((k) => !occupied.has(k))
-    .slice(0, 8)
-    .map((isoWeek) => {
-      const [y, w] = isoWeek.split("-");
-      return { isoWeek, year: Number(y), week: Number(w), count: 0, events: [] };
+  // ── places
+  const places: PlaceStat[] = [];
+  for (const [place, total] of sorted(countBy(inPerson, (e) => e.place))) {
+    const coords = CITY_COORDS[place];
+    if (!coords) continue;
+    const eds = inPerson.filter((e) => e.place === place);
+    const byYear: Record<number, number> = {};
+    for (const e of eds) byYear[e.year] = (byYear[e.year] ?? 0) + 1;
+    const fams = sorted(countBy(eds, (e) => e.family)).slice(0, 6).map(([family, editions]) => ({
+      family,
+      editions,
+      website: families.find((f) => f.family === family)?.website ?? null,
+    }));
+    places.push({
+      place,
+      region: REGION_BY_CITY[place] ?? null,
+      lat: coords[0],
+      lon: coords[1],
+      total,
+      byYear,
+      firstYear: Math.min(...eds.map((e) => e.year)),
+      families: fams,
+      topTopic: sorted(countBy(eds.filter((e) => e.topic !== "general"), (e) => e.topic))[0]?.[0] ?? "general",
     });
-
-  void todayIsoStr;
-  return { busiest, emptyWeeks: empty };
-}
-
-export interface CadencePoint { series: string; name: string; medianGapMonths: number; editions: number; }
-
-export function cadence(rows: ConfRow[]): CadencePoint[] {
-  const groups = new Map<string, ConfRow[]>();
-  for (const r of rows) {
-    if (!groups.has(r.series)) groups.set(r.series, []);
-    groups.get(r.series)!.push(r);
   }
-  const out: CadencePoint[] = [];
-  for (const [series, rs] of groups) {
-    if (rs.length < 2) continue;
-    const sorted = rs.slice().sort((a, b) => a.startIso.localeCompare(b.startIso));
-    const gaps: number[] = [];
-    for (let i = 1; i < sorted.length; i++) {
-      const months = diffDays(sorted[i - 1].startIso, sorted[i].startIso) / 30.44;
-      gaps.push(months);
+  const bigTwo = (rows: Edition[]) => pct(rows.filter((e) => e.place === "Madrid" || e.place === "Barcelona").length, rows.length);
+  const concentration = pastYears.map((year) => ({ year, share: bigTwo(inPerson.filter((e) => e.year === year)) }));
+  const regions = sorted(countBy(inPerson, (e) => e.region)).map(([region, count]) => ({ region, count, share: pct(count, inPerson.length) }));
+  const emptyRegions = ALL_REGIONS.filter((r) => !regions.some((x) => x.region === r));
+  const newPlaces = places.filter((p) => p.firstYear >= currentYear - 1).map((p) => p.place);
+
+  // ── topics
+  const topics = TOPICS.map((t) => {
+    const eds = real.filter((e) => e.topic === t.id);
+    return {
+      id: t.id,
+      label: t.label,
+      count: eds.length,
+      share: pct(eds.length, real.length),
+      byYear: pastYears.map((y) => eds.filter((e) => e.year === y).length),
+      examples: sorted(countBy(eds, (e) => e.family)).slice(0, 4).map(([f]) => f),
+    };
+  }).filter((t) => t.count > 0).sort((a, b) => b.count - a.count);
+  const tagCounts = sorted(countBy(real.flatMap((e) => e.tags.filter((t) => t !== "software-development")), (t) => t)).slice(0, 24).map(([tag, count]) => ({ tag, count }));
+  const ia = topics.find((t) => t.id === "ia");
+  const iaFirstBoomYear = ia ? pastYears[ia.byYear.findIndex((n, i) => n >= 3 && i > 0)] ?? null : null;
+
+  // ── languages
+  const langKnown = real.filter((e) => e.lang !== "unknown");
+  const languages = {
+    known: langKnown.length,
+    unknown: real.length - langKnown.length,
+    groups: (["es", "mixed", "en", "other"] as LangGroup[]).map((g) => ({
+      id: g,
+      count: langKnown.filter((e) => e.lang === g).length,
+      share: pct(langKnown.filter((e) => e.lang === g).length, langKnown.length),
+    })),
+    byYear: pastYears.map((year) => {
+      const ys = langKnown.filter((e) => e.year === year);
+      return { year, es: pct(ys.filter((e) => e.lang === "es").length, ys.length), mixed: pct(ys.filter((e) => e.lang === "mixed").length, ys.length), en: pct(ys.filter((e) => e.lang === "en").length, ys.length), other: pct(ys.filter((e) => e.lang === "other").length, ys.length) };
+    }),
+    englishCities: sorted(countBy(langKnown.filter((e) => e.lang === "en" && !e.online), (e) => e.place)).slice(0, 3).map(([place, count]) => ({ place, count })),
+  };
+
+  // ── calendar
+  const calendarRows = dated.filter((e) => e.year <= currentYear);
+  const byMonth = MONTHS_SHORT.map((_, i) => calendarRows.filter((e) => e.month === i + 1).length);
+  const monthRank = byMonth.map((n, i) => ({ month: i, n })).sort((a, b) => b.n - a.n);
+  const matrix = pastYears.map((year) => ({ year, months: MONTHS_SHORT.map((_, i) => calendarRows.filter((e) => e.year === year && e.month === i + 1).length) }));
+  const byWeekday = WEEKDAYS.map((_, i) => calendarRows.filter((e) => e.weekday === i).length);
+  const weekdayRank = byWeekday.map((n, i) => ({ day: i, n })).sort((a, b) => b.n - a.n);
+  const shortEvents = calendarRows.filter((e) => e.days <= 7);
+  const durations = [1, 2, 3].map((n) => ({ days: n, count: shortEvents.filter((e) => (n === 3 ? e.days >= 3 : e.days === n)).length }));
+  const dayLoad = new Map<string, string[]>();
+  for (const e of shortEvents) {
+    for (let i = 0; i < e.days; i++) {
+      const d = new Date(Date.parse(e.start + "T00:00:00Z") + i * 86_400_000).toISOString().slice(0, 10);
+      if (!dayLoad.has(d)) dayLoad.set(d, []);
+      dayLoad.get(d)!.push(e.name);
     }
-    gaps.sort((a, b) => a - b);
-    const median = gaps[Math.floor(gaps.length / 2)];
-    out.push({ series, name: sorted[sorted.length - 1].name, medianGapMonths: Math.round(median * 10) / 10, editions: sorted.length });
   }
-  return out;
-}
+  const busiest = [...dayLoad.entries()].sort((a, b) => b[1].length - a[1].length || b[0].localeCompare(a[0]))[0];
+  const weekLoad = countBy(shortEvents, (e) => `${e.year}-${String(isoWeek(e.start)).padStart(2, "0")}`);
+  const busiestWeek = sorted(weekLoad)[0];
+  const calendar = {
+    byMonth,
+    topMonths: monthRank.slice(0, 2).map((m) => ({ month: m.month, n: m.n, share: pct(m.n, calendarRows.length) })),
+    summer: byMonth[6] + byMonth[7],
+    matrix,
+    matrixMax: Math.max(...matrix.flatMap((r) => r.months)),
+    byWeekday,
+    topWeekdays: weekdayRank.slice(0, 2).map((w) => ({ day: w.day, share: pct(w.n, calendarRows.length) })),
+    weekendShare: pct(byWeekday[5] + byWeekday[6], calendarRows.length),
+    durations,
+    durationTotal: shortEvents.length,
+    busiestDay: busiest ? { date: busiest[0], names: [...new Set(busiest[1])] } : null,
+    busiestWeek: busiestWeek ? { key: busiestWeek[0], count: busiestWeek[1] } : null,
+  };
 
-export interface DormantSeries { series: string; name: string; lastYear: number; editions: number; yearsSilent: number; }
-
-export function dormantSeries(rows: ConfRow[], currentYear: number): DormantSeries[] {
-  const longevity = seriesLongevity(rows, currentYear);
-  return longevity
-    .filter((l) => currentYear - l.lastYear >= 3 && l.editions >= 2)
-    .map((l) => ({ series: l.series, name: l.name, lastYear: l.lastYear, editions: l.editions, yearsSilent: currentYear - l.lastYear }))
-    .sort((a, b) => b.editions - a.editions || a.yearsSilent - b.yearsSilent)
+  // ── longevity
+  const multi = families.filter((f) => f.editions >= 2);
+  const alive = families.filter((f) => f.lastYear >= currentYear - 1 || f.hasUpcoming);
+  const lifelines = families.slice().sort((a, b) => b.editions - a.editions || a.firstYear - b.firstYear || a.family.localeCompare(b.family, "es")).slice(0, 24);
+  const sinceStart = families.filter((f) => f.firstYear === firstYear);
+  const survivors = sinceStart.filter((f) => f.lastYear >= currentYear - 1 || f.hasUpcoming);
+  const memoriam = families
+    .filter((f) => f.held >= 2 && f.lastYear <= currentYear - 3 && !f.hasUpcoming)
+    .sort((a, b) => b.held - a.held || b.lastYear - a.lastYear)
     .slice(0, 12);
-}
+  const oneShots = families.filter((f) => f.editions <= 1 && f.lastYear <= currentYear - 2).length;
+  const nomads = families
+    .filter((f) => f.places.length >= 4 && !["DevFest", "WordCamp", "AgentCamp", "Women Techmakers"].includes(f.family))
+    .sort((a, b) => b.places.length - a.places.length)
+    .slice(0, 4)
+    .map((f) => ({
+      family: f.family,
+      stops: famMap.get(f.family)!
+        .filter((e) => !e.online && e.state !== "cancelled" && CITY_COORDS[e.place])
+        .map((e) => ({ year: e.year, place: e.place, lat: CITY_COORDS[e.place][0], lon: CITY_COORDS[e.place][1] })),
+    }));
+  const franchises = families
+    .filter((f) => ["DevFest", "WordCamp", "Women Techmakers", "AgentCamp"].includes(f.family))
+    .map((f) => ({ family: f.family, places: f.places.length, editions: f.editions }))
+    .sort((a, b) => b.places - a.places);
 
-export function regionBreakdown(rows: ConfRow[]): {
-  recent: { region: string; count: number; pct: number }[];
-  early: { region: string; count: number; pct: number }[];
-  recentYears: [number, number];
-  earlyYears: [number, number];
-} {
-  const cur = new Date().getUTCFullYear();
-  const recentYears: [number, number] = [cur - 2, cur];
-  const earlyYears: [number, number] = [cur - 5, cur - 3];
-
-  const tally = (range: [number, number]) => {
-    const map = new Map<string, number>();
-    for (const r of rows) {
-      if (r.cancelled) continue;
-      if (r.year < range[0] || r.year > range[1]) continue;
-      const region = regionFor(r.city);
-      map.set(region, (map.get(region) ?? 0) + 1);
-    }
-    const total = [...map.values()].reduce((a, b) => a + b, 0) || 1;
-    return [...map.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .map(([region, count]) => ({ region, count, pct: (count / total) * 100 }));
+  // ── call for papers
+  const withCfp = all.filter((e) => e.cfpEnd);
+  const leads = withCfp.map((e) => diffDays(e.cfpEnd!, e.start)).filter((n) => n >= 0 && n <= 400);
+  const windows = withCfp.filter((e) => e.cfpStart).map((e) => diffDays(e.cfpStart!, e.cfpEnd!)).filter((n) => n > 0 && n <= 400);
+  const closeMonths = MONTHS_SHORT.map((_, i) => withCfp.filter((e) => Number(e.cfpEnd!.slice(5, 7)) === i + 1).length);
+  const closeRank = closeMonths.map((n, i) => ({ month: i, n })).sort((a, b) => b.n - a.n);
+  const openNow = all
+    .filter((e) => e.state === "upcoming" && e.cfpEnd && e.cfpEnd >= todayIso && (!e.cfpStart || e.cfpStart <= todayIso))
+    .sort((a, b) => a.cfpEnd!.localeCompare(b.cfpEnd!))
+    .map((e) => ({ name: e.name, year: e.year, place: e.place, closes: e.cfpEnd!, daysLeft: diffDays(todayIso, e.cfpEnd!), site: e.cfpSite ?? e.website, eventStart: e.start }));
+  const cfp = {
+    documented: withCfp.length,
+    medianLead: median(leads),
+    medianWindow: median(windows),
+    closeMonths,
+    topCloseMonth: closeRank[0],
+    openNow,
   };
+
+  // ── records
+  const longest = shortEvents.filter((e) => e.days <= 5).sort((a, b) => b.days - a.days || b.start.localeCompare(a.start))[0];
+  const FRANCHISES = ["DevFest", "WordCamp", "Women Techmakers", "AgentCamp"];
+  const mostEditions = families.filter((f) => !FRANCHISES.includes(f.family)).sort((a, b) => b.editions - a.editions || a.firstYear - b.firstYear)[0];
+  const widest = families.slice().sort((a, b) => b.places.length - a.places.length)[0];
+  const topPlace = places[0];
+  const earliest = calendarRows.slice().sort((a, b) => a.start.slice(5).localeCompare(b.start.slice(5)))[0];
+  const latest = calendarRows.slice().sort((a, b) => b.start.slice(5).localeCompare(a.start.slice(5)))[0];
+  const north = places.slice().sort((a, b) => b.lat - a.lat)[0];
+  const south = places.filter((p) => p.region !== "Canarias").slice().sort((a, b) => a.lat - b.lat)[0];
 
   return {
-    recent: tally(recentYears),
-    early: tally(earlyYears),
-    recentYears,
-    earlyYears,
+    todayIso,
+    years,
+    pastYears,
+    totals,
+    perYear,
+    worstYear,
+    quietYear,
+    peakYear,
+    onlinePeak,
+    places,
+    concentration,
+    regions,
+    emptyRegions,
+    newPlaces,
+    bigTwoShare: bigTwo(inPerson),
+    topics,
+    tagCounts,
+    iaFirstBoomYear,
+    languages,
+    calendar,
+    families,
+    lifelines,
+    aliveShare: pct(alive.length, families.length),
+    multiCount: multi.length,
+    survivors: { of: sinceStart.length, alive: survivors.length },
+    memoriam,
+    oneShots,
+    nomads,
+    franchises,
+    cfp,
+    records: { longest, mostEditions, widest, topPlace, earliest, latest, north, south },
   };
 }
 
-export function weekOfYearHeat(rows: ConfRow[]): { years: number[]; values: [number, number, number][] } {
-  const cur = new Date().getUTCFullYear();
-  const inWindow = rows.filter((r) => !r.cancelled && r.year >= cur - 4 && r.year <= cur);
-  const years = [...new Set(inWindow.map((r) => r.year))].sort();
-  const map = new Map<string, number>();
-  for (const r of inWindow) {
-    const start = new Date(r.startIso + "T00:00:00Z");
-    const { year, week } = isoWeekOf(start);
-    if (!years.includes(year)) continue;
-    const k = `${year}-${week}`;
-    map.set(k, (map.get(k) ?? 0) + 1);
-  }
-  const values: [number, number, number][] = [];
-  for (let yi = 0; yi < years.length; yi++) {
-    for (let w = 1; w <= 53; w++) {
-      const v = map.get(`${years[yi]}-${w}`) ?? 0;
-      values.push([w - 1, yi, v]);
-    }
-  }
-  return { years, values };
-}
-
-export function cfpStats(rows: ConfRow[]): {
-  withCfp: number;
-  withoutCfp: number;
-  avgLeadDays: number | null;
-  medianLeadDays: number | null;
-  closingMonths: number[];
-} {
-  const withCfp = rows.filter((r) => r.hasCfp).length;
-  const withoutCfp = rows.length - withCfp;
-  const leads = rows
-    .map((r) => r.cfpLeadDays)
-    .filter((v): v is number => v != null && v >= 0 && v <= 365);
-  const sum = leads.reduce((a, b) => a + b, 0);
-  const sorted = leads.slice().sort((a, b) => a - b);
-  const median = sorted.length === 0 ? null : sorted[Math.floor(sorted.length / 2)];
-  const closingMonths = new Array(12).fill(0);
-  for (const r of rows) {
-    if (!r.cfpEndIso) continue;
-    const m = Number(r.cfpEndIso.slice(5, 7));
-    if (m >= 1 && m <= 12) closingMonths[m - 1]++;
-  }
-  return {
-    withCfp,
-    withoutCfp,
-    avgLeadDays: leads.length ? Math.round(sum / leads.length) : null,
-    medianLeadDays: median,
-    closingMonths,
-  };
-}
+export type Report = ReturnType<typeof buildReport>;

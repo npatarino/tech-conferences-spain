@@ -20,13 +20,13 @@ The site (in Spanish) is generated from `content/conferences/` and renders:
 - **Past events** archive (`/past`)
 - **Calendar** view (`/calendar`)
 - **Map** view (`/map`, Google Maps — needs an API key, see [Environment variables](#environment-variables))
-- **Insights** (`/insights`): yearly evolution, city breakdown and other trends across all editions
+- **Insights** (`/insights`): an interactive data story — every edition as a dot on a week-by-week timeline, a map of Spain with a year scrubber and per-city cards, topics, languages, seasonality, longevity, touring conferences, open calls for papers and records. Every figure is computed at build time from the data
 - Cancelled editions are shown struck through; editions with unconfirmed dates show `TBC`
 - SEO out of the box: sitemap, JSON-LD, Open Graph image, web manifest
 - **Open data**: every edition is also published as an [OpenTechEvents](https://opentechevents.org) feed (`/events.json`) and an iCalendar file (`/events.ics`) — see [Open data feed](#open-data-feed-opentechevents)
 
 <p align="center">
-  <img src="docs/images/insights.png" alt="Insights page with edition, event and city counts" width="560">
+  <img src="docs/images/insights.png" alt="Insights page: headline figures for conferences, cities and years" width="560">
   <img src="docs/images/home-mobile.png" alt="Home page on a phone" width="180">
 </p>
 
@@ -176,7 +176,7 @@ cp .env.example .env
 
 `GOOGLE_MAPS_API_KEY` is used at build time to geocode each `location` (Google Geocoding API) and in the browser to load Google Maps on `/map`. Because it ends up in the page source, restrict it by HTTP referrer in the Google Cloud console.
 
-Without a key the site still builds; the map just shows no markers. Successful geocoding results are cached in `.cache/geocode.json` — delete that file to force a fresh lookup. Failed lookups are not cached, so they are retried on the next build.
+Geocoding runs on the build server, so it needs a key that is **not** restricted by HTTP referrer (referrer restrictions only work from a browser) and has the Geocoding API enabled. When geocoding is unavailable or fails, each edition falls back to the coordinates of its city from [`src/data/spain.ts`](src/data/spain.ts), so the map still shows a pin per event — add new cities there. Successful geocoding results are cached in `.cache/geocode.json` — delete that file to force a fresh lookup. Failed lookups are not cached, so they are retried on the next build.
 
 ---
 
@@ -223,6 +223,7 @@ docs/images/              ← README screenshots
 src/
 ├── components/           ← Astro components (EventRow, MonthGroup, ViewSwitcher)
 ├── layouts/              ← Base layout wrapping every page
+├── data/                 ← static data (outline of Spain and city coordinates for the insights map)
 ├── lib/                  ← utilities (frontmatter parser, date formatting, geocoding, insights, OTE feed mapping)
 ├── loaders/              ← Astro content loader (reads content/conferences/)
 ├── pages/                ← one file per route (index, past, calendar, map, insights, events.json, events.ics)
@@ -232,7 +233,7 @@ src/
 astro.config.mjs          ← Astro config (via @chimichurricode/web-app-kit)
 ```
 
-Built with [Astro](https://astro.build) 7 (static output), Preact islands and [ECharts](https://echarts.apache.org) for the insights charts.
+Built with [Astro](https://astro.build) 7 (static output) and Preact islands. The insights charts are server-rendered SVG and HTML, with a small script for interaction.
 
 ---
 

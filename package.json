@@ -24,7 +24,6 @@
     "@chimichurricode/web-app-kit": "^0.1.3",
     "@opentechevents/export-ics": "^0.6.0",
     "astro": "^7.4.5",
-    "echarts": "^5.5.0",
     "preact": "^10.29.1"
   },
   "devDependencies": {

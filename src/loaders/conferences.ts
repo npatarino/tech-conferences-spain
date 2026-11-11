@@ -3,6 +3,7 @@ import { join, relative, resolve } from "node:path";
 import type { Loader } from "astro/loaders";
 import { parseFrontmatter } from "../lib/frontmatter.ts";
 import { geocode } from "../lib/geocode.ts";
+import { CITY_COORDS } from "../data/spain.ts";
 
 const CONTENT_DIR = resolve(process.cwd(), "content/conferences");
 
@@ -16,6 +17,22 @@ function toIsoDate(value: unknown): string | undefined {
 function toList(value: unknown): string[] {
   if (typeof value !== "string") return [];
   return [...new Set(value.split(",").map((v) => v.trim().toLowerCase()).filter(Boolean))];
+}
+
+const ONLINE_RE = /^(online|twitch)\b/i;
+
+/**
+ * Coordinates for an edition. Google geocoding gives the most precise
+ * point but needs a key that works server-side at build time; when it is
+ * missing or the lookup fails, fall back to the built-in city table so the
+ * map and the open-data feed never end up empty.
+ */
+async function coordsFor(location: string, city: string | undefined): Promise<{ lat: number; lng: number } | null> {
+  if (!location || ONLINE_RE.test(location.trim())) return null;
+  const geocoded = await geocode(location);
+  if (geocoded) return geocoded;
+  const known = CITY_COORDS[city ?? ""] ?? CITY_COORDS[location.split(",")[0].trim()];
+  return known ? { lat: known[0], lng: known[1] } : null;
 }
 
 export function conferencesLoader(): Loader {
@@ -55,7 +72,8 @@ export function conferencesLoader(): Loader {
           // removing GOOGLE_MAPS_API_KEY invalidates cached entries and
           // triggers a fresh geocoding pass on the next build.
           const geocodeSlot = process.env.GOOGLE_MAPS_API_KEY ? "geo:1" : "geo:0";
-          const coords = location ? await geocode(location) : null;
+          const city = typeof fm.city === "string" && fm.city ? fm.city : undefined;
+          const coords = await coordsFor(location, city);
 
           const data = await parseData({
             id,
@@ -66,7 +84,7 @@ export function conferencesLoader(): Loader {
               twitter: typeof fm.twitter === "string" ? fm.twitter : undefined,
               bluesky: typeof fm.bluesky === "string" ? fm.bluesky : undefined,
               location,
-              city: typeof fm.city === "string" && fm.city ? fm.city : undefined,
+              city,
               tags: toList(fm.tags),
               languages: toList(fm.languages),
               dateStart,
