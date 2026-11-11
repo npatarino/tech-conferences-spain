@@ -176,7 +176,7 @@ cp .env.example .env
 
 `GOOGLE_MAPS_API_KEY` is used at build time to geocode each `location` (Google Geocoding API) and in the browser to load Google Maps on `/map`. Because it ends up in the page source, restrict it by HTTP referrer in the Google Cloud console.
 
-Without a key the site still builds; the map just shows no markers. Successful geocoding results are cached in `.cache/geocode.json` — delete that file to force a fresh lookup. Failed lookups are not cached, so they are retried on the next build.
+Geocoding runs on the build server, so it needs a key that is **not** restricted by HTTP referrer (referrer restrictions only work from a browser) and has the Geocoding API enabled. When geocoding is unavailable or fails, each edition falls back to the coordinates of its city from [`src/data/spain.ts`](src/data/spain.ts), so the map still shows a pin per event — add new cities there. Successful geocoding results are cached in `.cache/geocode.json` — delete that file to force a fresh lookup. Failed lookups are not cached, so they are retried on the next build.
 
 ---
 

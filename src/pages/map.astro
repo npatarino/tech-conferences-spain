@@ -11,16 +11,32 @@ const all = await getCollection("conferences");
 const upcoming = all.filter((c) => c.data.dateEnd >= today);
 const withCoords = upcoming.filter((c) => c.data.lat != null && c.data.lng != null);
 
-const markers = withCoords.map((c) => ({
-  id: c.id,
-  name: c.data.name,
-  city: cityOf(c.data),
-  dateStart: c.data.dateStart,
-  dateEnd: c.data.dateEnd,
-  website: c.data.website ?? null,
-  lat: c.data.lat!,
-  lng: c.data.lng!,
-}));
+// Editions that share a point (same city, no venue-level coordinates) would
+// stack into a single pin, so they are fanned out in a small circle.
+const samePoint = new Map<string, number>();
+for (const c of withCoords) {
+  const k = `${c.data.lat},${c.data.lng}`;
+  samePoint.set(k, (samePoint.get(k) ?? 0) + 1);
+}
+const placed = new Map<string, number>();
+const markers = withCoords.map((c) => {
+  const k = `${c.data.lat},${c.data.lng}`;
+  const total = samePoint.get(k) ?? 1;
+  const i = placed.get(k) ?? 0;
+  placed.set(k, i + 1);
+  const angle = (i / total) * 2 * Math.PI;
+  const spread = total > 1 ? 0.012 : 0;
+  return {
+    id: c.id,
+    name: c.data.name,
+    city: cityOf(c.data),
+    dateStart: c.data.dateStart,
+    dateEnd: c.data.dateEnd,
+    website: c.data.website ?? null,
+    lat: c.data.lat! + Math.sin(angle) * spread,
+    lng: c.data.lng! + Math.cos(angle) * spread * 1.3,
+  };
+});
 
 const cityCounts = new Map<string, number>();
 for (const c of upcoming) {
