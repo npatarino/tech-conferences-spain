@@ -19,7 +19,7 @@
   "dependencies": {
     "@astrojs/preact": "^6.1.1",
     "@chimichurricode/analytics": "^0.1.0",
-    "@chimichurricode/design-system": "^0.7.5",
+    "@chimichurricode/design-system": "^0.9.1",
     "@chimichurricode/preact-ui": "^0.1.1",
     "@chimichurricode/web-app-kit": "^0.1.3",
     "@opentechevents/export-ics": "^0.6.0",
