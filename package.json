@@ -12,6 +12,7 @@
     "predev": "npm run sync",
     "prebuild": "npm run sync",
     "build": "astro build",
+    "check:slop": "node node_modules/@chimichurricode/design-system/scripts/check-slop.mjs --strict dist",
     "check:prose": "node node_modules/@chimichurricode/design-system/scripts/check-prose.mjs --strict dist",
     "preview": "astro preview",
     "astro": "astro",

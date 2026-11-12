@@ -163,10 +163,7 @@ const topCities = [...cityCounts.entries()]
     min-height: 480px;
     border-radius: 12px;
     border: 1px solid var(--hairline);
-    background:
-      radial-gradient(120% 80% at 0% 0%, color-mix(in srgb, var(--recipe-accent) 16%, transparent), transparent 60%),
-      radial-gradient(120% 80% at 100% 100%, color-mix(in srgb, var(--recipe-em) 14%, transparent), transparent 60%),
-      var(--recipe-surface);
+    background: var(--recipe-surface);
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -185,15 +182,15 @@ const topCities = [...cityCounts.entries()]
     inset: auto auto -120px -80px;
     width: 280px;
     height: 280px;
-    background: radial-gradient(closest-side, var(--recipe-accent), transparent 70%);
-    opacity: 0.18;
+    background: var(--recipe-accent);
+    opacity: 0.1;
   }
   .map-fallback::after {
     inset: -90px -80px auto auto;
     width: 220px;
     height: 220px;
-    background: radial-gradient(closest-side, var(--recipe-em), transparent 70%);
-    opacity: 0.18;
+    background: var(--recipe-em);
+    opacity: 0.1;
   }
 
   .fallback-inner {
@@ -243,7 +240,7 @@ const topCities = [...cityCounts.entries()]
     position: absolute;
     inset: 0;
     width: var(--w, 0%);
-    background: linear-gradient(90deg, var(--recipe-accent), var(--recipe-em));
+    background: var(--recipe-accent);
     border-radius: inherit;
   }
   .city-count { color: var(--muted-strong); }

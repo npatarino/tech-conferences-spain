@@ -20,6 +20,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      - run: npm run check:slop
       - run: npm run check:prose
       # The OTE feed (dist/events.json) must validate against the spec version it declares.
       - run: npm run validate:ote
