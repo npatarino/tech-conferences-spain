@@ -887,7 +887,7 @@ const clientData = {
   .seg.held { background: var(--c-held); }
   .seg.online { background: var(--c-online); }
   .seg.cancelled { background: var(--c-cancel); }
-  .seg.upcoming { background: repeating-linear-gradient(135deg, transparent 0 4px, color-mix(in srgb, var(--c-up) 45%, transparent) 4px 6px); outline: 1px dashed var(--muted); outline-offset: -1px; }
+  .seg.upcoming { background: color-mix(in srgb, var(--c-up) 28%, transparent); outline: 1px dashed var(--muted); outline-offset: -1px; }
   .yearbar-total { order: -1; text-align: center; font-family: var(--recipe-font-data); font-weight: 700; font-size: 20px; margin-bottom: 4px; }
   .yearbar-year { position: absolute; bottom: -24px; left: 0; right: 0; text-align: center; font: var(--web-mono-sm); color: var(--muted); }
 
@@ -924,7 +924,7 @@ const clientData = {
   .bars, .topics { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
   .bars li { display: grid; grid-template-columns: minmax(96px, 9.5em) 1fr 2.4em; align-items: center; gap: 10px; font-size: 14px; }
   .bar-track { height: 10px; border-radius: 999px; background: var(--card); overflow: hidden; display: block; }
-  .bar-fill { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--recipe-accent), color-mix(in srgb, var(--recipe-accent) 55%, var(--recipe-em))); }
+  .bar-fill { display: block; height: 100%; border-radius: 999px; background: var(--recipe-accent); }
   .bar-num { font: var(--web-mono-sm); color: var(--muted-strong); text-align: right; font-variant-numeric: tabular-nums; }
   .bar-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
